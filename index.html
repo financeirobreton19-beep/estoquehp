@@ -9,18 +9,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 :root {
   --bordo: #8B2E3C; --bordo-esc: #6E2430; --bordo-claro: #F5E9EB; --bordo-hover: #A1384A;
-  --verde: #27ae60; --vermelho: #c0392b; --amarelo: #d68910;
+  --verde: #27ae60; --vermelho: #c0392b; --amarelo: #d68910; --azul: #1565c0;
   --cinza: #f0eef0; --cinza-esc: #7d8b98; --texto: #2c2c2c; --borda: #ddd6d8;
 }
 html, body { height: 100%; }
 body { background: #faf7f8; color: var(--texto); padding-bottom: 85px; font-size: 15px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
 
-header {
-  background: #fff; padding: 12px 16px;
-  border-bottom: 2px solid var(--bordo-claro);
-  position: sticky; top: 0; z-index: 40;
-  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
-}
+header { background: #fff; padding: 12px 16px; border-bottom: 2px solid var(--bordo-claro); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 header h1 { font-size: 16px; font-weight: 700; color: var(--bordo); }
 header .status-sync { font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 600; }
 header .status-sync.online { background: #d4edda; color: #155724; }
@@ -51,6 +46,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-perigo { background: var(--vermelho); }
 .btn-sucesso { background: var(--verde); }
 .btn-aviso { background: var(--amarelo); }
+.btn-azul { background: var(--azul); }
 .btn-pequeno { padding: 8px 12px; font-size: 13px; min-height: 36px; }
 .btn-bloco { width: 100%; }
 .acoes-rapidas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
@@ -73,10 +69,16 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .card-item .acoes { display: flex; gap: 6px; flex-wrap: wrap; }
 .card-item .acoes button { flex: 1; }
 
+.pedido-destaque { display: inline-flex; align-items: center; gap: 6px; background: #fff8e1; border: 1px solid var(--amarelo); border-left: 4px solid var(--amarelo); padding: 6px 10px; border-radius: 6px; font-size: 13px; color: #856404; margin: 4px 0; font-weight: 600; }
+.pedido-destaque strong { font-size: 15px; font-weight: 800; color: #5c3c00; }
+.pedido-destaque.inline { display: inline-flex; margin: 0; }
+
 .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
 .badge.conferida, .badge.disponivel { background: #d4edda; color: #155724; }
 .badge.pendente, .badge.reservado, .badge.aguardando_destino { background: #fff3cd; color: #856404; }
 .badge.divergencia, .badge.cancelada { background: #f8d7da; color: #721c24; }
+.badge.avaria { background: #f8d7da; color: #721c24; }
+.badge.observacao { background: #cce5ff; color: #004085; }
 .badge.devolvida { background: #ffe0b2; color: #7a4a00; }
 .badge.vendido, .badge.entregue { background: #cce5ff; color: #004085; }
 .badge.showroom { background: #e3f2fd; color: #1565c0; }
@@ -84,16 +86,20 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 .grid-pecas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 @media (min-width: 600px) { .grid-pecas { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
-.peca-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(139,46,60,.06); cursor: pointer; transition: .2s; display: flex; flex-direction: column; }
+.peca-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(139,46,60,.06); cursor: pointer; transition: .2s; display: flex; flex-direction: column; position: relative; }
 .peca-card:active { transform: scale(.97); }
-.peca-card .foto { height: 130px; background: var(--bordo-claro); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 40px; background-size: cover; background-position: center; }
+.peca-card .foto { height: 130px; background: var(--bordo-claro); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 40px; background-size: cover; background-position: center; position: relative; }
 @media (min-width: 600px) { .peca-card .foto { height: 160px; } }
+.peca-card .foto .foto-count { position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,.6); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
 .peca-card .corpo { padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
 .peca-card .corpo h3 { font-size: 13px; line-height: 1.25; }
 .peca-card .corpo .cod { font-size: 10px; color: #b0a0a5; font-family: monospace; }
 .peca-card .corpo .preco { font-size: 15px; font-weight: 700; color: var(--bordo); }
 .peca-card .corpo .carac { font-size: 11px; color: var(--cinza-esc); flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .peca-card .corpo .cliente-badge { font-size: 10px; color: #856404; background: #fff3cd; padding: 3px 6px; border-radius: 4px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.peca-card .badge-cond { position: absolute; top: 6px; right: 6px; font-size: 9px; padding: 3px 8px; border-radius: 10px; font-weight: 800; z-index: 2; }
+.peca-card .badge-cond.avaria { background: var(--vermelho); color: #fff; }
+.peca-card .badge-cond.observacao { background: var(--azul); color: #fff; }
 
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
 @media (min-width: 700px) { .modal { align-items: center; padding: 20px; } }
@@ -114,6 +120,7 @@ label input, label select, label textarea { width: 100%; padding: 12px; margin-t
 label textarea { min-height: auto; }
 label input:focus, label select:focus, label textarea:focus { outline: none; border-color: var(--bordo); box-shadow: 0 0 0 3px rgba(139,46,60,.15); }
 label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
+label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
 
 .grid-2, .grid-3 { display: grid; grid-template-columns: 1fr; gap: 0; }
 @media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 0 12px; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 12px; } }
@@ -125,12 +132,17 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: 10px; padding: 14px; margin-bottom: 12px; position: relative; }
 .item-nf h4 { font-size: 13px; margin-bottom: 10px; color: var(--texto); font-weight: 700; }
 .item-nf .remover { position: absolute; top: 10px; right: 10px; background: var(--vermelho); padding: 5px 10px; font-size: 12px; min-height: 30px; }
+.item-nf.cond-avaria { border-left: 4px solid var(--vermelho); }
+.item-nf.cond-observacao { border-left: 4px solid var(--azul); }
 
-.info-destino-futuro { background: #e3f2fd; border-left: 4px solid #1565c0; padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; color: #0d47a1; }
+.info-destino-futuro { background: #e3f2fd; border-left: 4px solid var(--azul); padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; color: #0d47a1; }
 .info-destino-futuro strong { display: block; margin-bottom: 4px; }
 
-.foto-upload { border: 2px dashed var(--borda); border-radius: 10px; padding: 12px; text-align: center; background: #faf7f8; margin-top: 4px; }
-.foto-upload .preview { max-width: 100%; max-height: 220px; border-radius: 8px; margin-bottom: 10px; display: none; }
+.foto-upload { border: 2px dashed var(--borda); border-radius: 10px; padding: 12px; background: #faf7f8; margin-top: 4px; }
+.foto-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.foto-grid:empty { display: none; }
+.foto-thumb { width: 74px; height: 74px; border-radius: 8px; background-size: cover; background-position: center; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.foto-thumb .rm { position: absolute; top: -8px; right: -8px; background: var(--vermelho); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; min-height: 0; padding: 0; line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
 .foto-upload .botoes-foto { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 .foto-upload button { padding: 10px 12px; font-size: 13px; flex: 1; min-width: 100px; }
 
@@ -162,6 +174,8 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .ficha-grid .full { grid-column: 1/-1; }
 .ficha-foto { width: 100%; height: 220px; background: var(--bordo-claro); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 60px; background-size: cover; background-position: center; }
 @media (min-width: 700px) { .ficha-foto { height: 300px; } }
+.ficha-galeria { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.ficha-galeria img { height: 90px; border-radius: 8px; cursor: pointer; flex-shrink: 0; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
 .ficha-info p { font-size: 14px; margin-bottom: 6px; word-break: break-word; }
 .ficha-info strong { color: var(--texto); }
 
@@ -198,7 +212,10 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .campo-com-botao button { padding: 0 14px; min-height: 44px; white-space: nowrap; }
 .banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 10px 16px; font-size: 13px; color: #856404; text-align: center; font-weight: 600; }
 
-/* ===== DESTINOS ===== */
+.campo-pedido { background: #fff8e1; padding: 12px; border-radius: 10px; border-left: 4px solid var(--amarelo); margin-bottom: 15px; }
+.campo-pedido label { color: #856404; font-weight: 700; }
+.campo-pedido input { background: #fff; font-size: 16px; font-weight: 700; color: #5c3c00; border-color: var(--amarelo); }
+
 .grupo-nf { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px; }
 .grupo-nf > header { background: transparent; border: none; padding: 0 0 10px; border-bottom: 1px solid var(--borda); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; position: static; flex-wrap: wrap; }
 .grupo-nf > header h3 { font-size: 14px; color: var(--bordo); }
@@ -208,13 +225,14 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .destino-lista { display: flex; flex-direction: column; gap: 8px; }
 .destino-item { background: #faf7f8; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
 @media (min-width: 600px) { .destino-item { flex-direction: row; justify-content: space-between; align-items: center; } }
+.destino-item.cond-avaria { border-left: 4px solid var(--vermelho); background: #fff5f5; }
+.destino-item.cond-observacao { border-left: 4px solid var(--azul); background: #f0f7ff; }
 .destino-item .info-peca { flex: 1; min-width: 0; }
 .destino-item .info-peca strong { font-size: 13px; display: block; }
 .destino-item .info-peca small { font-size: 11px; color: var(--cinza-esc); display: block; }
 .destino-item .btns-destino { display: flex; gap: 6px; flex-wrap: wrap; }
 .destino-item .btns-destino button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; min-width: 110px; }
 
-/* ===== RELATÓRIOS ===== */
 .rel-periodo { background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(139,46,60,.06); }
 .rel-periodo .linha { display: flex; gap: 10px; flex-wrap: wrap; }
 .rel-periodo .linha > label { flex: 1; min-width: 140px; margin-bottom: 0; }
@@ -236,9 +254,6 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .rel-linha .esq small { color: var(--cinza-esc); font-size: 11px; display: block; }
 .rel-linha .dir { text-align: right; flex-shrink: 0; }
 .rel-linha .dir strong { color: var(--bordo); font-size: 13px; }
-
-.export-btns { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-.export-btns button { flex: 1; }
 </style>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
@@ -266,10 +281,10 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   <div class="dashboard">
     <div class="card destino"><span>Aguardando Destino</span><strong id="dashAguardando">0</strong></div>
     <div class="card"><span>Peças no Showroom</span><strong id="dashShowroom">0</strong></div>
-    <div class="card"><span>Valor em Estoque</span><strong id="dashValor">R$ 0,00</strong></div>
+    <div class="card"><span>Custo em Estoque</span><strong id="dashValor">R$ 0,00</strong></div>
     <div class="card"><span>Reservas Ativas</span><strong id="dashReservas">0</strong></div>
     <div class="card"><span>NFs Cadastradas</span><strong id="dashNFs">0</strong></div>
-    <div class="card alerta"><span>NFs Pendentes</span><strong id="dashPendentes">0</strong></div>
+    <div class="card alerta"><span>Com Avaria / Obs.</span><strong id="dashComProblema">0</strong></div>
   </div>
   <div id="alertaDestino"></div>
   <div id="alertaParadas"></div>
@@ -288,12 +303,14 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
     <button onclick="abrirNovaNF()">+ Nova</button>
   </div>
   <div class="filtros">
-    <input type="text" id="buscaNF" placeholder="🔍 Buscar NF, fornecedor, cliente..." oninput="renderNFs()">
+    <input type="text" id="buscaNF" placeholder="🔍 Buscar NF, pedido/OC, fornecedor..." oninput="renderNFs()">
     <select id="filtroStatusNF" onchange="renderNFs()">
       <option value="">Todos os status</option>
       <option value="pendente">Pendente</option>
       <option value="conferida">Conferida</option>
       <option value="divergencia">Divergência</option>
+      <option value="avaria">Com avaria</option>
+      <option value="observacao">Em observação</option>
       <option value="devolvida">Devolvida</option>
       <option value="cancelada">Cancelada</option>
     </select>
@@ -307,11 +324,9 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   <div id="listaNFs" class="lista-cards"></div>
 </section>
 
-<!-- DESTINOS (Coordenador) -->
+<!-- DESTINOS -->
 <section id="tab-destinos" class="tab-conteudo">
-  <div class="topo-secao">
-    <h2>🎯 Definir Destino das Peças</h2>
-  </div>
+  <div class="topo-secao"><h2>🎯 Definir Destino das Peças</h2></div>
   <div class="filtros">
     <input type="text" id="buscaDestino" placeholder="🔍 Buscar peça, código, NF, fornecedor..." oninput="renderDestinos()">
     <select id="filtroFornDestino" onchange="renderDestinos()"><option value="">Todos os fornecedores</option></select>
@@ -323,7 +338,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 <section id="tab-showroom" class="tab-conteudo">
   <div class="topo-secao"><h2>🪑 Showroom</h2></div>
   <div class="filtros">
-    <input type="text" id="buscaPeca" placeholder="🔍 Buscar peça, marca, código..." oninput="renderPecas()">
+    <input type="text" id="buscaPeca" placeholder="🔍 Buscar peça, marca, código, pedido/OC..." oninput="renderPecas()">
     <select id="filtroCategoriaPeca" onchange="renderPecas()"><option value="">Todas as categorias</option></select>
     <select id="filtroFornecedorPeca" onchange="renderPecas()"><option value="">Todos os fornecedores</option></select>
     <select id="filtroStatusPeca" onchange="renderPecas()">
@@ -436,7 +451,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 <div id="modalNF" class="modal oculto">
   <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="tentarFecharNF()">✕</button>
-    <h2>Nova Nota Fiscal — Recebimento</h2>
+    <h2 id="tituloModalNF">Nova Nota Fiscal — Recebimento</h2>
     <div id="avisoRascunho" class="aviso-rascunho" style="display:none">
       <span>⚠️ Existe um rascunho. Recuperar?</span>
       <div class="botoes-aviso">
@@ -444,56 +459,70 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
         <button class="btn-secundario" onclick="descartarRascunho()">Descartar</button>
       </div>
     </div>
-    <div class="info-destino-futuro">
+    <div class="info-destino-futuro" id="avisoRecebimento">
       <strong>ℹ️ Etapa de conferência</strong>
       Registre aqui o que chegou. O <strong>destino de cada peça</strong> (Showroom ou OC/Encomenda) será definido depois pelo <strong>Coordenador Logístico</strong> na aba 🎯 Destinos.
     </div>
+    <div class="info-destino-futuro" id="avisoEdicao" style="display:none;background:#fff8e1;border-left-color:var(--amarelo);color:#856404">
+      <strong>✏️ Modo edição</strong>
+      Você está editando os dados da NF. Os <strong>itens já cadastrados não são alterados por aqui</strong>. Para mudar itens, exclua a NF e recadastre.
+    </div>
     <form id="formNF" novalidate>
+      <div class="campo-pedido">
+        <label>📋 Nº do Pedido / Ordem de Compra (OC da NF)
+          <input type="text" id="nfPedido" placeholder="Ex: OC 12345 (vem impresso na nota)">
+        </label>
+      </div>
       <h3 class="subtitulo">📋 Dados da NF</h3>
       <div class="grid-3">
-        <label>Nº da NF *
+        <label>Nº da NF
           <div class="campo-com-botao">
             <input type="text" id="nfNumero">
             <button type="button" class="btn-sucesso" onclick="abrirLeitor()" title="Ler código de barras da DANFE">📷 Ler</button>
           </div>
         </label>
-        <label>Nº do Pedido<input type="text" id="nfPedido"></label>
-        <label>Fornecedor *
+        <label>Fornecedor
           <div class="campo-com-botao">
             <select id="nfFornecedor"><option value="">— Selecione —</option></select>
             <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('fornecedor')">+ Novo</button>
           </div>
         </label>
-        <label>CNPJ Fornecedor<input type="text" id="nfCNPJ" readonly></label>
+        <label>CNPJ Fornecedor <span class="opc">(auto)</span><input type="text" id="nfCNPJ" readonly></label>
         <label>Transportadora
           <div class="campo-com-botao">
             <select id="nfTransportadora"><option value="">— Selecione —</option></select>
             <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('transportadora')">+ Novo</button>
           </div>
         </label>
+        <label>Valor Total da NF (R$)<input type="number" id="nfValorTotal" step="0.01" min="0" inputmode="decimal"></label>
         <label>Data de Emissão<input type="date" id="nfEmissao"></label>
         <label>Data de Recebimento<input type="date" id="nfRecebimento"></label>
         <label>Data de Conferência<input type="date" id="nfConferencia"></label>
         <label>Conferido por<input type="text" id="nfConferidoPor"></label>
-        <label>Status
+        <label>Status da NF
           <select id="nfStatus">
-            <option value="conferida">Conferida</option>
-            <option value="pendente">Pendente</option>
-            <option value="divergencia">Divergência</option>
-            <option value="devolvida">Devolvida</option>
-            <option value="cancelada">Cancelada</option>
+            <option value="conferida">✅ Conferida</option>
+            <option value="pendente">⏳ Pendente</option>
+            <option value="divergencia">⚠️ Divergência</option>
+            <option value="avaria">🔴 Com avaria</option>
+            <option value="observacao">🔍 Em observação</option>
+            <option value="devolvida">↩️ Devolvida</option>
+            <option value="cancelada">❌ Cancelada</option>
           </select>
         </label>
-        <label>Valor Total (R$)<input type="number" id="nfValorTotal" step="0.01" min="0"></label>
       </div>
-      <label>Observações da NF<textarea id="nfObservacoes" rows="2"></textarea></label>
-      <h3 class="subtitulo">📦 Itens da NF</h3>
-      <div id="itensNF"></div>
-      <button type="button" class="btn-secundario btn-bloco" onclick="addItemNF()">+ Adicionar item</button>
+      <label>Observações da NF<textarea id="nfObservacoes" rows="2" placeholder="Ex: chegou 1 peça trincada, conferir com fornecedor..."></textarea></label>
+
+      <div id="blocoItens">
+        <h3 class="subtitulo">📦 Itens da NF</h3>
+        <div id="itensNF"></div>
+        <button type="button" class="btn-secundario btn-bloco" onclick="addItemNF()">+ Adicionar item</button>
+      </div>
+
       <div class="botoes" style="margin-top:20px">
-        <button type="button" class="btn-secundario" onclick="salvarRascunhoManual()">💾 Rascunho</button>
+        <button type="button" class="btn-secundario" onclick="salvarRascunhoManual()" id="btnRascunho">💾 Rascunho</button>
         <button type="button" class="btn-secundario" onclick="tentarFecharNF()">Cancelar</button>
-        <button type="submit" class="btn-sucesso">✅ Salvar NF</button>
+        <button type="submit" class="btn-sucesso" id="btnSalvarNF">✅ Salvar NF</button>
       </div>
     </form>
   </div>
@@ -554,10 +583,8 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharLeitor()">✕</button>
     <h2>📷 Ler código da DANFE</h2>
-    <p style="color:var(--cinza-esc);font-size:13px;margin-bottom:12px">
-      Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou <strong>QR Code</strong> da nota.
-    </p>
-    <div style="background:#f0f7ff;border-left:4px solid #1565c0;padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:12px;color:#0d47a1">
+    <p style="color:var(--cinza-esc);font-size:13px;margin-bottom:12px">Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou <strong>QR Code</strong> da nota.</p>
+    <div style="background:#f0f7ff;border-left:4px solid var(--azul);padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:12px;color:#0d47a1">
       ℹ️ <strong>Leitura 100% local.</strong> O app lê a chave, valida o dígito e cruza o CNPJ com a <strong>sua base de fornecedores</strong>. Não consulta SEFAZ nem API fiscal.
     </div>
     <div id="leitorQR" style="width:100%;border-radius:10px;overflow:hidden;background:#000;min-height:220px"></div>
@@ -565,9 +592,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
     <details style="margin-top:14px">
       <summary style="cursor:pointer;font-size:13px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
       <div style="margin-top:10px">
-        <label>Chave de acesso (44 dígitos)
-          <input type="text" id="chaveManual" inputmode="numeric" maxlength="60" placeholder="00000000000000000000000000000000000000000000">
-        </label>
+        <label>Chave de acesso (44 dígitos)<input type="text" id="chaveManual" inputmode="numeric" maxlength="60" placeholder="00000000000000000000000000000000000000000000"></label>
         <button type="button" class="btn-sucesso btn-bloco" onclick="usarChaveManual()">Usar esta chave</button>
       </div>
     </details>
@@ -579,6 +604,14 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalFichaPeca')">✕</button>
     <div id="fichaPeca"></div>
+  </div>
+</div>
+
+<!-- MODAL GALERIA (ampliar foto) -->
+<div id="modalGaleria" class="modal oculto">
+  <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()" style="background:#000;padding:10px">
+    <button class="fechar-x" onclick="fecharModal('modalGaleria')">✕</button>
+    <img id="imgGaleria" style="width:100%;height:auto;border-radius:8px;display:block">
   </div>
 </div>
 
@@ -646,7 +679,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
     <div class="botoes">
       <button type="button" class="btn-secundario" onclick="fecharCamera()">Cancelar</button>
       <button type="button" class="btn-secundario" onclick="escolherArquivoCamera()">📁 Galeria</button>
-      <button type="button" class="btn-sucesso" onclick="capturarFoto()">📸 Capturar</button>
+      <button type="button" class="btn-sucesso" onclick="capturarFoto()">📸 Capturar e continuar</button>
     </div>
   </div>
 </div>
@@ -685,11 +718,13 @@ const DOC_REF = doc(db, 'estoque', 'principal');
 
 const CATEGORIAS_FIXAS = ['Sofá','Mesa','Cadeira','Poltrona','Cama','Armário','Rack','Aparador','Iluminação','Decoração','Estante','Buffet','Escrivaninha','Outro'];
 const LOCAIS_VALIDOS = ['showroom', 'deposito', 'transito'];
+const CONDICOES = { ok: 'Normal', avaria: 'Avaria', observacao: 'Em observação' };
 const STORAGE_KEY = 'estoqueMoveisV4';
 const RASCUNHO_KEY = 'rascunhoNF';
 const BACKUP_KEY = 'estoqueMoveisV4_backup';
 const PERFIL_KEY = 'perfilUsuario';
 const MAX_FOTO_KB = 200;
+const MAX_FOTOS_ITEM = 6;
 
 const DB = {
   nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [],
@@ -703,6 +738,7 @@ let syncStatus = 'iniciando';
 let ultimaSyncRemota = 0;
 let salvandoRemoto = false;
 let perfilAtual = 'recebedor';
+let nfEditandoId = null;
 
 const $ = id => document.getElementById(id);
 const brl = v => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -750,6 +786,11 @@ function toast(msg, tipo = 'ok') {
 }
 function fecharModal(id) { $(id).classList.add('oculto'); }
 function abrirModal(id) { $(id).classList.remove('oculto'); }
+function pecaFotos(peca) {
+  if (Array.isArray(peca.fotos) && peca.fotos.length) return peca.fotos.map(urlImagemSegura).filter(Boolean);
+  const f = urlImagemSegura(peca.foto);
+  return f ? [f] : [];
+}
 
 async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
   return new Promise((resolve, reject) => {
@@ -850,14 +891,10 @@ async function salvarRemoto() {
     atualizarStatusSync('offline', e.message);
   } finally { salvandoRemoto = false; }
 }
-function salvar() {
-  const ok = salvarLocal();
-  salvarRemoto();
-  return ok;
-}
+function salvar() { const ok = salvarLocal(); salvarRemoto(); return ok; }
 
 // ============================================================
-// PERFIL (Recebedor / Coordenador)
+// PERFIL
 // ============================================================
 function carregarPerfil() {
   try { perfilAtual = localStorage.getItem(PERFIL_KEY) || 'recebedor'; }
@@ -872,9 +909,9 @@ function alternarPerfil() {
 function aplicarPerfil() {
   const btn = $('btnPerfil');
   if (btn) btn.textContent = perfilAtual === 'coordenador' ? '🎯 Coordenador' : '👤 Recebedor';
-  const mostrandoDestino = perfilAtual === 'coordenador';
-  document.querySelectorAll('[data-tab="destinos"]').forEach(el => { el.style.display = mostrandoDestino ? '' : 'none'; });
-  if (!mostrandoDestino && $('tab-destinos')?.classList.contains('ativo')) {
+  const mostrarDestino = perfilAtual === 'coordenador';
+  document.querySelectorAll('[data-tab="destinos"]').forEach(el => { el.style.display = mostrarDestino ? '' : 'none'; });
+  if (!mostrarDestino && $('tab-destinos')?.classList.contains('ativo')) {
     document.querySelector('[data-tab="dashboard"]')?.click();
   }
   renderTudo();
@@ -892,7 +929,6 @@ function validarBackup(dados) {
   const pecasIds = new Set((dados.pecas || []).map(p => p && p.id).filter(Boolean));
   for (const nf of dados.nfs || []) {
     if (!nf || typeof nf !== 'object') { erros.push('NF inválida.'); continue; }
-    if (!nf.numero) erros.push('NF sem número.');
     if (Array.isArray(nf.pecasIds)) {
       for (const pid of nf.pecasIds) {
         if (!pecasIds.has(pid)) { erros.push('Peças referenciadas por NFs não encontradas.'); break; }
@@ -904,7 +940,7 @@ function validarBackup(dados) {
 function exportarBackup() {
   try {
     const dados = {
-      _app: 'estoque-hong-possas', _versao: 5,
+      _app: 'estoque-hong-possas', _versao: 6,
       _exportadoEm: new Date().toISOString(),
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
@@ -927,28 +963,17 @@ function importarBackup(event) {
     try { dados = JSON.parse(e.target.result); }
     catch { toast('Arquivo não é JSON válido.', 'erro'); event.target.value = ''; return; }
     const erros = validarBackup(dados);
-    if (erros.length) {
-      toast('Backup inválido: ' + erros[0], 'erro');
-      alert('Arquivo inválido:\n\n' + erros.join('\n'));
-      event.target.value = '';
-      return;
-    }
+    if (erros.length) { toast('Backup inválido: ' + erros[0], 'erro'); alert('Arquivo inválido:\n\n' + erros.join('\n')); event.target.value = ''; return; }
     if (!confirm('Substituir TODOS os dados atuais?')) { event.target.value = ''; return; }
     try { localStorage.setItem(BACKUP_KEY, localStorage.getItem(STORAGE_KEY) || ''); } catch {}
     try {
-      DB.nfs = dados.nfs || [];
-      DB.pecas = dados.pecas || [];
-      DB.fornecedores = dados.fornecedores || [];
-      DB.transportadoras = dados.transportadoras || [];
-      DB.clientes = dados.clientes || [];
-      DB.contadores = dados.contadores || { peca: 0 };
+      DB.nfs = dados.nfs || []; DB.pecas = dados.pecas || [];
+      DB.fornecedores = dados.fornecedores || []; DB.transportadoras = dados.transportadoras || [];
+      DB.clientes = dados.clientes || []; DB.contadores = dados.contadores || { peca: 0 };
       salvar(); renderTudo(); atualizarSelectsCadastros();
       toast('✅ Backup restaurado.');
     } catch {
-      try {
-        const prev = localStorage.getItem(BACKUP_KEY);
-        if (prev) localStorage.setItem(STORAGE_KEY, prev);
-      } catch {}
+      try { const prev = localStorage.getItem(BACKUP_KEY); if (prev) localStorage.setItem(STORAGE_KEY, prev); } catch {}
       toast('Erro ao restaurar. Dados anteriores preservados.', 'erro');
     }
     event.target.value = '';
@@ -973,10 +998,7 @@ async function limparTudo() {
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.onclick = () => {
     const tab = btn.dataset.tab;
-    if (tab === 'destinos' && perfilAtual !== 'coordenador') {
-      toast('Apenas o Coordenador Logístico acessa esta aba.', 'aviso');
-      return;
-    }
+    if (tab === 'destinos' && perfilAtual !== 'coordenador') { toast('Apenas o Coordenador Logístico acessa esta aba.', 'aviso'); return; }
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tab === tab));
     document.querySelectorAll('.tab-conteudo').forEach(s => s.classList.remove('ativo'));
     $('tab-' + tab).classList.add('ativo');
@@ -993,10 +1015,8 @@ function renderTudo() {
   renderFornecedores(); renderTransportadoras(); renderClientes();
   renderEstatisticas(); renderInfoSync(); renderRelatorio();
 }
-
 function renderInfoSync() {
-  const el = $('infoSync');
-  if (!el) return;
+  const el = $('infoSync'); if (!el) return;
   if (!firebaseUser) { el.textContent = 'Conectando…'; return; }
   const uidCurto = firebaseUser.uid.substring(0, 8);
   const ult = ultimaSyncRemota ? formatarDataHora(new Date(ultimaSyncRemota).toISOString()) : '—';
@@ -1005,35 +1025,31 @@ function renderInfoSync() {
     <p>Perfil: <strong>${perfilAtual === 'coordenador' ? '🎯 Coordenador' : '👤 Recebedor'}</strong></p>
     <p>Dispositivo: <code>${escapeHtml(uidCurto)}</code></p>
     <p>Última sincronização: ${escapeHtml(ult)}</p>
-    <p>Peças: ${DB.pecas.length} · NFs: ${DB.nfs.length}</p>
-  `;
+    <p>Peças: ${DB.pecas.length} · NFs: ${DB.nfs.length}</p>`;
 }
-
 function renderDashboard() {
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
   const showroom = DB.pecas.filter(p => p.status === 'disponivel');
+  const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
   $('dashAguardando').textContent = aguardando.length;
   $('dashShowroom').textContent = showroom.length;
-  $('dashValor').textContent = brl(showroom.reduce((s, p) => s + (Number(p.precoVenda) || 0), 0));
+  $('dashValor').textContent = brl(showroom.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0));
   $('dashReservas').textContent = DB.pecas.filter(p => p.status === 'reservado').length;
   $('dashNFs').textContent = DB.nfs.length;
-  $('dashPendentes').textContent = DB.nfs.filter(n => n.status === 'pendente').length;
+  $('dashComProblema').textContent = comProblema;
 
   const elD = $('alertaDestino');
   if (aguardando.length && perfilAtual === 'coordenador') {
-    elD.innerHTML = `<div class="alerta-destino">
-      <div>
-        <h4>🎯 ${aguardando.length} peça(s) aguardando definição de destino</h4>
-        <p>Você é o Coordenador. Defina Showroom ou OC para liberar as peças.</p>
-      </div>
-      <button class="btn-aviso" onclick="document.querySelector('[data-tab=destinos]').click()">Ir para Destinos →</button>
-    </div>`;
+    elD.innerHTML = `<div class="alerta-destino"><div>
+      <h4>🎯 ${aguardando.length} peça(s) aguardando definição de destino</h4>
+      <p>Você é o Coordenador. Defina Showroom ou OC para liberar as peças.</p>
+    </div>
+    <button class="btn-aviso" onclick="document.querySelector('[data-tab=destinos]').click()">Ir para Destinos →</button></div>`;
   } else { elD.innerHTML = ''; }
 
   const LIMITE_DIAS = 90;
   const agora = Date.now();
-  const paradas = DB.pecas
-    .filter(p => p.status === 'disponivel' && p.dataCadastro)
+  const paradas = DB.pecas.filter(p => p.status === 'disponivel' && p.dataCadastro)
     .map(p => ({ ...p, diasParada: Math.floor((agora - new Date(p.dataCadastro).getTime()) / 86400000) }))
     .filter(p => p.diasParada >= LIMITE_DIAS)
     .sort((a, b) => b.diasParada - a.diasParada);
@@ -1041,8 +1057,7 @@ function renderDashboard() {
   if (!paradas.length) { elP.innerHTML = ''; }
   else {
     const linhas = paradas.slice(0, 5).map(p =>
-      `<div class="peca-parada">• <strong>${escapeHtml(p.nome)}</strong> (${escapeHtml(p.codigo)}) — ${p.diasParada} dias · ${escapeHtml(brl(p.precoVenda))}</div>`
-    ).join('');
+      `<div class="peca-parada">• <strong>${escapeHtml(p.nome)}</strong> (${escapeHtml(p.codigo)}) — ${p.diasParada} dias</div>`).join('');
     const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:6px">...e mais ${paradas.length - 5}</div>` : '';
     elP.innerHTML = `<div class="alerta-parada"><h4>⚠️ ${paradas.length} peça(s) parada(s) +90 dias</h4>${linhas}${extra}</div>`;
   }
@@ -1074,9 +1089,10 @@ function abrirCadastroRapido(tipo) {
   abrirModal('modalCadastroRapido');
   setTimeout(() => $('crNome').focus(), 100);
 }
-$('crCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
-$('fornCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
-$('transpCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
+['crCNPJ','fornCNPJ','transpCNPJ'].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
+});
 $('crCNPJ').addEventListener('blur', verificarDuplicidade);
 $('crNome').addEventListener('blur', verificarDuplicidade);
 
@@ -1145,22 +1161,15 @@ $('formCadastroRapido').onsubmit = e => {
   const cnpj = cnpjRaw ? mascararCNPJ(cnpjRaw) : '';
   const endereco = $('crEndereco').value.trim();
   if (!nome) { toast('Informe o nome.', 'erro'); return; }
-
   if (tipo === 'cliente') {
-    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) {
-      toast('Já existe cliente.', 'erro'); return;
-    }
+    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) { toast('Já existe cliente.', 'erro'); return; }
     const novo = { id: uid(), nome, telefone: contato, endereco };
     DB.clientes.push(novo);
     salvar(); atualizarSelectsCadastros();
     if (!$('modalDefinirOC').classList.contains('oculto')) {
-      $('ocClienteSelect').value = novo.id;
-      $('ocClienteManual').value = nome;
-      $('ocClienteTelefone').value = contato;
+      $('ocClienteSelect').value = novo.id; $('ocClienteManual').value = nome; $('ocClienteTelefone').value = contato;
     } else if (!$('modalReservar').classList.contains('oculto')) {
-      $('reservaClienteSelect').value = novo.id;
-      $('reservaClienteManual').value = nome;
-      $('reservaTelefone').value = contato;
+      $('reservaClienteSelect').value = novo.id; $('reservaClienteManual').value = nome; $('reservaTelefone').value = contato;
     }
     fecharModal('modalCadastroRapido'); renderTudo();
     toast('✅ Cliente cadastrado!');
@@ -1172,9 +1181,7 @@ $('formCadastroRapido').onsubmit = e => {
     mostrarAvisoDuplicado(tipo, lista.find(x => soDigitos(x.cnpj) === soDigitos(cnpj)));
     toast('CNPJ já cadastrado!', 'erro'); return;
   }
-  if (lista.some(x => String(x.nome || '').toLowerCase() === nome.toLowerCase())) {
-    toast('Já existe com esse nome.', 'erro'); return;
-  }
+  if (lista.some(x => String(x.nome || '').toLowerCase() === nome.toLowerCase())) { toast('Já existe com esse nome.', 'erro'); return; }
   const novo = { id: uid(), nome, cnpj, contato };
   lista.push(novo);
   salvar(); atualizarSelectsCadastros();
@@ -1186,42 +1193,21 @@ $('formCadastroRapido').onsubmit = e => {
 
 // ============================================================
 // LEITURA DE CÓDIGO DA DANFE — 100% LOCAL
-// ------------------------------------------------------------
-// IMPORTANTE: este módulo NÃO consulta SEFAZ, NÃO consulta API
-// fiscal externa, NÃO simula consulta. Apenas:
-//   1) Lê o código de barras / QR code da DANFE
-//   2) Valida o dígito verificador da chave de 44 dígitos
-//   3) Extrai os dados embutidos na própria chave
-//      (UF, CNPJ emitente, modelo, série, número, AAMM)
-//   4) Cruza o CNPJ com a BASE LOCAL de fornecedores
-//
-// Para obter itens/valores completos da NF seria necessário
-// certificado digital A1 + integração real com a SEFAZ
-// (Cloud Function + API fiscal), o que NÃO está implementado
-// aqui. Não invente: se não houver integração configurada, os
-// itens continuam sendo digitados manualmente.
 // ============================================================
 const UF_POR_CODIGO = {
   11:'RO',12:'AC',13:'AM',14:'RR',15:'PA',16:'AP',17:'TO',
   21:'MA',22:'PI',23:'CE',24:'RN',25:'PB',26:'PE',27:'AL',28:'SE',29:'BA',
-  31:'MG',32:'ES',33:'RJ',35:'SP',
-  41:'PR',42:'SC',43:'RS',
-  50:'MS',51:'MT',52:'GO',53:'DF'
+  31:'MG',32:'ES',33:'RJ',35:'SP',41:'PR',42:'SC',43:'RS',50:'MS',51:'MT',52:'GO',53:'DF'
 };
-
 function validarDVChaveNFe(chave) {
   if (!/^\d{44}$/.test(chave)) return false;
   const corpo = chave.substring(0, 43);
   let soma = 0, peso = 2;
-  for (let i = corpo.length - 1; i >= 0; i--) {
-    soma += Number(corpo[i]) * peso;
-    peso = peso === 9 ? 2 : peso + 1;
-  }
+  for (let i = corpo.length - 1; i >= 0; i--) { soma += Number(corpo[i]) * peso; peso = peso === 9 ? 2 : peso + 1; }
   const resto = soma % 11;
   const dv = resto < 2 ? 0 : 11 - resto;
   return dv === Number(chave[43]);
 }
-
 function parsearChaveNFe(chaveBruta) {
   const chave = soDigitos(chaveBruta);
   if (chave.length !== 44) return { ok:false, erro:`Chave precisa ter 44 dígitos (recebi ${chave.length}).` };
@@ -1237,21 +1223,14 @@ function parsearChaveNFe(chaveBruta) {
   const mes = Number(aamm.substring(2, 4));
   const dataEmissao = `${ano}-${String(mes).padStart(2, '0')}-01`;
   const tipo = modelo === '55' ? 'NF-e' : modelo === '65' ? 'NFC-e' : `Modelo ${modelo}`;
-  return {
-    ok: true, chave, uf, codUF, ano, mes, dataEmissao,
-    cnpj: mascararCNPJ(cnpj), cnpjDigitos: cnpj,
-    modelo, tipo,
-    serie: String(Number(serie)),
-    numero: String(Number(numero))
-  };
+  return { ok: true, chave, uf, codUF, ano, mes, dataEmissao,
+    cnpj: mascararCNPJ(cnpj), cnpjDigitos: cnpj, modelo, tipo,
+    serie: String(Number(serie)), numero: String(Number(numero)) };
 }
-
 function aplicarChaveNFe(info) {
   if (info.numero) $('nfNumero').value = info.numero;
   if (!$('nfEmissao').value && info.dataEmissao) $('nfEmissao').value = info.dataEmissao;
-  if (info.serie && !$('nfPedido').value) $('nfPedido').value = `${info.tipo} · série ${info.serie}`;
-
-  // Busca SOMENTE na base local — sem chamada externa
+  // NÃO sobrescreve o campo Nº do Pedido/OC — esse vem da nota física, não da chave
   const forn = DB.fornecedores.find(f => soDigitos(f.cnpj) === info.cnpjDigitos);
   if (forn) {
     $('nfFornecedor').value = forn.id;
@@ -1259,52 +1238,33 @@ function aplicarChaveNFe(info) {
     toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${forn.nome} selecionado.`);
   } else {
     $('nfCNPJ').value = info.cnpj;
-    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${info.cnpj} não está no cadastro — cadastre para vincular.`, 'aviso');
+    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${info.cnpj} não está no cadastro.`, 'aviso');
   }
 }
-
 let html5QrCode = null;
-
 function abrirLeitor() {
   abrirModal('modalScanner');
   $('leitorStatus').textContent = 'Iniciando câmera…';
-  if (typeof Html5Qrcode === 'undefined') {
-    $('leitorStatus').textContent = '⚠️ Biblioteca não carregou. Use "Digitar manualmente".';
-    return;
-  }
+  if (typeof Html5Qrcode === 'undefined') { $('leitorStatus').textContent = '⚠️ Biblioteca não carregou. Use "Digitar manualmente".'; return; }
   iniciarScanner();
 }
-
 async function iniciarScanner() {
   const el = $('leitorQR');
   el.innerHTML = '';
-  if (html5QrCode) {
-    try { await html5QrCode.stop(); } catch {}
-    try { html5QrCode.clear(); } catch {}
-  }
+  if (html5QrCode) { try { await html5QrCode.stop(); } catch {} try { html5QrCode.clear(); } catch {} }
   html5QrCode = new Html5Qrcode('leitorQR', { verbose: false });
   const config = {
-    fps: 10,
-    qrbox: { width: 280, height: 200 },
-    aspectRatio: 1.5,
+    fps: 10, qrbox: { width: 280, height: 200 }, aspectRatio: 1.5,
     formatsToSupport: [
-      Html5QrcodeSupportedFormats.CODE_128,
-      Html5QrcodeSupportedFormats.QR_CODE,
-      Html5QrcodeSupportedFormats.CODE_39,
-      Html5QrcodeSupportedFormats.ITF,
+      Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.QR_CODE,
+      Html5QrcodeSupportedFormats.CODE_39, Html5QrcodeSupportedFormats.ITF,
       Html5QrcodeSupportedFormats.EAN_13
     ]
   };
   try {
-    await html5QrCode.start(
-      { facingMode: 'environment' },
-      config,
-      (texto) => onScanSucesso(texto),
-      () => {}
-    );
+    await html5QrCode.start({ facingMode: 'environment' }, config, (t) => onScanSucesso(t), () => {});
     $('leitorStatus').textContent = '📸 Aponte para o código…';
   } catch (e) {
-    console.error('Scanner:', e);
     let msg = 'Não foi possível abrir a câmera. ';
     if (e.name === 'NotAllowedError') msg += 'Permissão negada.';
     else if (e.name === 'NotFoundError') msg += 'Nenhuma câmera encontrada.';
@@ -1313,7 +1273,6 @@ async function iniciarScanner() {
     $('leitorStatus').textContent = '⚠️ ' + msg;
   }
 }
-
 function onScanSucesso(texto) {
   const info = parsearChaveNFe(texto);
   if (!info.ok) { $('leitorStatus').textContent = '⚠️ ' + info.erro; return; }
@@ -1322,7 +1281,6 @@ function onScanSucesso(texto) {
   aplicarChaveNFe(info);
   setTimeout(() => fecharLeitor(), 700);
 }
-
 function usarChaveManual() {
   const info = parsearChaveNFe($('chaveManual').value);
   if (!info.ok) { toast(info.erro, 'erro'); return; }
@@ -1330,18 +1288,13 @@ function usarChaveManual() {
   $('chaveManual').value = '';
   fecharLeitor();
 }
-
 async function fecharLeitor() {
-  if (html5QrCode) {
-    try { await html5QrCode.stop(); } catch {}
-    try { html5QrCode.clear(); } catch {}
-    html5QrCode = null;
-  }
+  if (html5QrCode) { try { await html5QrCode.stop(); } catch {} try { html5QrCode.clear(); } catch {} html5QrCode = null; }
   fecharModal('modalScanner');
 }
 
 // ============================================================
-// NF — RECEBIMENTO / CONFERÊNCIA
+// NF — RECEBIMENTO / EDIÇÃO
 // ============================================================
 let contadorItemNF = 0;
 let itemAtualFoto = null;
@@ -1383,11 +1336,18 @@ $('reservaClienteSelect').onchange = () => {
 };
 
 function abrirNovaNF() {
+  nfEditandoId = null;
   $('formNF').reset();
   $('itensNF').innerHTML = '';
   contadorItemNF = 0;
   $('nfConferencia').value = hoje();
   $('nfRecebimento').value = hoje();
+  $('tituloModalNF').textContent = 'Nova Nota Fiscal — Recebimento';
+  $('avisoEdicao').style.display = 'none';
+  $('avisoRecebimento').style.display = 'block';
+  $('blocoItens').style.display = 'block';
+  $('btnRascunho').style.display = '';
+  $('btnSalvarNF').textContent = '✅ Salvar NF';
   atualizarSelectsCadastros();
   addItemNF();
   const rasc = localStorage.getItem(RASCUNHO_KEY);
@@ -1395,9 +1355,43 @@ function abrirNovaNF() {
   abrirModal('modalNF');
   iniciarAutoSave();
 }
+
+function abrirEditarNF(nfId) {
+  const nf = DB.nfs.find(n => n.id === nfId);
+  if (!nf) { toast('NF não encontrada.', 'erro'); return; }
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode editar NFs.', 'aviso'); return; }
+  nfEditandoId = nfId;
+  $('formNF').reset();
+  atualizarSelectsCadastros();
+
+  $('nfPedido').value = nf.pedido || '';
+  $('nfNumero').value = nf.numero || '';
+  $('nfFornecedor').value = nf.fornecedorId || '';
+  $('nfCNPJ').value = nf.fornecedorCNPJ || '';
+  $('nfTransportadora').value = nf.transportadoraId || '';
+  $('nfValorTotal').value = nf.valorTotalNF || '';
+  $('nfEmissao').value = nf.dataEmissao || '';
+  $('nfRecebimento').value = nf.dataRecebimento || '';
+  $('nfConferencia').value = nf.dataConferencia || '';
+  $('nfConferidoPor').value = nf.conferidoPor || '';
+  $('nfStatus').value = nf.status || 'conferida';
+  $('nfObservacoes').value = nf.observacoes || '';
+
+  // Bloqueia a edição dos itens no modo edição
+  $('tituloModalNF').textContent = `✏️ Editar NF ${nf.numero}`;
+  $('avisoEdicao').style.display = 'block';
+  $('avisoRecebimento').style.display = 'none';
+  $('blocoItens').style.display = 'none';
+  $('itensNF').innerHTML = '';
+  $('btnRascunho').style.display = 'none';
+  $('btnSalvarNF').textContent = '💾 Salvar Alterações';
+  $('avisoRascunho').style.display = 'none';
+  abrirModal('modalNF');
+}
 function iniciarAutoSave() {
   if (autoSaveInterval) clearInterval(autoSaveInterval);
   autoSaveInterval = setInterval(() => {
+    if (nfEditandoId) return;
     if (!$('modalNF').classList.contains('oculto')) {
       const algum = $('nfNumero').value || $('nfFornecedor').value ||
         [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
@@ -1408,28 +1402,32 @@ function iniciarAutoSave() {
 function pararAutoSave() { if (autoSaveInterval) clearInterval(autoSaveInterval); autoSaveInterval = null; }
 
 window.addEventListener('beforeunload', (e) => {
-  if (!$('modalNF').classList.contains('oculto')) {
-    const algum = $('nfNumero').value || $('nfFornecedor').value ||
-      [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
-    if (algum) { e.preventDefault(); e.returnValue = ''; }
-  }
+  if ($('modalNF').classList.contains('oculto')) return;
+  if (nfEditandoId) return;
+  const algum = $('nfNumero').value || $('nfFornecedor').value ||
+    [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
+  if (algum) { e.preventDefault(); e.returnValue = ''; }
 });
 
 function coletarDadosNF() {
-  const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => ({
-    numero: div.querySelector('.item-numero').value,
-    nome: div.querySelector('.item-nome').value,
-    categoria: div.querySelector('.item-categoria').value,
-    marca: div.querySelector('.item-marca').value,
-    qtd: div.querySelector('.item-qtd').value,
-    custo: div.querySelector('.item-custo').value,
-    venda: div.querySelector('.item-venda').value,
-    carac: div.querySelector('.item-carac').value,
-    foto: div.querySelector('.item-foto-b64').value
-  }));
+  const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => {
+    let fotos = [];
+    try { fotos = JSON.parse(div.querySelector('.item-fotos').value || '[]'); } catch { fotos = []; }
+    fotos = fotos.map(urlImagemSegura).filter(Boolean);
+    return {
+      numero: div.querySelector('.item-numero').value,
+      nome: div.querySelector('.item-nome').value,
+      categoria: div.querySelector('.item-categoria').value,
+      marca: div.querySelector('.item-marca').value,
+      qtd: div.querySelector('.item-qtd').value,
+      condicao: div.querySelector('.item-condicao')?.value || 'ok',
+      carac: div.querySelector('.item-carac').value,
+      fotos
+    };
+  });
   return {
-    numero: $('nfNumero').value,
     pedido: $('nfPedido').value,
+    numero: $('nfNumero').value,
     fornecedorId: $('nfFornecedor').value,
     transportadoraId: $('nfTransportadora').value,
     dataEmissao: $('nfEmissao').value,
@@ -1443,17 +1441,21 @@ function coletarDadosNF() {
   };
 }
 function salvarRascunhoAuto() {
+  if (nfEditandoId) return;
   try { localStorage.setItem(RASCUNHO_KEY, JSON.stringify(coletarDadosNF())); }
   catch (e) { if (e.name === 'QuotaExceededError') toast('⚠️ Sem espaço p/ rascunho.', 'erro'); }
 }
-function salvarRascunhoManual() { salvarRascunhoAuto(); toast('💾 Rascunho salvo.', 'aviso'); }
+function salvarRascunhoManual() {
+  if (nfEditandoId) { toast('Rascunho não se aplica à edição.', 'aviso'); return; }
+  salvarRascunhoAuto(); toast('💾 Rascunho salvo.', 'aviso');
+}
 function recuperarRascunho() {
   try {
     const raw = localStorage.getItem(RASCUNHO_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    $('nfNumero').value = d.numero || '';
     $('nfPedido').value = d.pedido || '';
+    $('nfNumero').value = d.numero || '';
     if (d.fornecedorId) $('nfFornecedor').value = d.fornecedorId;
     $('nfCNPJ').value = DB.fornecedores.find(f => f.id === d.fornecedorId)?.cnpj || '';
     if (d.transportadoraId) $('nfTransportadora').value = d.transportadoraId;
@@ -1477,16 +1479,11 @@ function recuperarRascunho() {
       if (it.categoria) div.querySelector('.item-categoria').value = it.categoria;
       div.querySelector('.item-marca').value = it.marca || '';
       div.querySelector('.item-qtd').value = it.qtd || 1;
-      div.querySelector('.item-custo').value = it.custo || '';
-      div.querySelector('.item-venda').value = it.venda || '';
+      if (it.condicao) div.querySelector('.item-condicao').value = it.condicao;
       div.querySelector('.item-carac').value = it.carac || '';
-      const fotoSegura = urlImagemSegura(it.foto);
-      if (fotoSegura) {
-        const wrap = div.querySelector('.foto-upload');
-        wrap.querySelector('.preview').src = fotoSegura;
-        wrap.querySelector('.preview').style.display = 'block';
-        wrap.querySelector('.item-foto-b64').value = fotoSegura;
-      }
+      const fotos = (it.fotos || (it.foto ? [it.foto] : [])).map(urlImagemSegura).filter(Boolean);
+      div.querySelector('.item-fotos').value = JSON.stringify(fotos);
+      renderizarFotos(div.querySelector('.foto-upload'));
     });
     if (!d.itens || !d.itens.length) addItemNF();
     $('avisoRascunho').style.display = 'none';
@@ -1499,6 +1496,12 @@ function descartarRascunho() {
   toast('Rascunho descartado.');
 }
 function tentarFecharNF() {
+  if (nfEditandoId) {
+    if (!confirm('Descartar alterações desta NF?')) return;
+    nfEditandoId = null;
+    fecharModal('modalNF');
+    return;
+  }
   const algum = $('nfNumero').value || $('nfFornecedor').value ||
     [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
   if (algum) {
@@ -1509,11 +1512,12 @@ function tentarFecharNF() {
   pararAutoSave();
   fecharModal('modalNF');
 }
+
 function templateItemNF(num) {
   return `
     <button type="button" class="remover" onclick="this.parentElement.remove()">✕</button>
     <h4>Item ${escapeHtml(num)}</h4>
-    <label>Nome da Peça *<input type="text" class="item-nome"></label>
+    <label>Nome da Peça <input type="text" class="item-nome" placeholder="Ex: Sofá 3 lugares"></label>
     <div class="grid-3">
       <label>Categoria
         <select class="item-categoria">
@@ -1522,20 +1526,24 @@ function templateItemNF(num) {
       </label>
       <label>Marca<input type="text" class="item-marca"></label>
       <label>Nº Item NF<input type="text" class="item-numero" value="${escapeHtml(num)}"></label>
-      <label>Quantidade *<input type="number" class="item-qtd" min="1" value="1" inputmode="numeric"></label>
-      <label>Preço Custo *<input type="number" class="item-custo" step="0.01" min="0" inputmode="decimal"></label>
-      <label>Preço Venda *<input type="number" class="item-venda" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Quantidade<input type="number" class="item-qtd" min="1" value="1" inputmode="numeric"></label>
+      <label>Condição do item
+        <select class="item-condicao">
+          <option value="ok">✅ Normal</option>
+          <option value="avaria">🔴 Com avaria</option>
+          <option value="observacao">🔍 Em observação</option>
+        </select>
+      </label>
     </div>
-    <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas..."></textarea></label>
+    <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas, detalhes de avaria..."></textarea></label>
     <div class="foto-upload">
-      <img class="preview" alt="preview">
+      <div class="foto-grid"></div>
       <div class="botoes-foto">
         <button type="button" class="btn-secundario" onclick="abrirCameraPara(this)">📷 Câmera</button>
         <button type="button" class="btn-secundario" onclick="escolherArquivo(this)">🖼️ Galeria</button>
-        <button type="button" class="btn-perigo" onclick="removerFoto(this)">✕</button>
       </div>
-      <input type="file" accept="image/*" style="display:none" onchange="carregarFoto(this)">
-      <input type="hidden" class="item-foto-b64">
+      <input type="file" accept="image/*" multiple style="display:none" onchange="carregarFotos(this)">
+      <input type="hidden" class="item-fotos" value="[]">
     </div>`;
 }
 function addItemNF() {
@@ -1544,21 +1552,65 @@ function addItemNF() {
   div.className = 'item-nf';
   div.innerHTML = templateItemNF(contadorItemNF);
   $('itensNF').appendChild(div);
+  // Atualiza borda conforme condição
+  const sel = div.querySelector('.item-condicao');
+  sel.addEventListener('change', () => {
+    div.classList.toggle('cond-avaria', sel.value === 'avaria');
+    div.classList.toggle('cond-observacao', sel.value === 'observacao');
+  });
 }
-function escolherArquivo(btn) { btn.closest('.foto-upload').querySelector('input[type=file]').click(); }
-async function carregarFoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  if (!file.type.startsWith('image/')) { toast('Arquivo não é imagem.', 'erro'); return; }
-  try {
-    const comprimida = await comprimirImagem(file);
-    aplicarFoto(input.closest('.foto-upload'), comprimida);
-  } catch { toast('Erro ao processar imagem.', 'erro'); }
+function escolherArquivo(btn) {
+  const input = btn.closest('.foto-upload').querySelector('input[type=file]');
+  input.click();
+}
+
+// -------- MÚLTIPLAS FOTOS --------
+function obterFotosWrap(wrap) {
+  try { return JSON.parse(wrap.querySelector('.item-fotos').value || '[]').map(urlImagemSegura).filter(Boolean); }
+  catch { return []; }
+}
+function setFotosWrap(wrap, fotos) {
+  wrap.querySelector('.item-fotos').value = JSON.stringify(fotos);
+  renderizarFotos(wrap);
+}
+function renderizarFotos(wrap) {
+  const grid = wrap.querySelector('.foto-grid');
+  const fotos = obterFotosWrap(wrap);
+  grid.innerHTML = fotos.map((f, i) => `
+    <div class="foto-thumb" style="background-image:url('${escapeHtml(f)}')">
+      <button type="button" class="rm" onclick="removerFotoIndex(this, ${i})">✕</button>
+    </div>`).join('');
+}
+function adicionarFotoWrap(wrap, dataUrl) {
+  const segura = urlImagemSegura(dataUrl);
+  if (!segura) return;
+  const fotos = obterFotosWrap(wrap);
+  if (fotos.length >= MAX_FOTOS_ITEM) { toast(`Máximo ${MAX_FOTOS_ITEM} fotos por item.`, 'aviso'); return; }
+  fotos.push(segura);
+  setFotosWrap(wrap, fotos);
+}
+function removerFotoIndex(btn, index) {
+  const wrap = btn.closest('.foto-upload');
+  const fotos = obterFotosWrap(wrap);
+  fotos.splice(index, 1);
+  setFotosWrap(wrap, fotos);
+}
+async function carregarFotos(input) {
+  const files = [...input.files];
+  if (!files.length) return;
+  const wrap = input.closest('.foto-upload');
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) { toast(`${f.name}: não é imagem.`, 'aviso'); continue; }
+    try {
+      const comprimida = await comprimirImagem(f);
+      adicionarFotoWrap(wrap, comprimida);
+    } catch { toast(`Erro ao processar ${f.name}.`, 'erro'); }
+  }
   input.value = '';
 }
 
 // ============================================================
-// CÂMERA DE FOTO
+// CÂMERA
 // ============================================================
 function avisoCamera(msg) {
   const el = $('cameraAviso');
@@ -1599,9 +1651,13 @@ async function capturarFoto() {
   const bruta = canvas.toDataURL('image/jpeg', 0.8);
   try {
     const comprimida = await comprimirImagem(bruta);
-    if (itemAtualFoto) aplicarFoto(itemAtualFoto, comprimida);
+    if (itemAtualFoto) {
+      adicionarFotoWrap(itemAtualFoto, comprimida);
+      const qtd = obterFotosWrap(itemAtualFoto).length;
+      toast(`📸 Foto ${qtd} adicionada.` + (qtd < MAX_FOTOS_ITEM ? ' Pode tirar mais.' : ''));
+      if (qtd >= MAX_FOTOS_ITEM) fecharCamera();
+    }
   } catch { toast('Erro ao capturar.', 'erro'); }
-  fecharCamera();
 }
 function fecharCamera() {
   if (streamCamera) { streamCamera.getTracks().forEach(t => t.stop()); streamCamera = null; }
@@ -1613,44 +1669,76 @@ function fecharCamera() {
 function escolherArquivoCamera() {
   if (!itemAtualFoto) { toast('Nenhum item ativo.', 'erro'); return; }
   const input = itemAtualFoto.querySelector('input[type=file]');
-  const wrap = itemAtualFoto;
   itemAtualFoto = null;
   fecharCamera();
   if (input) {
-    input.onchange = null;
-    input.addEventListener('change', function handler() {
-      input.removeEventListener('change', handler);
-      carregarFoto(input);
-    }, { once: true });
+    input.addEventListener('change', function handler() { input.removeEventListener('change', handler); }, { once: true });
     input.click();
   }
 }
-function aplicarFoto(wrap, dataUrl) {
-  const segura = urlImagemSegura(dataUrl);
-  if (!segura) return;
-  wrap.querySelector('.preview').src = segura;
-  wrap.querySelector('.preview').style.display = 'block';
-  wrap.querySelector('.item-foto-b64').value = segura;
-}
-function removerFoto(btn) {
-  const wrap = btn.closest('.foto-upload');
-  wrap.querySelector('.preview').src = '';
-  wrap.querySelector('.preview').style.display = 'none';
-  wrap.querySelector('.item-foto-b64').value = '';
-}
 
 // ============================================================
-// SUBMIT NF — cria peças como aguardando_destino
+// SUBMIT NF (novo + edição)
 // ============================================================
 $('formNF').onsubmit = e => {
   e.preventDefault();
-  const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
-  if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
+  if (nfEditandoId) { return submeterEdicaoNF(); }
+  return submeterNovaNF();
+};
+
+function submeterEdicaoNF() {
+  const nf = DB.nfs.find(n => n.id === nfEditandoId);
+  if (!nf) { toast('NF não encontrada.', 'erro'); nfEditandoId = null; return; }
+  const fornecedor = DB.fornecedores.find(f => f.id === $('nfFornecedor').value);
+  const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
+
+  nf.pedido = $('nfPedido').value.trim();
+  nf.numero = $('nfNumero').value.trim() || nf.numero;
+  nf.fornecedorId = fornecedor ? fornecedor.id : nf.fornecedorId;
+  nf.fornecedorNome = fornecedor ? fornecedor.nome : nf.fornecedorNome;
+  nf.fornecedorCNPJ = fornecedor ? (fornecedor.cnpj || '') : nf.fornecedorCNPJ;
+  nf.transportadoraId = transportadora ? transportadora.id : null;
+  nf.transportadoraNome = transportadora ? transportadora.nome : '';
+  nf.dataEmissao = $('nfEmissao').value;
+  nf.dataRecebimento = $('nfRecebimento').value;
+  nf.dataConferencia = $('nfConferencia').value;
+  nf.conferidoPor = $('nfConferidoPor').value.trim();
+  nf.status = $('nfStatus').value;
+  nf.valorTotalNF = Number($('nfValorTotal').value) || 0;
+  nf.observacoes = $('nfObservacoes').value.trim();
+  nf.dataEdicao = new Date().toISOString();
+
+  // Propaga campos atualizados para as peças vinculadas
+  const valorUnit = (nf.pecasIds && nf.pecasIds.length) ? (nf.valorTotalNF / nf.pecasIds.length) : 0;
+  DB.pecas.forEach(p => {
+    if ((nf.pecasIds || []).includes(p.id)) {
+      p.numeroNF = nf.numero;
+      p.numeroPedido = nf.pedido;
+      p.fornecedor = nf.fornecedorNome;
+      p.fornecedorId = nf.fornecedorId;
+      p.transportadora = nf.transportadoraNome;
+      p.dataConferencia = nf.dataConferencia;
+      p.precoCusto = valorUnit;
+      registrarHistorico(p, 'NF editada', `Coord. atualizou NF ${nf.numero}`);
+    }
+  });
+
+  const ok = salvar();
+  if (!ok && !firebaseUser) { toast('Erro ao salvar alterações.', 'erro'); return; }
+  nfEditandoId = null;
+  fecharModal('modalNF'); renderTudo();
+  toast('✅ NF atualizada.');
+}
+
+function submeterNovaNF() {
   const numNF = $('nfNumero').value.trim();
-  if (!numNF) { toast('Informe o nº da NF.', 'erro'); $('nfNumero').focus(); return; }
+  const pedido = $('nfPedido').value.trim();
   const fornecedorId = $('nfFornecedor').value;
   const fornecedor = DB.fornecedores.find(f => f.id === fornecedorId);
-  if (!fornecedor) { toast('Selecione um fornecedor.', 'erro'); $('nfFornecedor').focus(); return; }
+
+  // Validação mínima: precisa ter itens com nome. O resto é opcional.
+  const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
+  if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
 
   const itensValidados = [];
   for (let i = 0; i < itensDOM.length; i++) {
@@ -1658,41 +1746,43 @@ $('formNF').onsubmit = e => {
     const nome = div.querySelector('.item-nome').value.trim();
     const categoria = div.querySelector('.item-categoria').value;
     const marca = div.querySelector('.item-marca').value.trim();
-    const qtdRaw = div.querySelector('.item-qtd').value;
-    const custoRaw = div.querySelector('.item-custo').value;
-    const vendaRaw = div.querySelector('.item-venda').value;
+    const qtdRaw = div.querySelector('.item-qtd').value || '1';
+    const condicao = div.querySelector('.item-condicao')?.value || 'ok';
     const carac = div.querySelector('.item-carac').value.trim();
-    const foto = urlImagemSegura(div.querySelector('.item-foto-b64').value);
     const numItem = div.querySelector('.item-numero').value.trim();
+    let fotos = [];
+    try { fotos = JSON.parse(div.querySelector('.item-fotos').value || '[]'); } catch { fotos = []; }
+    fotos = fotos.map(urlImagemSegura).filter(Boolean);
 
-    if (!nome) { toast(`Item ${i+1}: informe o nome.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
+    if (!nome) { toast(`Item ${i+1}: informe o nome da peça.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
     if (!CATEGORIAS_FIXAS.includes(categoria)) { toast(`Item ${i+1}: categoria inválida.`, 'erro'); return; }
     const qtd = Number(qtdRaw);
     if (!Number.isInteger(qtd) || qtd <= 0) { toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro'); div.querySelector('.item-qtd').focus(); return; }
-    const custo = Number(custoRaw);
-    if (!Number.isFinite(custo) || custo < 0) { toast(`Item ${i+1}: custo inválido.`, 'erro'); div.querySelector('.item-custo').focus(); return; }
-    const venda = Number(vendaRaw);
-    if (!Number.isFinite(venda) || venda < 0) { toast(`Item ${i+1}: venda inválida.`, 'erro'); div.querySelector('.item-venda').focus(); return; }
-    itensValidados.push({ nome, categoria, marca, qtd, custo, venda, carac, foto, numItem });
+    if (!(condicao in CONDICOES)) { toast(`Item ${i+1}: condição inválida.`, 'erro'); return; }
+    itensValidados.push({ nome, categoria, marca, qtd, condicao, carac, fotos, numItem });
   }
+
+  const totalPecas = itensValidados.reduce((s, it) => s + it.qtd, 0);
+  const valorNF = Number($('nfValorTotal').value) || 0;
+  const valorUnit = totalPecas > 0 ? (valorNF / totalPecas) : 0;
 
   const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
   const nf = {
     id: uid(),
     tipoEntrada: 'aguardando',
-    numero: numNF,
-    pedido: $('nfPedido').value.trim(),
-    fornecedorId: fornecedor.id,
-    fornecedorNome: fornecedor.nome,
-    fornecedorCNPJ: fornecedor.cnpj || '',
+    numero: numNF || 'S/N',
+    pedido: pedido,
+    fornecedorId: fornecedor ? fornecedor.id : null,
+    fornecedorNome: fornecedor ? fornecedor.nome : 'Não informado',
+    fornecedorCNPJ: fornecedor ? (fornecedor.cnpj || '') : ($('nfCNPJ').value || ''),
     transportadoraId: transportadora ? transportadora.id : null,
     transportadoraNome: transportadora ? transportadora.nome : '',
     dataEmissao: $('nfEmissao').value,
-    dataRecebimento: $('nfRecebimento').value,
-    dataConferencia: $('nfConferencia').value,
+    dataRecebimento: $('nfRecebimento').value || hoje(),
+    dataConferencia: $('nfConferencia').value || hoje(),
     conferidoPor: $('nfConferidoPor').value.trim(),
-    status: $('nfStatus').value,
-    valorTotalNF: Number($('nfValorTotal').value) || 0,
+    status: $('nfStatus').value || 'conferida',
+    valorTotalNF: valorNF,
     observacoes: $('nfObservacoes').value.trim(),
     dataCadastro: new Date().toISOString(),
     pecasIds: []
@@ -1710,18 +1800,21 @@ $('formNF').onsubmit = e => {
         numeroNF: nf.numero, numeroPedido: nf.pedido,
         itemNF: item.numItem, dataConferencia: nf.dataConferencia,
         caracteristicas: item.carac,
-        precoCusto: item.custo, precoVenda: item.venda,
+        condicao: item.condicao,
+        precoCusto: valorUnit, precoVenda: 0,
         localizacao: 'deposito',
         status: 'aguardando_destino',
         numeroOC: null, cliente: null, clienteTelefone: null,
         dataEntrega: null, valorCombinado: null, obsReserva: '',
         dataVenda: null,
-        foto: item.foto || '',
+        foto: item.fotos[0] || '',
+        fotos: item.fotos,
         sequencia: item.qtd > 1 ? `${i}/${item.qtd}` : null,
         dataCadastro: new Date().toISOString(),
         historico: []
       };
-      registrarHistorico(peca, 'recebida (conferência)', `NF ${nf.numero} · item ${item.numItem} · aguardando destino`);
+      const obs = item.condicao !== 'ok' ? ` · ${CONDICOES[item.condicao]}` : '';
+      registrarHistorico(peca, 'recebida (conferência)', `NF ${nf.numero}${nf.pedido ? ' · Pedido/OC ' + nf.pedido : ''} · item ${item.numItem}${obs}`);
       novasPecas.push(peca);
       nf.pecasIds.push(peca.id);
     }
@@ -1741,52 +1834,50 @@ $('formNF').onsubmit = e => {
   }
   fecharModal('modalNF'); renderTudo();
   toast(`✅ NF salva! ${nf.pecasIds.length} peça(s) aguardando destino.`);
-};
+}
 
 // ============================================================
-// DESTINOS — Coordenador
+// DESTINOS
 // ============================================================
 function renderDestinos() {
   if (perfilAtual !== 'coordenador') { $('listaDestinos').innerHTML = '<p class="vazio">Acesso restrito ao Coordenador Logístico.</p>'; return; }
   const pendentes = DB.pecas.filter(p => p.status === 'aguardando_destino');
-
   const fornSel = $('filtroFornDestino');
   if (fornSel) {
     const v = fornSel.value;
     const forns = [...new Set(pendentes.map(p => p.fornecedor).filter(Boolean))].sort();
-    fornSel.innerHTML = '<option value="">Todos os fornecedores</option>' +
-      forns.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
+    fornSel.innerHTML = '<option value="">Todos os fornecedores</option>' + forns.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
     if (v && [...fornSel.options].some(o => o.value === v)) fornSel.value = v;
   }
-
   const busca = ($('buscaDestino').value || '').toLowerCase();
   const fornFiltro = fornSel ? fornSel.value : '';
-
   const filtradas = pendentes.filter(p => {
     if (fornFiltro && p.fornecedor !== fornFiltro) return false;
     if (!busca) return true;
-    return [p.nome, p.codigo, p.numeroNF, p.fornecedor, p.marca].some(v => String(v || '').toLowerCase().includes(busca));
+    return [p.nome, p.codigo, p.numeroNF, p.numeroPedido, p.fornecedor, p.marca].some(v => String(v || '').toLowerCase().includes(busca));
   });
 
   const el = $('listaDestinos');
   if (!filtradas.length) { el.innerHTML = '<p class="vazio">🎉 Nenhuma peça aguardando destino.</p>'; return; }
 
-  // Agrupa por NF
   const grupos = {};
   filtradas.forEach(p => { const k = p.numeroNF || 'Sem NF'; (grupos[k] = grupos[k] || []).push(p); });
 
   el.innerHTML = Object.keys(grupos).sort().reverse().map(nfNum => {
     const pecas = grupos[nfNum];
     const forn = pecas[0]?.fornecedor || '';
+    const pedido = pecas[0]?.numeroPedido || '';
     const dataConf = pecas[0]?.dataConferencia ? formatarData(pecas[0].dataConferencia) : '';
     const itens = pecas.map(p => {
-      const fotoSeg = urlImagemSegura(p.foto);
-      const thumb = fotoSeg ? `<span style="display:inline-block;width:32px;height:32px;border-radius:6px;background:url('${escapeHtml(fotoSeg)}') center/cover;vertical-align:middle;margin-right:6px"></span>` : '';
+      const fotos = pecaFotos(p);
+      const thumb = fotos[0] ? `<span style="display:inline-block;width:32px;height:32px;border-radius:6px;background:url('${escapeHtml(fotos[0])}') center/cover;vertical-align:middle;margin-right:6px"></span>` : '';
+      const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge ${p.condicao}" style="font-size:9px;margin-left:6px">${CONDICOES[p.condicao]}</span>` : '';
+      const cls = p.condicao === 'avaria' ? 'cond-avaria' : p.condicao === 'observacao' ? 'cond-observacao' : '';
       return `
-      <div class="destino-item">
+      <div class="destino-item ${cls}">
         <div class="info-peca">
-          <strong>${thumb}${escapeHtml(p.nome)} <span style="color:#b0a0a5;font-weight:400;font-size:11px">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span></strong>
-          <small>${escapeHtml(p.marca || '—')} · ${escapeHtml(brl(p.precoVenda))} · item NF ${escapeHtml(p.itemNF || '—')}</small>
+          <strong>${thumb}${escapeHtml(p.nome)} <span style="color:#b0a0a5;font-weight:400;font-size:11px">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>${condBadge}</strong>
+          <small>${escapeHtml(p.marca || '—')} · item NF ${escapeHtml(p.itemNF || '—')}</small>
         </div>
         <div class="btns-destino">
           <button class="btn-sucesso" data-showroom="${escapeHtml(p.id)}">🪑 Showroom</button>
@@ -1799,6 +1890,7 @@ function renderDestinos() {
         <header>
           <div>
             <h3>NF ${escapeHtml(nfNum)} · ${escapeHtml(forn || '—')}</h3>
+            ${pedido ? `<div class="pedido-destaque inline">📋 Pedido/OC: <strong>${escapeHtml(pedido)}</strong></div>` : ''}
             <small>${pecas.length} peça(s) pendente(s)${dataConf ? ' · conferida em ' + escapeHtml(dataConf) : ''}</small>
           </div>
           <div class="acoes-grupo">
@@ -1816,15 +1908,13 @@ function renderDestinos() {
 
 function confirmarDestinoShowroom(pecaId) {
   const p = DB.pecas.find(x => x.id === pecaId);
-  if (!p) return;
-  if (p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
+  if (!p || p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
   p.status = 'disponivel';
   p.localizacao = 'showroom';
   registrarHistorico(p, 'destino: showroom', 'Classificada pelo Coordenador');
   salvar(); renderTudo();
   toast('🪑 Enviada ao Showroom.');
 }
-
 function confirmarShowroomLote(nfNum) {
   const pendentes = DB.pecas.filter(p => p.numeroNF === nfNum && p.status === 'aguardando_destino');
   if (!pendentes.length) { toast('Nada pendente nessa NF.', 'aviso'); return; }
@@ -1837,20 +1927,17 @@ function confirmarShowroomLote(nfNum) {
   salvar(); renderTudo();
   toast(`🪑 ${pendentes.length} peça(s) para o Showroom.`);
 }
-
 function abrirDefinirOC(pecaId) {
   const p = DB.pecas.find(x => x.id === pecaId);
-  if (!p) return;
-  if (p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
+  if (!p || p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
   $('formDefinirOC').reset();
   $('ocPecaId').value = pecaId;
-  $('ocPecaInfo').textContent = `${p.nome} (${p.codigo}) · ${brl(p.precoVenda)}`;
-  $('ocValor').value = p.precoVenda || '';
+  $('ocPecaInfo').textContent = `${p.nome} (${p.codigo})`;
+  $('ocValor').value = p.precoCusto || '';
   atualizarSelectsCadastros();
   abrirModal('modalDefinirOC');
   setTimeout(() => $('ocNumero').focus(), 100);
 }
-
 $('formDefinirOC').onsubmit = e => {
   e.preventDefault();
   const id = $('ocPecaId').value;
@@ -1875,7 +1962,6 @@ $('formDefinirOC').onsubmit = e => {
   p.valorCombinado = Number.isFinite(valor) ? valor : 0;
   p.obsReserva = $('ocObs').value.trim();
   registrarHistorico(p, 'destino: OC', `OC ${numOC} · cliente ${cliente}`);
-
   salvar(); fecharModal('modalDefinirOC'); renderTudo();
   toast('🧾 Definida como OC / Encomenda.');
 };
@@ -1890,11 +1976,11 @@ function renderNFs() {
   const lista = DB.nfs.filter(nf => {
     const mB = !busca ||
       String(nf.numero || '').toLowerCase().includes(busca) ||
+      String(nf.pedido || '').toLowerCase().includes(busca) ||
       String(nf.fornecedorNome || '').toLowerCase().includes(busca) ||
       String(nf.transportadoraNome || '').toLowerCase().includes(busca) ||
       String(nf.cliente || '').toLowerCase().includes(busca) ||
-      String(nf.numeroOC || '').toLowerCase().includes(busca) ||
-      String(nf.pedido || '').toLowerCase().includes(busca);
+      String(nf.numeroOC || '').toLowerCase().includes(busca);
     return mB && (!status || nf.status === status) && (!tipo || nf.tipoEntrada === tipo);
   }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
 
@@ -1902,29 +1988,34 @@ function renderNFs() {
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma NF encontrada.</p>'; return; }
   el.innerHTML = lista.map(nf => {
     const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-    const custoCalc = pecasNF.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
     const pendentes = pecasNF.filter(p => p.status === 'aguardando_destino').length;
+    const comProblema = pecasNF.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
     const tipo = nf.tipoEntrada || 'aguardando';
     const badgeTipo = tipo === 'oc' ? '<span class="badge oc">🧾 OC</span>'
                    : tipo === 'showroom' ? '<span class="badge showroom">🪑 Showroom</span>'
-                   : tipo === 'aguardando' ? `<span class="badge aguardando_destino">⏳ Aguardando destino</span>`
-                   : '<span class="badge aguardando_destino">—</span>';
+                   : '<span class="badge aguardando_destino">⏳ Aguardando destino</span>';
+    const statusBadge = nf.status === 'avaria' ? '<span class="badge avaria">🔴 Avaria</span>'
+                     : nf.status === 'observacao' ? '<span class="badge observacao">🔍 Observação</span>'
+                     : `<span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>`;
     return `
       <div class="card-item">
         <div class="info">
-          <h3>NF ${escapeHtml(nf.numero)} ${badgeTipo}</h3>
-          <p>🏢 ${escapeHtml(nf.fornecedorNome)}</p>
-          <p>📅 ${escapeHtml(formatarData(nf.dataRecebimento))} · ${escapeHtml(nf.conferidoPor || '—')}</p>
+          <h3>NF ${escapeHtml(nf.numero)} ${badgeTipo} ${statusBadge}</h3>
+          ${nf.pedido ? `<div class="pedido-destaque">📋 Pedido/OC: <strong>${escapeHtml(nf.pedido)}</strong></div>` : ''}
+          <p>🏢 ${escapeHtml(nf.fornecedorNome)}${nf.fornecedorCNPJ ? ' · ' + escapeHtml(nf.fornecedorCNPJ) : ''}</p>
+          <p>📅 ${escapeHtml(formatarData(nf.dataRecebimento))}${nf.conferidoPor ? ' · conf. ' + escapeHtml(nf.conferidoPor) : ''}</p>
           ${nf.transportadoraNome ? `<p>🚚 ${escapeHtml(nf.transportadoraNome)}</p>` : ''}
-          <p>📦 ${pecasNF.length} peça(s) · custo ${escapeHtml(brl(custoCalc))}${pendentes ? ` · <strong style="color:var(--amarelo)">${pendentes} aguardando destino</strong>` : ''}</p>
-          <span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>
+          <p>📦 ${pecasNF.length} peça(s)${nf.valorTotalNF ? ' · ' + escapeHtml(brl(nf.valorTotalNF)) : ''}${pendentes ? ` · <strong style="color:var(--amarelo)">${pendentes} aguardando</strong>` : ''}${comProblema ? ` · <strong style="color:var(--vermelho)">${comProblema} c/ problema</strong>` : ''}</p>
+          ${nf.observacoes ? `<p style="color:#b0a0a5;font-style:italic">📝 ${escapeHtml(nf.observacoes)}</p>` : ''}
         </div>
         <div class="acoes">
+          ${perfilAtual === 'coordenador' ? `<button class="btn-azul btn-pequeno" data-editar-nf="${escapeHtml(nf.id)}">✏️ Editar</button>` : ''}
           <button class="btn-perigo btn-pequeno" data-excluir-nf="${escapeHtml(nf.id)}">Excluir</button>
         </div>
       </div>`;
   }).join('');
   el.querySelectorAll('[data-excluir-nf]').forEach(btn => btn.addEventListener('click', () => excluirNF(btn.dataset.excluirNf)));
+  el.querySelectorAll('[data-editar-nf]').forEach(btn => btn.addEventListener('click', () => abrirEditarNF(btn.dataset.editarNf)));
 }
 function excluirNF(id) {
   const nf = DB.nfs.find(n => n.id === id);
@@ -1934,8 +2025,7 @@ function excluirNF(id) {
   const reservadas = pecasNF.filter(p => p.status === 'reservado');
   if (vendidas.length) { toast(`Não pode excluir: ${vendidas.length} vendida(s).`, 'erro'); return; }
   if (reservadas.length) { toast(`Não pode excluir: ${reservadas.length} reservada(s).`, 'erro'); return; }
-  const msg = `Excluir NF ${nf.numero}?\n\nSerão removidas ${pecasNF.length} peça(s).\n\nNão pode ser desfeito.`;
-  if (!confirm(msg)) return;
+  if (!confirm(`Excluir NF ${nf.numero}?\n\nSerão removidas ${pecasNF.length} peça(s).\n\nNão pode ser desfeito.`)) return;
   DB.pecas = DB.pecas.filter(p => !(nf.pecasIds || []).includes(p.id));
   DB.nfs = DB.nfs.filter(n => n.id !== id);
   salvar(); renderTudo(); toast('NF excluída.');
@@ -1961,6 +2051,8 @@ function renderPecas() {
       String(p.nome || '').toLowerCase().includes(busca) ||
       String(p.codigo || '').toLowerCase().includes(busca) ||
       String(p.marca || '').toLowerCase().includes(busca) ||
+      String(p.numeroPedido || '').toLowerCase().includes(busca) ||
+      String(p.numeroNF || '').toLowerCase().includes(busca) ||
       String(p.caracteristicas || '').toLowerCase().includes(busca);
     return mB && (!cat || p.categoria === cat) && (!forn || p.fornecedor === forn) && (!status || p.status === status);
   }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
@@ -1968,16 +2060,19 @@ function renderPecas() {
   const el = $('gridPecas');
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma peça encontrada.</p>'; return; }
   el.innerHTML = lista.map(p => {
-    const fotoSeg = urlImagemSegura(p.foto);
-    const bg = fotoSeg ? `style="background-image:url('${escapeHtml(fotoSeg)}')"` : '';
+    const fotos = pecaFotos(p);
+    const bg = fotos[0] ? `style="background-image:url('${escapeHtml(fotos[0])}')"` : '';
+    const count = fotos.length > 1 ? `<span class="foto-count">📷 ${fotos.length}</span>` : '';
+    const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge-cond ${p.condicao}">${p.condicao === 'avaria' ? '🔴 AVARIA' : '🔍 OBS'}</span>` : '';
     return `
     <div class="peca-card" data-peca-id="${escapeHtml(p.id)}">
-      <div class="foto" ${bg}>${fotoSeg ? '' : '🪑'}</div>
+      ${condBadge}
+      <div class="foto" ${bg}>${fotos[0] ? '' : '🪑'}${count}</div>
       <div class="corpo">
         <div class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</div>
         <h3>${escapeHtml(p.nome)}</h3>
+        ${p.numeroPedido ? `<div class="pedido-destaque inline" style="font-size:10px;padding:3px 6px">📋 ${escapeHtml(p.numeroPedido)}</div>` : ''}
         <div class="carac">${escapeHtml(p.caracteristicas || p.marca || '—')}</div>
-        <div class="preco">${escapeHtml(brl(p.precoVenda))}</div>
         <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>
         ${p.cliente ? `<div class="cliente-badge">👤 ${escapeHtml(p.cliente)}</div>` : ''}
       </div>
@@ -1989,10 +2084,7 @@ function renderPecas() {
 function renderReservas() {
   const busca = ($('buscaReserva').value || '').toLowerCase();
   const lista = DB.pecas.filter(p => p.status === 'reservado')
-    .filter(p => !busca ||
-      String(p.cliente || '').toLowerCase().includes(busca) ||
-      String(p.nome || '').toLowerCase().includes(busca) ||
-      String(p.numeroOC || '').toLowerCase().includes(busca))
+    .filter(p => !busca || [p.cliente, p.nome, p.numeroOC, p.numeroPedido].some(v => String(v || '').toLowerCase().includes(busca)))
     .sort((a, b) => String(a.dataEntrega || '').localeCompare(String(b.dataEntrega || '')));
   const el = $('listaReservas');
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma reserva.</p>'; return; }
@@ -2000,6 +2092,7 @@ function renderReservas() {
     <div class="card-item">
       <div class="info">
         <h3>${escapeHtml(p.nome)} <span style="color:#95a5a6;font-size:12px">${escapeHtml(p.codigo)}</span></h3>
+        ${p.numeroPedido ? `<div class="pedido-destaque">📋 Pedido/OC: <strong>${escapeHtml(p.numeroPedido)}</strong></div>` : ''}
         <p>👤 <strong>${escapeHtml(p.cliente || '—')}</strong>${p.clienteTelefone ? ' · 📞 ' + escapeHtml(p.clienteTelefone) : ''}</p>
         ${p.numeroOC ? `<p>🧾 OC: ${escapeHtml(p.numeroOC)}</p>` : ''}
         <p>📅 Entrega: ${escapeHtml(formatarData(p.dataEntrega))}${p.valorCombinado ? ' · 💰 ' + escapeHtml(brl(p.valorCombinado)) : ''}</p>
@@ -2021,7 +2114,7 @@ function entregarReserva(id) {
   p.status = 'vendido';
   p.dataVenda = hoje();
   p.localizacao = 'transito';
-  registrarHistorico(p, 'entregue', `Cliente ${p.cliente} · ${brl(p.valorCombinado || p.precoVenda)}`);
+  registrarHistorico(p, 'entregue', `Cliente ${p.cliente} · ${brl(p.valorCombinado || 0)}`);
   salvar(); renderTudo(); toast('✅ Entregue!');
 }
 function cancelarReserva(id) {
@@ -2031,6 +2124,7 @@ function cancelarReserva(id) {
   if (!confirm(`Cancelar reserva de "${p.nome}"?`)) return;
   registrarHistorico(p, 'reserva cancelada', `Era cliente: ${p.cliente || '—'}`);
   p.status = 'disponivel';
+  p.localizacao = 'showroom';
   p.cliente = null; p.clienteTelefone = null; p.numeroOC = null;
   p.dataEntrega = null; p.valorCombinado = null; p.obsReserva = '';
   salvar(); renderTudo(); toast('Reserva cancelada.');
@@ -2042,17 +2136,20 @@ function cancelarReserva(id) {
 function abrirFichaPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) { fecharModal('modalFichaPeca'); toast('Peça não encontrada.', 'aviso'); return; }
-  const fotoSeg = urlImagemSegura(p.foto);
-  const bg = fotoSeg ? `style="background-image:url('${escapeHtml(fotoSeg)}')"` : '';
+  const fotos = pecaFotos(p);
+  const bg = fotos[0] ? `style="background-image:url('${escapeHtml(fotos[0])}')"` : '';
+  const galeria = fotos.length > 1 ? `<div class="ficha-galeria">${fotos.map(f => `<img src="${escapeHtml(f)}" onclick="ampliarFoto('${escapeHtml(f)}')" alt="">`).join('')}</div>` : '';
   const hist = (p.historico || []).map(h => `
     <div class="historico-item">
       <div class="data">${escapeHtml(formatarDataHora(h.data))}</div>
       <strong>${escapeHtml(h.acao)}</strong> ${h.detalhe ? '— ' + escapeHtml(h.detalhe) : ''}
     </div>`).join('') || '<p style="color:#95a5a6">Sem histórico.</p>';
   const badge = `<span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>`;
+  const condBadge = p.condicao && p.condicao !== 'ok' ? ` <span class="badge ${p.condicao}">${CONDICOES[p.condicao]}</span>` : '';
   $('fichaPeca').innerHTML = `
     <div class="ficha-grid">
-      <div class="full"><div class="ficha-foto" ${bg}>${fotoSeg ? '' : '🪑'}</div></div>
+      <div class="full"><div class="ficha-foto" ${bg}>${fotos[0] ? '' : '🪑'}</div></div>
+      ${galeria ? `<div class="full">${galeria}</div>` : ''}
       <div class="ficha-info">
         <h2>${escapeHtml(p.nome)}</h2>
         <p><strong>Código:</strong> ${escapeHtml(p.codigo)}${p.sequencia ? ' (' + escapeHtml(p.sequencia) + ')' : ''}</p>
@@ -2061,26 +2158,22 @@ function abrirFichaPeca(id) {
         <p><strong>Fornecedor:</strong> ${escapeHtml(p.fornecedor || '—')}</p>
         <p><strong>Transportadora:</strong> ${escapeHtml(p.transportadora || '—')}</p>
         <p><strong>NF:</strong> ${escapeHtml(p.numeroNF || '—')} · Item ${escapeHtml(p.itemNF || '—')}</p>
-        <p><strong>Pedido:</strong> ${escapeHtml(p.numeroPedido || '—')}</p>
         <p><strong>Data conferência:</strong> ${escapeHtml(formatarData(p.dataConferencia))}</p>
       </div>
       <div class="ficha-info">
-        <p><strong>Custo:</strong> ${escapeHtml(brl(p.precoCusto))}</p>
-        <p><strong>Venda:</strong> ${escapeHtml(brl(p.precoVenda))}</p>
+        <p><strong>Status:</strong> ${badge}${condBadge}</p>
         <p><strong>Local:</strong> ${escapeHtml(p.localizacao)}</p>
-        <p><strong>Status:</strong> ${badge}</p>
+        ${p.precoCusto ? `<p><strong>Custo unitário (rateio NF):</strong> ${escapeHtml(brl(p.precoCusto))}</p>` : ''}
         ${p.cliente ? `<p><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</p>` : ''}
         ${p.clienteTelefone ? `<p><strong>📞:</strong> ${escapeHtml(p.clienteTelefone)}</p>` : ''}
-        ${p.numeroOC ? `<p><strong>OC:</strong> ${escapeHtml(p.numeroOC)}</p>` : ''}
+        ${p.numeroOC ? `<p><strong>OC cliente:</strong> ${escapeHtml(p.numeroOC)}</p>` : ''}
         ${p.dataEntrega ? `<p><strong>Entrega:</strong> ${escapeHtml(formatarData(p.dataEntrega))}</p>` : ''}
-        ${p.valorCombinado ? `<p><strong>Combinado:</strong> ${escapeHtml(brl(p.valorCombinado))}</p>` : ''}
+        ${p.valorCombinado ? `<p><strong>Valor combinado:</strong> ${escapeHtml(brl(p.valorCombinado))}</p>` : ''}
       </div>
+      ${p.numeroPedido ? `<div class="full"><div class="pedido-destaque">📋 Pedido / Ordem de Compra na NF: <strong>${escapeHtml(p.numeroPedido)}</strong></div></div>` : ''}
       <div class="full"><p><strong>Características:</strong> ${escapeHtml(p.caracteristicas || '—')}</p></div>
       ${p.obsReserva ? `<div class="full"><p><strong>Obs reserva:</strong> ${escapeHtml(p.obsReserva)}</p></div>` : ''}
-      <div class="full">
-        <h3 class="subtitulo">🕒 Histórico</h3>
-        ${hist}
-      </div>
+      <div class="full"><h3 class="subtitulo">🕒 Histórico</h3>${hist}</div>
       <div class="full botoes" style="justify-content:flex-start">
         ${p.status === 'aguardando_destino' && perfilAtual === 'coordenador' ? `<button class="btn-sucesso btn-pequeno" data-acao="showroom">🪑 Showroom</button>` : ''}
         ${p.status === 'aguardando_destino' && perfilAtual === 'coordenador' ? `<button class="btn-aviso btn-pequeno" data-acao="oc">🧾 OC</button>` : ''}
@@ -2088,7 +2181,8 @@ function abrirFichaPeca(id) {
         ${p.status === 'reservado' ? `<button class="btn-sucesso btn-pequeno" data-acao="entregar">✅ Entregar</button>` : ''}
         ${p.status === 'reservado' ? `<button class="btn-aviso btn-pequeno" data-acao="cancelar-res">↩️ Cancelar</button>` : ''}
         <button class="btn-secundario btn-pequeno" data-acao="mover">📍 Mover</button>
-        <button class="btn-secundario btn-pequeno" data-acao="foto">📷 Foto</button>
+        <button class="btn-secundario btn-pequeno" data-acao="condicao">🏷️ Condição</button>
+        <button class="btn-secundario btn-pequeno" data-acao="foto">📷 Fotos</button>
         <button class="btn-perigo btn-pequeno" data-acao="excluir">🗑️ Excluir</button>
       </div>
     </div>`;
@@ -2102,11 +2196,29 @@ function abrirFichaPeca(id) {
       else if (a === 'entregar') entregarReserva(id);
       else if (a === 'cancelar-res') cancelarReserva(id);
       else if (a === 'mover') moverPeca(id);
+      else if (a === 'condicao') trocarCondicao(id);
       else if (a === 'foto') trocarFotoPeca(id);
       else if (a === 'excluir') excluirPeca(id);
     });
   });
   abrirModal('modalFichaPeca');
+}
+function ampliarFoto(url) {
+  $('imgGaleria').src = url;
+  abrirModal('modalGaleria');
+}
+function trocarCondicao(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  const mapa = { '1': 'ok', '2': 'avaria', '3': 'observacao' };
+  const r = prompt('Condição da peça:\n1) Normal\n2) Com avaria\n3) Em observação\n\nDigite o número:', p.condicao === 'avaria' ? '2' : p.condicao === 'observacao' ? '3' : '1');
+  if (!r) return;
+  const nova = mapa[r.trim()];
+  if (!nova) { toast('Opção inválida.', 'erro'); return; }
+  if (nova === p.condicao) return;
+  p.condicao = nova;
+  registrarHistorico(p, 'condição alterada', `Agora: ${CONDICOES[nova]}`);
+  salvar(); abrirFichaPeca(id); renderTudo(); toast('Condição atualizada.');
 }
 function moverPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
@@ -2132,22 +2244,26 @@ $('formMover').onsubmit = e => {
   renderTudo(); toast('Localização atualizada.');
 };
 function trocarFotoPeca(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  const fotos = pecaFotos(p);
+  const acao = prompt(`Fotos atuais: ${fotos.length}.\n\n1) Adicionar novas fotos\n2) Substituir todas\n3) Cancelar`, '1');
+  if (!acao) return;
   const input = document.createElement('input');
-  input.type = 'file'; input.accept = 'image/*'; input.capture = 'environment';
+  input.type = 'file'; input.accept = 'image/*'; input.multiple = true; input.capture = 'environment';
   input.onchange = async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { toast('Não é imagem.', 'erro'); return; }
-    try {
-      const nova = await comprimirImagem(file);
-      const p = DB.pecas.find(x => x.id === id);
-      if (!p) return;
-      const antiga = p.foto;
-      p.foto = nova;
-      if (!salvar()) { p.foto = antiga; toast('Erro ao salvar foto.', 'erro'); return; }
-      registrarHistorico(p, 'foto atualizada', '');
-      salvar(); abrirFichaPeca(id); renderTudo(); toast('Foto atualizada.');
-    } catch { toast('Erro ao processar imagem.', 'erro'); }
+    const files = [...e.target.files];
+    if (!files.length) return;
+    const novas = acao.trim() === '2' ? [] : [...fotos];
+    for (const f of files) {
+      if (!f.type.startsWith('image/')) continue;
+      try { novas.push(await comprimirImagem(f)); } catch {}
+    }
+    if (!novas.length) return;
+    p.fotos = novas;
+    p.foto = novas[0];
+    registrarHistorico(p, 'fotos atualizadas', `${novas.length} foto(s)`);
+    salvar(); abrirFichaPeca(id); renderTudo(); toast('Fotos atualizadas.');
   };
   input.click();
 }
@@ -2169,12 +2285,11 @@ function excluirPeca(id) {
 // ============================================================
 function abrirReservar(id) {
   const p = DB.pecas.find(x => x.id === id);
-  if (!p) return;
-  if (p.status !== 'disponivel') { toast('Só peças disponíveis.', 'erro'); return; }
+  if (!p || p.status !== 'disponivel') { toast('Só peças disponíveis.', 'erro'); return; }
   $('formReservar').reset();
   $('reservaPecaId').value = id;
-  $('reservaPecaInfo').textContent = `${p.nome} (${p.codigo}) · ${brl(p.precoVenda)}`;
-  $('reservaValor').value = p.precoVenda || '';
+  $('reservaPecaInfo').textContent = `${p.nome} (${p.codigo})`;
+  $('reservaValor').value = p.precoCusto || '';
   atualizarSelectsCadastros();
   fecharModal('modalFichaPeca');
   abrirModal('modalReservar');
@@ -2183,8 +2298,7 @@ $('formReservar').onsubmit = e => {
   e.preventDefault();
   const id = $('reservaPecaId').value;
   const p = DB.pecas.find(x => x.id === id);
-  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
-  if (p.status !== 'disponivel') { toast('Peça não disponível.', 'erro'); return; }
+  if (!p || p.status !== 'disponivel') { toast('Peça não disponível.', 'erro'); return; }
   const cliId = $('reservaClienteSelect').value;
   const cliManual = $('reservaClienteManual').value.trim();
   const cliente = cliId ? (DB.clientes.find(c => c.id === cliId)?.nome || '') : cliManual;
@@ -2203,7 +2317,7 @@ $('formReservar').onsubmit = e => {
 };
 
 // ============================================================
-// CADASTROS (aba)
+// CADASTROS
 // ============================================================
 $('formFornecedor').onsubmit = e => {
   e.preventDefault();
@@ -2228,20 +2342,14 @@ $('formFornecedor').onsubmit = e => {
   salvar(); renderTudo(); atualizarSelectsCadastros();
 };
 function editarForn(id) {
-  const f = DB.fornecedores.find(x => x.id === id);
-  if (!f) return;
+  const f = DB.fornecedores.find(x => x.id === id); if (!f) return;
   DB.editandoFornId = id;
-  $('fornCNPJ').value = f.cnpj || '';
-  $('fornNome').value = f.nome;
-  $('fornContato').value = f.contato || '';
-  $('btnForn').textContent = '💾 Salvar';
-  $('btnCancelForn').style.display = 'inline-flex';
+  $('fornCNPJ').value = f.cnpj || ''; $('fornNome').value = f.nome; $('fornContato').value = f.contato || '';
+  $('btnForn').textContent = '💾 Salvar'; $('btnCancelForn').style.display = 'inline-flex';
 }
 function cancelarEditForn() {
-  DB.editandoFornId = null;
-  $('formFornecedor').reset();
-  $('btnForn').textContent = '+ Adicionar';
-  $('btnCancelForn').style.display = 'none';
+  DB.editandoFornId = null; $('formFornecedor').reset();
+  $('btnForn').textContent = '+ Adicionar'; $('btnCancelForn').style.display = 'none';
 }
 function excluirForn(id) {
   if (DB.nfs.some(n => n.fornecedorId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
@@ -2263,7 +2371,6 @@ function renderFornecedores() {
   el.querySelectorAll('[data-edit-f]').forEach(b => b.addEventListener('click', () => editarForn(b.dataset.editF)));
   el.querySelectorAll('[data-del-f]').forEach(b => b.addEventListener('click', () => excluirForn(b.dataset.delF)));
 }
-
 $('formTransportadora').onsubmit = e => {
   e.preventDefault();
   const cnpj = $('transpCNPJ').value.trim();
@@ -2287,20 +2394,14 @@ $('formTransportadora').onsubmit = e => {
   salvar(); renderTudo(); atualizarSelectsCadastros();
 };
 function editarTransp(id) {
-  const t = DB.transportadoras.find(x => x.id === id);
-  if (!t) return;
+  const t = DB.transportadoras.find(x => x.id === id); if (!t) return;
   DB.editandoTranspId = id;
-  $('transpCNPJ').value = t.cnpj || '';
-  $('transpNome').value = t.nome;
-  $('transpContato').value = t.contato || '';
-  $('btnTransp').textContent = '💾 Salvar';
-  $('btnCancelTransp').style.display = 'inline-flex';
+  $('transpCNPJ').value = t.cnpj || ''; $('transpNome').value = t.nome; $('transpContato').value = t.contato || '';
+  $('btnTransp').textContent = '💾 Salvar'; $('btnCancelTransp').style.display = 'inline-flex';
 }
 function cancelarEditTransp() {
-  DB.editandoTranspId = null;
-  $('formTransportadora').reset();
-  $('btnTransp').textContent = '+ Adicionar';
-  $('btnCancelTransp').style.display = 'none';
+  DB.editandoTranspId = null; $('formTransportadora').reset();
+  $('btnTransp').textContent = '+ Adicionar'; $('btnCancelTransp').style.display = 'none';
 }
 function excluirTransp(id) {
   if (DB.nfs.some(n => n.transportadoraId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
@@ -2322,7 +2423,6 @@ function renderTransportadoras() {
   el.querySelectorAll('[data-edit-t]').forEach(b => b.addEventListener('click', () => editarTransp(b.dataset.editT)));
   el.querySelectorAll('[data-del-t]').forEach(b => b.addEventListener('click', () => excluirTransp(b.dataset.delT)));
 }
-
 $('formCliente').onsubmit = e => {
   e.preventDefault();
   const nome = $('cliNome').value.trim();
@@ -2330,8 +2430,7 @@ $('formCliente').onsubmit = e => {
   const endereco = $('cliEndereco').value.trim();
   if (!nome) { toast('Informe o nome.', 'erro'); return; }
   if (DB.editandoCliId) {
-    const c = DB.clientes.find(x => x.id === DB.editandoCliId);
-    if (!c) return;
+    const c = DB.clientes.find(x => x.id === DB.editandoCliId); if (!c) return;
     c.nome = nome; c.telefone = telefone; c.endereco = endereco;
     cancelarEditCli(); toast('Atualizado.');
   } else {
@@ -2343,24 +2442,17 @@ $('formCliente').onsubmit = e => {
   salvar(); renderTudo(); atualizarSelectsCadastros();
 };
 function editarCli(id) {
-  const c = DB.clientes.find(x => x.id === id);
-  if (!c) return;
+  const c = DB.clientes.find(x => x.id === id); if (!c) return;
   DB.editandoCliId = id;
-  $('cliNome').value = c.nome;
-  $('cliTelefone').value = c.telefone || '';
-  $('cliEndereco').value = c.endereco || '';
-  $('btnCli').textContent = '💾 Salvar';
-  $('btnCancelCli').style.display = 'inline-flex';
+  $('cliNome').value = c.nome; $('cliTelefone').value = c.telefone || ''; $('cliEndereco').value = c.endereco || '';
+  $('btnCli').textContent = '💾 Salvar'; $('btnCancelCli').style.display = 'inline-flex';
 }
 function cancelarEditCli() {
-  DB.editandoCliId = null;
-  $('formCliente').reset();
-  $('btnCli').textContent = '+ Adicionar';
-  $('btnCancelCli').style.display = 'none';
+  DB.editandoCliId = null; $('formCliente').reset();
+  $('btnCli').textContent = '+ Adicionar'; $('btnCancelCli').style.display = 'none';
 }
 function excluirCli(id) {
-  const c = DB.clientes.find(x => x.id === id);
-  if (!c) return;
+  const c = DB.clientes.find(x => x.id === id); if (!c) return;
   if (DB.pecas.some(p => p.cliente === c.nome)) { toast('Tem peças vinculadas.', 'erro'); return; }
   if (!confirm('Excluir?')) return;
   DB.clientes = DB.clientes.filter(x => x.id !== id);
@@ -2407,18 +2499,14 @@ function dentroPeriodo(dataISO, inicio, fim) {
   if (fim && d > new Date(fim + 'T23:59:59').getTime()) return false;
   return true;
 }
-
 function renderRelatorio() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
-
-  const nfsFiltradas = DB.nfs.filter(nf => {
-    if (!inicio && !fim) return true;
-    return dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim);
-  });
+  const nfsFiltradas = DB.nfs.filter(nf => (!inicio && !fim) ? true : dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim));
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
+  const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
 
   const movs = [];
   DB.pecas.forEach(p => (p.historico || []).forEach(h => {
@@ -2426,28 +2514,24 @@ function renderRelatorio() {
   }));
   movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
 
-  let custoNFs = 0;
-  nfsFiltradas.forEach(nf => {
-    const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-    custoNFs += pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
-  });
-  const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
-  const valorReservas = reservasAtivas.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
+  const valorNFsTotal = nfsFiltradas.reduce((s, nf) => s + (Number(nf.valorTotalNF) || 0), 0);
+  const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || 0), 0);
   const custoEntregues = entregues.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
   const lucroEntregues = valorEntregues - custoEntregues;
   const margemEntregues = valorEntregues > 0 ? (lucroEntregues / valorEntregues) * 100 : 0;
+  const valorReservas = reservasAtivas.reduce((s, p) => s + (Number(p.valorCombinado) || 0), 0);
 
   $('relResumo').innerHTML = `
     <div class="item"><span>NFs no período</span><strong>${nfsFiltradas.length}</strong></div>
-    <div class="item"><span>Custo das entradas</span><strong>${escapeHtml(brl(custoNFs))}</strong></div>
+    <div class="item"><span>Valor total das NFs</span><strong>${escapeHtml(brl(valorNFsTotal))}</strong></div>
     <div class="item"><span>Peças entregues</span><strong>${entregues.length}</strong></div>
     <div class="item"><span>Valor entregue</span><strong>${escapeHtml(brl(valorEntregues))}</strong></div>
     <div class="item" style="border-left-color:var(--verde)"><span>Lucro bruto</span><strong style="color:var(--verde)">${escapeHtml(brl(lucroEntregues))}</strong></div>
     <div class="item" style="border-left-color:var(--verde)"><span>Margem</span><strong style="color:var(--verde)">${margemEntregues.toFixed(1)}%</strong></div>
     <div class="item" style="border-left-color:var(--amarelo)"><span>Aguardando destino</span><strong style="color:var(--amarelo)">${aguardando.length}</strong></div>
+    <div class="item" style="border-left-color:var(--vermelho)"><span>Com avaria/obs.</span><strong style="color:var(--vermelho)">${comProblema.length}</strong></div>
     <div class="item"><span>Reservas ativas</span><strong>${reservasAtivas.length}</strong></div>
     <div class="item"><span>Valor reservado</span><strong>${escapeHtml(brl(valorReservas))}</strong></div>
-    <div class="item"><span>Movimentações</span><strong>${movs.length}</strong></div>
   `;
 
   let html = '';
@@ -2457,16 +2541,16 @@ function renderRelatorio() {
   else {
     html += nfsFiltradas.map(nf => {
       const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-      const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
       const pend = pecas.filter(p => p.status === 'aguardando_destino').length;
-      const destino = nf.tipoEntrada === 'oc' ? 'OC ' + (nf.numeroOC || '') : nf.tipoEntrada === 'showroom' ? 'Showroom' : 'Aguardando destino';
+      const prob = pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
       return `
         <div class="rel-linha">
           <div class="esq">
             <strong>NF ${escapeHtml(nf.numero)} · ${escapeHtml(nf.fornecedorNome)}</strong>
-            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s) · ${escapeHtml(destino)}${pend ? ' · ' + pend + ' pendente(s)' : ''}</small>
+            ${nf.pedido ? `<small class="pedido-destaque inline" style="font-size:11px;padding:2px 6px">📋 ${escapeHtml(nf.pedido)}</small>` : ''}
+            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s)${pend ? ' · ' + pend + ' pendente(s)' : ''}${prob ? ' · ' + prob + ' c/ problema' : ''}</small>
           </div>
-          <div class="dir"><strong>${escapeHtml(brl(custo))}</strong></div>
+          <div class="dir"><strong>${escapeHtml(brl(nf.valorTotalNF || 0))}</strong></div>
         </div>`;
     }).join('');
   }
@@ -2476,7 +2560,7 @@ function renderRelatorio() {
   if (!entregues.length) html += '<p class="vazio" style="padding:20px">Nenhuma entrega no período.</p>';
   else {
     html += entregues.map(p => {
-      const receita = Number(p.valorCombinado) || Number(p.precoVenda) || 0;
+      const receita = Number(p.valorCombinado) || 0;
       const custo = Number(p.precoCusto) || 0;
       const lucro = receita - custo;
       const margem = receita > 0 ? (lucro / receita) * 100 : 0;
@@ -2494,6 +2578,19 @@ function renderRelatorio() {
   }
   html += '</div>';
 
+  if (comProblema.length) {
+    html += `<div class="rel-secao"><h3>⚠️ Peças com Avaria / Observação (${comProblema.length})</h3>`;
+    html += comProblema.map(p => `
+      <div class="rel-linha">
+        <div class="esq">
+          <strong>${escapeHtml(p.nome)} <span class="badge ${p.condicao}">${CONDICOES[p.condicao]}</span></strong>
+          <small>${escapeHtml(p.codigo)} · NF ${escapeHtml(p.numeroNF || '—')} · ${escapeHtml(p.fornecedor || '—')}</small>
+        </div>
+        <div class="dir"><strong>${escapeHtml(p.status.replace('_',' '))}</strong></div>
+      </div>`).join('');
+    html += '</div>';
+  }
+
   html += `<div class="rel-secao"><h3>📌 Reservas Ativas (${reservasAtivas.length})</h3>`;
   if (!reservasAtivas.length) html += '<p class="vazio" style="padding:20px">Nenhuma reserva ativa.</p>';
   else {
@@ -2501,9 +2598,9 @@ function renderRelatorio() {
       <div class="rel-linha">
         <div class="esq">
           <strong>${escapeHtml(p.nome)}</strong>
-          <small>${escapeHtml(p.codigo)} · 👤 ${escapeHtml(p.cliente || '—')} · Entrega ${escapeHtml(formatarData(p.dataEntrega))}</small>
+          <small>${escapeHtml(p.codigo)} · 👤 ${escapeHtml(p.cliente || '—')} · Entrega ${escapeHtml(formatarData(p.dataEntrega))}${p.numeroOC ? ' · OC ' + escapeHtml(p.numeroOC) : ''}</small>
         </div>
-        <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || p.precoVenda))}</strong></div>
+        <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || 0))}</strong></div>
       </div>`).join('');
   }
   html += '</div>';
@@ -2524,7 +2621,6 @@ function renderRelatorio() {
 
   $('relConteudo').innerHTML = html;
 }
-
 function exportarRelatorioCSV() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
@@ -2532,26 +2628,28 @@ function exportarRelatorioCSV() {
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
+  const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
 
   const linhas = [];
   linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','OBS']);
-
   nfsFiltradas.forEach(nf => {
     const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-    const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
-    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', 'Entrada', nf.fornecedorNome || '', custo.toFixed(2), pecas.length + ' peça(s)']);
+    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', 'Entrada', nf.fornecedorNome || '', (Number(nf.valorTotalNF) || 0).toFixed(2), `pedido/OC ${nf.pedido || '-'} | ${pecas.length} peça(s) | status ${nf.status}`]);
   });
   entregues.forEach(p => {
-    const receita = Number(p.valorCombinado) || Number(p.precoVenda) || 0;
+    const receita = Number(p.valorCombinado) || 0;
     const custo = Number(p.precoCusto) || 0;
     const lucro = receita - custo;
-    linhas.push(['ENTREGA', p.dataVenda || '', p.codigo || '', p.nome || '', p.cliente || '', receita.toFixed(2), `custo ${custo.toFixed(2)} | lucro ${lucro.toFixed(2)}`]);
+    linhas.push(['ENTREGA', p.dataVenda || '', p.codigo || '', p.nome || '', p.cliente || '', receita.toFixed(2), `custo ${custo.toFixed(2)} | lucro ${lucro.toFixed(2)}${p.numeroPedido ? ' | pedido/OC ' + p.numeroPedido : ''}`]);
   });
   reservasAtivas.forEach(p => {
-    linhas.push(['RESERVA', p.dataEntrega || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || Number(p.precoVenda) || 0).toFixed(2), p.numeroOC || '']);
+    linhas.push(['RESERVA', p.dataEntrega || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || 0).toFixed(2), `OC ${p.numeroOC || '-'}${p.numeroPedido ? ' | pedido/OC ' + p.numeroPedido : ''}`]);
   });
   aguardando.forEach(p => {
-    linhas.push(['AGUARDANDO_DESTINO', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', (Number(p.precoVenda) || 0).toFixed(2), 'NF ' + (p.numeroNF || '')]);
+    linhas.push(['AGUARDANDO_DESTINO', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', (Number(p.precoCusto) || 0).toFixed(2), `NF ${p.numeroNF || ''} | pedido/OC ${p.numeroPedido || '-'} | cond ${CONDICOES[p.condicao] || 'Normal'}`]);
+  });
+  comProblema.forEach(p => {
+    linhas.push(['AVARIA/OBS', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', '', `NF ${p.numeroNF || ''} | ${CONDICOES[p.condicao]} | status ${p.status}`]);
   });
 
   const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
@@ -2573,8 +2671,8 @@ function renderEstatisticas() {
   const disp = DB.pecas.filter(p => p.status === 'disponivel').length;
   const res = DB.pecas.filter(p => p.status === 'reservado').length;
   const vend = DB.pecas.filter(p => p.status === 'vendido').length;
+  const prob = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
   const custo = DB.pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
-  const vendaPot = DB.pecas.filter(p => p.status === 'disponivel').reduce((s, p) => s + (Number(p.precoVenda) || 0), 0);
   $('estatisticas').innerHTML = `
     <div class="dashboard">
       <div class="card"><span>Total peças</span><strong>${total}</strong></div>
@@ -2582,8 +2680,8 @@ function renderEstatisticas() {
       <div class="card"><span>Disponíveis</span><strong>${disp}</strong></div>
       <div class="card"><span>Reservadas</span><strong>${res}</strong></div>
       <div class="card"><span>Vendidas</span><strong>${vend}</strong></div>
-      <div class="card"><span>Custo total</span><strong>${escapeHtml(brl(custo))}</strong></div>
-      <div class="card"><span>Venda potencial</span><strong>${escapeHtml(brl(vendaPot))}</strong></div>
+      <div class="card alerta"><span>Avaria/observação</span><strong>${prob}</strong></div>
+      <div class="card"><span>Custo em estoque</span><strong>${escapeHtml(brl(custo))}</strong></div>
     </div>`;
 }
 
@@ -2614,11 +2712,7 @@ async function iniciarFirebase() {
   atalhoRel('30d');
   try {
     onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        try { await signInAnonymously(auth); }
-        catch (e) { atualizarStatusSync('offline', 'Falha no login'); }
-        return;
-      }
+      if (!user) { try { await signInAnonymously(auth); } catch (e) { atualizarStatusSync('offline', 'Falha no login'); } return; }
       firebaseUser = user;
       firebaseReady = true;
       onSnapshot(DOC_REF, (snap) => {
@@ -2647,17 +2741,18 @@ async function iniciarFirebase() {
 }
 iniciarFirebase();
 
-// Expõe funções para onclick inline
+// Expor funções
 window.abrirNovaNF = abrirNovaNF;
+window.abrirEditarNF = abrirEditarNF;
 window.abrirCadastroRapido = abrirCadastroRapido;
 window.addItemNF = addItemNF;
 window.escolherArquivo = escolherArquivo;
-window.carregarFoto = carregarFoto;
+window.carregarFotos = carregarFotos;
+window.removerFotoIndex = removerFotoIndex;
 window.abrirCameraPara = abrirCameraPara;
 window.capturarFoto = capturarFoto;
 window.fecharCamera = fecharCamera;
 window.escolherArquivoCamera = escolherArquivoCamera;
-window.removerFoto = removerFoto;
 window.salvarRascunhoManual = salvarRascunhoManual;
 window.tentarFecharNF = tentarFecharNF;
 window.recuperarRascunho = recuperarRascunho;
@@ -2675,6 +2770,8 @@ window.entregarReserva = entregarReserva;
 window.cancelarReserva = cancelarReserva;
 window.moverPeca = moverPeca;
 window.trocarFotoPeca = trocarFotoPeca;
+window.trocarCondicao = trocarCondicao;
+window.ampliarFoto = ampliarFoto;
 window.abrirReservar = abrirReservar;
 window.abrirFichaPeca = abrirFichaPeca;
 window.renderNFs = renderNFs;
