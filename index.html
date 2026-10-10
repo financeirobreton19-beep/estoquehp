@@ -8,17 +8,9 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 :root {
-  --bordo: #8B2E3C;
-  --bordo-esc: #6E2430;
-  --bordo-claro: #F5E9EB;
-  --bordo-hover: #A1384A;
-  --verde: #27ae60;
-  --vermelho: #c0392b;
-  --amarelo: #d68910;
-  --cinza: #f0eef0;
-  --cinza-esc: #7d8b98;
-  --texto: #2c2c2c;
-  --borda: #ddd6d8;
+  --bordo: #8B2E3C; --bordo-esc: #6E2430; --bordo-claro: #F5E9EB; --bordo-hover: #A1384A;
+  --verde: #27ae60; --vermelho: #c0392b; --amarelo: #d68910;
+  --cinza: #f0eef0; --cinza-esc: #7d8b98; --texto: #2c2c2c; --borda: #ddd6d8;
 }
 html, body { height: 100%; }
 body { background: #faf7f8; color: var(--texto); padding-bottom: 85px; font-size: 15px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
@@ -27,14 +19,14 @@ header {
   background: #fff; padding: 12px 16px;
   border-bottom: 2px solid var(--bordo-claro);
   position: sticky; top: 0; z-index: 40;
-  display: flex; justify-content: space-between; align-items: center; gap: 10px;
-  flex-wrap: wrap;
+  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
 }
 header h1 { font-size: 16px; font-weight: 700; color: var(--bordo); }
 header .status-sync { font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 600; }
 header .status-sync.online { background: #d4edda; color: #155724; }
 header .status-sync.offline { background: #fff3cd; color: #856404; }
 header .status-sync.erro { background: #f8d7da; color: #721c24; }
+.perfil-btn { font-size: 12px; padding: 6px 12px; min-height: 34px; border-radius: 16px; font-weight: 600; }
 
 .tab-conteudo { display: none; padding: 16px; max-width: 1400px; margin: 0 auto; }
 .tab-conteudo.ativo { display: block; }
@@ -48,13 +40,10 @@ h2 { font-size: 17px; margin-bottom: 12px; color: var(--bordo); }
 .card span { color: var(--cinza-esc); font-size: 11px; line-height: 1.2; }
 .card strong { font-size: 20px; color: var(--bordo); }
 .card.alerta strong { color: var(--vermelho); }
+.card.destino { border-left-color: var(--amarelo); }
+.card.destino strong { color: var(--amarelo); }
 
-button {
-  background: var(--bordo); color: #fff; border: none; padding: 12px 18px;
-  border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
-  transition: .15s; min-height: 44px;
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-}
+button { background: var(--bordo); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: .15s; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 button:active { transform: scale(.97); background: var(--bordo-esc); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-secundario { background: var(--cinza); color: var(--texto); }
@@ -72,10 +61,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 .filtros { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
 @media (min-width: 700px) { .filtros { flex-direction: row; flex-wrap: wrap; } }
-.filtros input, .filtros select {
-  padding: 12px 14px; border: 1px solid var(--borda); border-radius: 8px;
-  font-size: 15px; background: #fff; width: 100%; min-height: 44px;
-}
+.filtros input, .filtros select { padding: 12px 14px; border: 1px solid var(--borda); border-radius: 8px; font-size: 15px; background: #fff; width: 100%; min-height: 44px; }
 @media (min-width: 700px) { .filtros input { flex: 1; min-width: 220px; } }
 
 .lista-cards { display: flex; flex-direction: column; gap: 10px; }
@@ -89,7 +75,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 
 .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
 .badge.conferida, .badge.disponivel { background: #d4edda; color: #155724; }
-.badge.pendente, .badge.reservado { background: #fff3cd; color: #856404; }
+.badge.pendente, .badge.reservado, .badge.aguardando_destino { background: #fff3cd; color: #856404; }
 .badge.divergencia, .badge.cancelada { background: #f8d7da; color: #721c24; }
 .badge.devolvida { background: #ffe0b2; color: #7a4a00; }
 .badge.vendido, .badge.entregue { background: #cce5ff; color: #004085; }
@@ -140,13 +126,8 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .item-nf h4 { font-size: 13px; margin-bottom: 10px; color: var(--texto); font-weight: 700; }
 .item-nf .remover { position: absolute; top: 10px; right: 10px; background: var(--vermelho); padding: 5px 10px; font-size: 12px; min-height: 30px; }
 
-.tipo-entrada { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 15px; }
-.tipo-opcao { border: 2px solid var(--borda); border-radius: 10px; padding: 12px 8px; cursor: pointer; text-align: center; transition: .2s; background: #fff; }
-.tipo-opcao:active { transform: scale(.97); }
-.tipo-opcao.selecionado { border-color: var(--bordo); background: var(--bordo-claro); box-shadow: 0 0 0 3px rgba(139,46,60,.15); }
-.tipo-opcao .icone { font-size: 26px; margin-bottom: 5px; }
-.tipo-opcao .titulo { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-.tipo-opcao .desc { font-size: 10px; color: var(--cinza-esc); line-height: 1.3; }
+.info-destino-futuro { background: #e3f2fd; border-left: 4px solid #1565c0; padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; color: #0d47a1; }
+.info-destino-futuro strong { display: block; margin-bottom: 4px; }
 
 .foto-upload { border: 2px dashed var(--borda); border-radius: 10px; padding: 12px; text-align: center; background: #faf7f8; margin-top: 4px; }
 .foto-upload .preview { max-width: 100%; max-height: 220px; border-radius: 8px; margin-bottom: 10px; display: none; }
@@ -162,12 +143,15 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .aviso-rascunho .botoes-aviso { display: flex; gap: 8px; flex-wrap: wrap; }
 .aviso-rascunho button { padding: 8px 14px; font-size: 13px; min-height: 36px; }
 
-.bloco-oc { background: #f9eef0; border-radius: 10px; padding: 14px; margin-bottom: 15px; border-left: 4px solid var(--bordo); }
-.bloco-oc h3 { margin-top: 0 !important; color: var(--bordo); }
-
 .alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 14px; margin-bottom: 18px; }
 .alerta-parada h4 { color: #856404; margin-bottom: 8px; font-size: 14px; }
 .alerta-parada .peca-parada { font-size: 12px; color: #856404; padding: 3px 0; }
+
+.alerta-destino { background: #fff8e1; border: 1px solid var(--amarelo); border-left: 5px solid var(--amarelo); border-radius: 10px; padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px; }
+@media (min-width: 600px) { .alerta-destino { flex-direction: row; justify-content: space-between; align-items: center; } }
+.alerta-destino h4 { color: #856404; font-size: 14px; margin-bottom: 4px; }
+.alerta-destino p { font-size: 13px; color: #856404; }
+.alerta-destino button { flex-shrink: 0; }
 
 .historico-item { padding: 10px 12px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 6px; border-radius: 6px; font-size: 13px; }
 .historico-item .data { color: #b0a0a5; font-size: 11px; margin-bottom: 2px; }
@@ -210,65 +194,64 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 .duplicado-aviso .btn-usar { margin-top: 8px; width: 100%; }
 .divisor { height: 1px; background: var(--borda); margin: 20px 0; }
 .campo-com-botao { display: flex; gap: 8px; align-items: stretch; margin-top: 5px; }
-.campo-com-botao select { flex: 1; margin-top: 0; }
+.campo-com-botao select, .campo-com-botao input { flex: 1; margin-top: 0; }
 .campo-com-botao button { padding: 0 14px; min-height: 44px; white-space: nowrap; }
 .banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 10px 16px; font-size: 13px; color: #856404; text-align: center; font-weight: 600; }
 
+/* ===== DESTINOS ===== */
+.grupo-nf { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px; }
+.grupo-nf > header { background: transparent; border: none; padding: 0 0 10px; border-bottom: 1px solid var(--borda); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; position: static; flex-wrap: wrap; }
+.grupo-nf > header h3 { font-size: 14px; color: var(--bordo); }
+.grupo-nf > header small { font-size: 11px; color: var(--cinza-esc); display: block; margin-top: 2px; }
+.grupo-nf .acoes-grupo { display: flex; gap: 6px; flex-wrap: wrap; }
+.grupo-nf .acoes-grupo button { padding: 8px 12px; font-size: 12px; min-height: 36px; }
+.destino-lista { display: flex; flex-direction: column; gap: 8px; }
+.destino-item { background: #faf7f8; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+@media (min-width: 600px) { .destino-item { flex-direction: row; justify-content: space-between; align-items: center; } }
+.destino-item .info-peca { flex: 1; min-width: 0; }
+.destino-item .info-peca strong { font-size: 13px; display: block; }
+.destino-item .info-peca small { font-size: 11px; color: var(--cinza-esc); display: block; }
+.destino-item .btns-destino { display: flex; gap: 6px; flex-wrap: wrap; }
+.destino-item .btns-destino button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; min-width: 110px; }
+
 /* ===== RELATÓRIOS ===== */
-.rel-periodo {
-  background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px;
-  box-shadow: 0 1px 4px rgba(139,46,60,.06);
-}
+.rel-periodo { background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(139,46,60,.06); }
 .rel-periodo .linha { display: flex; gap: 10px; flex-wrap: wrap; }
 .rel-periodo .linha > label { flex: 1; min-width: 140px; margin-bottom: 0; }
 .rel-atalhos { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
 .rel-atalhos button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; }
 
-.rel-resumo {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
-  margin-bottom: 20px;
-}
+.rel-resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
 @media (min-width: 700px) { .rel-resumo { grid-template-columns: repeat(4, 1fr); } }
-.rel-resumo .item {
-  background: #fff; border-radius: 10px; padding: 14px;
-  box-shadow: 0 1px 4px rgba(139,46,60,.06);
-  border-left: 3px solid var(--bordo);
-}
+.rel-resumo .item { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); border-left: 3px solid var(--bordo); }
 .rel-resumo .item span { font-size: 11px; color: var(--cinza-esc); display: block; margin-bottom: 4px; }
 .rel-resumo .item strong { font-size: 18px; color: var(--bordo); }
 
-.rel-secao {
-  background: #fff; border-radius: 10px; padding: 14px;
-  box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px;
-}
-.rel-secao h3 {
-  font-size: 14px; color: var(--bordo); margin-bottom: 10px;
-  display: flex; justify-content: space-between; align-items: center;
-}
-.rel-linha {
-  display: flex; justify-content: space-between; gap: 10px;
-  padding: 8px 0; border-bottom: 1px solid #f0eef0;
-  font-size: 13px;
-}
+.rel-secao { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px; }
+.rel-secao h3 { font-size: 14px; color: var(--bordo); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.rel-linha { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0eef0; font-size: 13px; }
 .rel-linha:last-child { border-bottom: none; }
 .rel-linha .esq { flex: 1; min-width: 0; }
 .rel-linha .esq strong { display: block; font-size: 13px; margin-bottom: 2px; }
-.rel-linha .esq small { color: var(--cinza-esc); font-size: 11px; }
+.rel-linha .esq small { color: var(--cinza-esc); font-size: 11px; display: block; }
 .rel-linha .dir { text-align: right; flex-shrink: 0; }
 .rel-linha .dir strong { color: var(--bordo); font-size: 13px; }
 
 .export-btns { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .export-btns button { flex: 1; }
 </style>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
 
 <header>
-  <h1>🛋️ Controle de Estoque Hong Possas</h1>
+  <h1>🛋️ Estoque Hong Possas</h1>
   <span id="statusSync" class="status-sync offline">🟡 Conectando…</span>
+  <button id="btnPerfil" class="btn-secundario perfil-btn" onclick="alternarPerfil()">👤 Recebedor</button>
   <nav class="desktop-nav" id="desktopNav">
     <button class="nav-btn ativo" data-tab="dashboard">📊 Dashboard</button>
     <button class="nav-btn" data-tab="nfs">📄 NFs</button>
+    <button class="nav-btn" data-tab="destinos" style="display:none">🎯 Destinos</button>
     <button class="nav-btn" data-tab="showroom">🪑 Showroom</button>
     <button class="nav-btn" data-tab="reservas">📌 Reservas</button>
     <button class="nav-btn" data-tab="relatorios">📈 Relatórios</button>
@@ -281,13 +264,14 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 <!-- DASHBOARD -->
 <section id="tab-dashboard" class="tab-conteudo ativo">
   <div class="dashboard">
+    <div class="card destino"><span>Aguardando Destino</span><strong id="dashAguardando">0</strong></div>
     <div class="card"><span>Peças no Showroom</span><strong id="dashShowroom">0</strong></div>
     <div class="card"><span>Valor em Estoque</span><strong id="dashValor">R$ 0,00</strong></div>
     <div class="card"><span>Reservas Ativas</span><strong id="dashReservas">0</strong></div>
     <div class="card"><span>NFs Cadastradas</span><strong id="dashNFs">0</strong></div>
-    <div class="card"><span>Vendidas</span><strong id="dashVendidas">0</strong></div>
     <div class="card alerta"><span>NFs Pendentes</span><strong id="dashPendentes">0</strong></div>
   </div>
+  <div id="alertaDestino"></div>
   <div id="alertaParadas"></div>
   <h2 class="subtitulo">⚡ Ações rápidas</h2>
   <div class="acoes-rapidas">
@@ -314,12 +298,25 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
       <option value="cancelada">Cancelada</option>
     </select>
     <select id="filtroTipoNF" onchange="renderNFs()">
-      <option value="">Todos os tipos</option>
-      <option value="showroom">Showroom</option>
-      <option value="oc">OC / Encomenda</option>
+      <option value="">Todos os destinos</option>
+      <option value="aguardando">⏳ Aguardando destino</option>
+      <option value="showroom">🪑 Showroom</option>
+      <option value="oc">🧾 OC / Encomenda</option>
     </select>
   </div>
   <div id="listaNFs" class="lista-cards"></div>
+</section>
+
+<!-- DESTINOS (Coordenador) -->
+<section id="tab-destinos" class="tab-conteudo">
+  <div class="topo-secao">
+    <h2>🎯 Definir Destino das Peças</h2>
+  </div>
+  <div class="filtros">
+    <input type="text" id="buscaDestino" placeholder="🔍 Buscar peça, código, NF, fornecedor..." oninput="renderDestinos()">
+    <select id="filtroFornDestino" onchange="renderDestinos()"><option value="">Todos os fornecedores</option></select>
+  </div>
+  <div id="listaDestinos"></div>
 </section>
 
 <!-- SHOWROOM -->
@@ -331,9 +328,10 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
     <select id="filtroFornecedorPeca" onchange="renderPecas()"><option value="">Todos os fornecedores</option></select>
     <select id="filtroStatusPeca" onchange="renderPecas()">
       <option value="">Todos os status</option>
-      <option value="disponivel">Disponível</option>
-      <option value="reservado">Reservado</option>
-      <option value="vendido">Vendido</option>
+      <option value="aguardando_destino">⏳ Aguardando destino</option>
+      <option value="disponivel">✅ Disponível</option>
+      <option value="reservado">📌 Reservado</option>
+      <option value="vendido">💰 Vendido</option>
     </select>
   </div>
   <div id="gridPecas" class="grid-pecas"></div>
@@ -354,7 +352,6 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
     <h2>📈 Relatórios</h2>
     <button class="btn-secundario btn-pequeno" onclick="exportarRelatorioCSV()">⬇️ CSV</button>
   </div>
-
   <div class="rel-periodo">
     <div class="linha">
       <label>Data inicial<input type="date" id="relInicio"></label>
@@ -368,9 +365,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
       <button class="btn-secundario" onclick="atalhoRel('tudo')">Tudo</button>
     </div>
   </div>
-
   <div class="rel-resumo" id="relResumo"></div>
-
   <div id="relConteudo"></div>
 </section>
 
@@ -441,7 +436,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 <div id="modalNF" class="modal oculto">
   <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="tentarFecharNF()">✕</button>
-    <h2>Nova Nota Fiscal</h2>
+    <h2>Nova Nota Fiscal — Recebimento</h2>
     <div id="avisoRascunho" class="aviso-rascunho" style="display:none">
       <span>⚠️ Existe um rascunho. Recuperar?</span>
       <div class="botoes-aviso">
@@ -449,37 +444,19 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
         <button class="btn-secundario" onclick="descartarRascunho()">Descartar</button>
       </div>
     </div>
+    <div class="info-destino-futuro">
+      <strong>ℹ️ Etapa de conferência</strong>
+      Registre aqui o que chegou. O <strong>destino de cada peça</strong> (Showroom ou OC/Encomenda) será definido depois pelo <strong>Coordenador Logístico</strong> na aba 🎯 Destinos.
+    </div>
     <form id="formNF" novalidate>
-      <h3 class="subtitulo">🎯 Tipo de entrada</h3>
-      <div class="tipo-entrada">
-        <div class="tipo-opcao selecionado" id="tipoShowroom" onclick="selecionarTipo('showroom')">
-          <div class="icone">🪑</div><div class="titulo">Showroom</div>
-          <div class="desc">Compra normal. Peça fica disponível.</div>
-        </div>
-        <div class="tipo-opcao" id="tipoOC" onclick="selecionarTipo('oc')">
-          <div class="icone">🧾</div><div class="titulo">OC</div>
-          <div class="desc">Já vendida. Vai reservada p/ cliente.</div>
-        </div>
-      </div>
-      <div id="blocoDadosOC" class="bloco-oc" style="display:none">
-        <h3 class="subtitulo" style="margin-top:0">👤 Dados do cliente</h3>
-        <div class="grid-3">
-          <label>Nº da OC *<input type="text" id="nfNumeroOC"></label>
-          <label>Cliente *
-            <div class="campo-com-botao">
-              <select id="nfClienteSelect"><option value="">— Selecione —</option></select>
-              <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
-            </div>
-          </label>
-          <label>Telefone<input type="text" id="nfClienteTelefone" inputmode="tel"></label>
-          <label>Data de entrega<input type="date" id="nfDataEntrega"></label>
-          <label>Valor combinado (R$)<input type="number" id="nfValorCombinado" step="0.01" min="0"></label>
-          <label>Observações OC<input type="text" id="nfObsOC"></label>
-        </div>
-      </div>
       <h3 class="subtitulo">📋 Dados da NF</h3>
       <div class="grid-3">
-        <label>Nº da NF *<input type="text" id="nfNumero"></label>
+        <label>Nº da NF *
+          <div class="campo-com-botao">
+            <input type="text" id="nfNumero">
+            <button type="button" class="btn-sucesso" onclick="abrirLeitor()" title="Ler código de barras da DANFE">📷 Ler</button>
+          </div>
+        </label>
         <label>Nº do Pedido<input type="text" id="nfPedido"></label>
         <label>Fornecedor *
           <div class="campo-com-botao">
@@ -522,6 +499,36 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   </div>
 </div>
 
+<!-- MODAL DEFINIR OC -->
+<div id="modalDefinirOC" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalDefinirOC')">✕</button>
+    <h2>🧾 Definir como OC / Encomenda</h2>
+    <p id="ocPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <form id="formDefinirOC">
+      <input type="hidden" id="ocPecaId">
+      <label>Nº da OC *<input type="text" id="ocNumero" required></label>
+      <label>Cliente *
+        <div class="campo-com-botao">
+          <select id="ocClienteSelect"><option value="">— Selecione —</option></select>
+          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
+        </div>
+      </label>
+      <div class="grid-2">
+        <label>Ou digite o nome<input type="text" id="ocClienteManual"></label>
+        <label>Telefone<input type="text" id="ocClienteTelefone" inputmode="tel"></label>
+        <label>Data de entrega<input type="date" id="ocDataEntrega"></label>
+        <label>Valor combinado (R$)<input type="number" id="ocValor" step="0.01" min="0"></label>
+      </div>
+      <label>Observações<textarea id="ocObs" rows="2"></textarea></label>
+      <div class="botoes">
+        <button type="button" class="btn-secundario" onclick="fecharModal('modalDefinirOC')">Cancelar</button>
+        <button type="submit" class="btn-sucesso">🧾 Confirmar OC</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- MODAL CADASTRO RÁPIDO -->
 <div id="modalCadastroRapido" class="modal oculto">
   <div class="modal-conteudo" onclick="event.stopPropagation()">
@@ -539,6 +546,31 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
         <button type="submit" class="btn-sucesso">💾 Cadastrar</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- MODAL SCANNER -->
+<div id="modalScanner" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharLeitor()">✕</button>
+    <h2>📷 Ler código da DANFE</h2>
+    <p style="color:var(--cinza-esc);font-size:13px;margin-bottom:12px">
+      Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou <strong>QR Code</strong> da nota.
+    </p>
+    <div style="background:#f0f7ff;border-left:4px solid #1565c0;padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:12px;color:#0d47a1">
+      ℹ️ <strong>Leitura 100% local.</strong> O app lê a chave, valida o dígito e cruza o CNPJ com a <strong>sua base de fornecedores</strong>. Não consulta SEFAZ nem API fiscal.
+    </div>
+    <div id="leitorQR" style="width:100%;border-radius:10px;overflow:hidden;background:#000;min-height:220px"></div>
+    <div id="leitorStatus" style="font-size:13px;color:var(--cinza-esc);text-align:center;margin:10px 0 0"></div>
+    <details style="margin-top:14px">
+      <summary style="cursor:pointer;font-size:13px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
+      <div style="margin-top:10px">
+        <label>Chave de acesso (44 dígitos)
+          <input type="text" id="chaveManual" inputmode="numeric" maxlength="60" placeholder="00000000000000000000000000000000000000000000">
+        </label>
+        <button type="button" class="btn-sucesso btn-bloco" onclick="usarChaveManual()">Usar esta chave</button>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -580,6 +612,29 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
   </div>
 </div>
 
+<!-- MODAL MOVER PEÇA -->
+<div id="modalMover" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalMover')">✕</button>
+    <h2>📍 Mover peça</h2>
+    <p id="moverPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <form id="formMover">
+      <input type="hidden" id="moverPecaId">
+      <label>Nova localização
+        <select id="moverLocal">
+          <option value="showroom">🪑 Showroom</option>
+          <option value="deposito">📦 Depósito</option>
+          <option value="transito">🚚 Em trânsito</option>
+        </select>
+      </label>
+      <div class="botoes">
+        <button type="button" class="btn-secundario" onclick="fecharModal('modalMover')">Cancelar</button>
+        <button type="submit" class="btn-sucesso">💾 Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- MODAL CÂMERA -->
 <div id="modalCamera" class="modal oculto">
   <div class="modal-conteudo camera-modal" onclick="event.stopPropagation()">
@@ -601,6 +656,7 @@ label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-btn ativo" data-tab="dashboard"><span class="ico">📊</span>Início</button>
   <button class="nav-btn" data-tab="nfs"><span class="ico">📄</span>NFs</button>
+  <button class="nav-btn" data-tab="destinos" style="display:none"><span class="ico">🎯</span>Destinos</button>
   <button class="nav-btn" data-tab="showroom"><span class="ico">🪑</span>Showroom</button>
   <button class="nav-btn" data-tab="relatorios"><span class="ico">📈</span>Relatórios</button>
   <button class="nav-btn" data-tab="cadastros"><span class="ico">🏢</span>Cadastros</button>
@@ -627,14 +683,12 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const DOC_REF = doc(db, 'estoque', 'principal');
 
-// ============================================================
-// CONSTANTES
-// ============================================================
 const CATEGORIAS_FIXAS = ['Sofá','Mesa','Cadeira','Poltrona','Cama','Armário','Rack','Aparador','Iluminação','Decoração','Estante','Buffet','Escrivaninha','Outro'];
 const LOCAIS_VALIDOS = ['showroom', 'deposito', 'transito'];
 const STORAGE_KEY = 'estoqueMoveisV4';
 const RASCUNHO_KEY = 'rascunhoNF';
 const BACKUP_KEY = 'estoqueMoveisV4_backup';
+const PERFIL_KEY = 'perfilUsuario';
 const MAX_FOTO_KB = 200;
 
 const DB = {
@@ -648,10 +702,8 @@ let firebaseUser = null;
 let syncStatus = 'iniciando';
 let ultimaSyncRemota = 0;
 let salvandoRemoto = false;
+let perfilAtual = 'recebedor';
 
-// ============================================================
-// HELPERS
-// ============================================================
 const $ = id => document.getElementById(id);
 const brl = v => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const hoje = () => new Date().toISOString().split('T')[0];
@@ -662,9 +714,7 @@ const formatarDataHora = d => d ? new Date(d).toLocaleString('pt-BR') : '—';
 
 function escapeHtml(v) {
   if (v === null || v === undefined) return '';
-  return String(v)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 function urlImagemSegura(url) {
   if (!url) return '';
@@ -701,7 +751,6 @@ function toast(msg, tipo = 'ok') {
 function fecharModal(id) { $(id).classList.add('oculto'); }
 function abrirModal(id) { $(id).classList.remove('oculto'); }
 
-// Compressão de imagem
 async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -762,9 +811,8 @@ function salvarLocal(silencioso = false) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     return true;
   } catch (e) {
-    if (e.name === 'QuotaExceededError') {
-      if (!silencioso) toast('⚠️ Armazenamento cheio! Faça backup.', 'erro');
-    } else if (!silencioso) toast('Erro ao salvar localmente.', 'erro');
+    if (e.name === 'QuotaExceededError') { if (!silencioso) toast('⚠️ Armazenamento cheio! Faça backup.', 'erro'); }
+    else if (!silencioso) toast('Erro ao salvar localmente.', 'erro');
     return false;
   }
 }
@@ -809,15 +857,37 @@ function salvar() {
 }
 
 // ============================================================
+// PERFIL (Recebedor / Coordenador)
+// ============================================================
+function carregarPerfil() {
+  try { perfilAtual = localStorage.getItem(PERFIL_KEY) || 'recebedor'; }
+  catch { perfilAtual = 'recebedor'; }
+}
+function alternarPerfil() {
+  perfilAtual = perfilAtual === 'recebedor' ? 'coordenador' : 'recebedor';
+  try { localStorage.setItem(PERFIL_KEY, perfilAtual); } catch {}
+  aplicarPerfil();
+  toast(perfilAtual === 'coordenador' ? '🎯 Perfil: Coordenador Logístico' : '👤 Perfil: Estoquista / Recebedor');
+}
+function aplicarPerfil() {
+  const btn = $('btnPerfil');
+  if (btn) btn.textContent = perfilAtual === 'coordenador' ? '🎯 Coordenador' : '👤 Recebedor';
+  const mostrandoDestino = perfilAtual === 'coordenador';
+  document.querySelectorAll('[data-tab="destinos"]').forEach(el => { el.style.display = mostrandoDestino ? '' : 'none'; });
+  if (!mostrandoDestino && $('tab-destinos')?.classList.contains('ativo')) {
+    document.querySelector('[data-tab="dashboard"]')?.click();
+  }
+  renderTudo();
+}
+
+// ============================================================
 // BACKUP
 // ============================================================
 function validarBackup(dados) {
   const erros = [];
   if (!dados || typeof dados !== 'object') return ['Arquivo não é um objeto JSON.'];
   const lists = ['nfs', 'pecas', 'fornecedores', 'transportadoras', 'clientes'];
-  for (const k of lists) {
-    if (k in dados && !Array.isArray(dados[k])) erros.push(`Campo "${k}" deve ser uma lista.`);
-  }
+  for (const k of lists) { if (k in dados && !Array.isArray(dados[k])) erros.push(`Campo "${k}" deve ser uma lista.`); }
   if (dados.contadores && typeof dados.contadores !== 'object') erros.push('"contadores" inválido.');
   const pecasIds = new Set((dados.pecas || []).map(p => p && p.id).filter(Boolean));
   for (const nf of dados.nfs || []) {
@@ -834,7 +904,7 @@ function validarBackup(dados) {
 function exportarBackup() {
   try {
     const dados = {
-      _app: 'estoque-hong-possas', _versao: 4,
+      _app: 'estoque-hong-possas', _versao: 5,
       _exportadoEm: new Date().toISOString(),
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
@@ -903,6 +973,10 @@ async function limparTudo() {
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.onclick = () => {
     const tab = btn.dataset.tab;
+    if (tab === 'destinos' && perfilAtual !== 'coordenador') {
+      toast('Apenas o Coordenador Logístico acessa esta aba.', 'aviso');
+      return;
+    }
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tab === tab));
     document.querySelectorAll('.tab-conteudo').forEach(s => s.classList.remove('ativo'));
     $('tab-' + tab).classList.add('ativo');
@@ -915,7 +989,7 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // RENDER GERAL
 // ============================================================
 function renderTudo() {
-  renderDashboard(); renderNFs(); renderPecas(); renderReservas();
+  renderDashboard(); renderNFs(); renderDestinos(); renderPecas(); renderReservas();
   renderFornecedores(); renderTransportadoras(); renderClientes();
   renderEstatisticas(); renderInfoSync(); renderRelatorio();
 }
@@ -928,6 +1002,7 @@ function renderInfoSync() {
   const ult = ultimaSyncRemota ? formatarDataHora(new Date(ultimaSyncRemota).toISOString()) : '—';
   el.innerHTML = `
     <p>Status: <strong>${escapeHtml(syncStatus)}</strong></p>
+    <p>Perfil: <strong>${perfilAtual === 'coordenador' ? '🎯 Coordenador' : '👤 Recebedor'}</strong></p>
     <p>Dispositivo: <code>${escapeHtml(uidCurto)}</code></p>
     <p>Última sincronização: ${escapeHtml(ult)}</p>
     <p>Peças: ${DB.pecas.length} · NFs: ${DB.nfs.length}</p>
@@ -935,13 +1010,25 @@ function renderInfoSync() {
 }
 
 function renderDashboard() {
+  const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
   const showroom = DB.pecas.filter(p => p.status === 'disponivel');
+  $('dashAguardando').textContent = aguardando.length;
   $('dashShowroom').textContent = showroom.length;
   $('dashValor').textContent = brl(showroom.reduce((s, p) => s + (Number(p.precoVenda) || 0), 0));
   $('dashReservas').textContent = DB.pecas.filter(p => p.status === 'reservado').length;
   $('dashNFs').textContent = DB.nfs.length;
-  $('dashVendidas').textContent = DB.pecas.filter(p => p.status === 'vendido').length;
   $('dashPendentes').textContent = DB.nfs.filter(n => n.status === 'pendente').length;
+
+  const elD = $('alertaDestino');
+  if (aguardando.length && perfilAtual === 'coordenador') {
+    elD.innerHTML = `<div class="alerta-destino">
+      <div>
+        <h4>🎯 ${aguardando.length} peça(s) aguardando definição de destino</h4>
+        <p>Você é o Coordenador. Defina Showroom ou OC para liberar as peças.</p>
+      </div>
+      <button class="btn-aviso" onclick="document.querySelector('[data-tab=destinos]').click()">Ir para Destinos →</button>
+    </div>`;
+  } else { elD.innerHTML = ''; }
 
   const LIMITE_DIAS = 90;
   const agora = Date.now();
@@ -950,7 +1037,6 @@ function renderDashboard() {
     .map(p => ({ ...p, diasParada: Math.floor((agora - new Date(p.dataCadastro).getTime()) / 86400000) }))
     .filter(p => p.diasParada >= LIMITE_DIAS)
     .sort((a, b) => b.diasParada - a.diasParada);
-
   const elP = $('alertaParadas');
   if (!paradas.length) { elP.innerHTML = ''; }
   else {
@@ -1001,8 +1087,7 @@ function verificarDuplicidade() {
   if (tipo === 'cliente') {
     if (!nome) { $('avisoDuplicado').innerHTML = ''; return; }
     const dup = DB.clientes.find(c => String(c.nome || '').toLowerCase() === nome);
-    if (dup) mostrarAvisoDuplicado('cliente', dup);
-    else $('avisoDuplicado').innerHTML = '';
+    if (dup) mostrarAvisoDuplicado('cliente', dup); else $('avisoDuplicado').innerHTML = '';
     return;
   }
   if (cnpj && cnpj.length === 14) {
@@ -1038,9 +1123,15 @@ function usarDuplicado(tipo, id) {
     $('nfCNPJ').value = f ? (f.cnpj || '') : '';
   } else if (tipo === 'transportadora') $('nfTransportadora').value = id;
   else if (tipo === 'cliente') {
-    $('nfClienteSelect').value = id;
-    const c = DB.clientes.find(x => x.id === id);
-    if (c) $('nfClienteTelefone').value = c.telefone || '';
+    if (!$('modalDefinirOC').classList.contains('oculto')) {
+      $('ocClienteSelect').value = id;
+      const c = DB.clientes.find(x => x.id === id);
+      if (c) $('ocClienteTelefone').value = c.telefone || '';
+    } else if (!$('modalReservar').classList.contains('oculto')) {
+      $('reservaClienteSelect').value = id;
+      const c = DB.clientes.find(x => x.id === id);
+      if (c) { $('reservaClienteManual').value = c.nome; $('reservaTelefone').value = c.telefone || ''; }
+    }
   }
   fecharModal('modalCadastroRapido');
   toast('Cadastro selecionado.');
@@ -1062,8 +1153,11 @@ $('formCadastroRapido').onsubmit = e => {
     const novo = { id: uid(), nome, telefone: contato, endereco };
     DB.clientes.push(novo);
     salvar(); atualizarSelectsCadastros();
-    if (!$('modalNF').classList.contains('oculto')) $('nfClienteSelect').value = novo.id;
-    else if (!$('modalReservar').classList.contains('oculto')) {
+    if (!$('modalDefinirOC').classList.contains('oculto')) {
+      $('ocClienteSelect').value = novo.id;
+      $('ocClienteManual').value = nome;
+      $('ocClienteTelefone').value = contato;
+    } else if (!$('modalReservar').classList.contains('oculto')) {
       $('reservaClienteSelect').value = novo.id;
       $('reservaClienteManual').value = nome;
       $('reservaTelefone').value = contato;
@@ -1091,14 +1185,168 @@ $('formCadastroRapido').onsubmit = e => {
 };
 
 // ============================================================
-// NF
+// LEITURA DE CÓDIGO DA DANFE — 100% LOCAL
+// ------------------------------------------------------------
+// IMPORTANTE: este módulo NÃO consulta SEFAZ, NÃO consulta API
+// fiscal externa, NÃO simula consulta. Apenas:
+//   1) Lê o código de barras / QR code da DANFE
+//   2) Valida o dígito verificador da chave de 44 dígitos
+//   3) Extrai os dados embutidos na própria chave
+//      (UF, CNPJ emitente, modelo, série, número, AAMM)
+//   4) Cruza o CNPJ com a BASE LOCAL de fornecedores
+//
+// Para obter itens/valores completos da NF seria necessário
+// certificado digital A1 + integração real com a SEFAZ
+// (Cloud Function + API fiscal), o que NÃO está implementado
+// aqui. Não invente: se não houver integração configurada, os
+// itens continuam sendo digitados manualmente.
+// ============================================================
+const UF_POR_CODIGO = {
+  11:'RO',12:'AC',13:'AM',14:'RR',15:'PA',16:'AP',17:'TO',
+  21:'MA',22:'PI',23:'CE',24:'RN',25:'PB',26:'PE',27:'AL',28:'SE',29:'BA',
+  31:'MG',32:'ES',33:'RJ',35:'SP',
+  41:'PR',42:'SC',43:'RS',
+  50:'MS',51:'MT',52:'GO',53:'DF'
+};
+
+function validarDVChaveNFe(chave) {
+  if (!/^\d{44}$/.test(chave)) return false;
+  const corpo = chave.substring(0, 43);
+  let soma = 0, peso = 2;
+  for (let i = corpo.length - 1; i >= 0; i--) {
+    soma += Number(corpo[i]) * peso;
+    peso = peso === 9 ? 2 : peso + 1;
+  }
+  const resto = soma % 11;
+  const dv = resto < 2 ? 0 : 11 - resto;
+  return dv === Number(chave[43]);
+}
+
+function parsearChaveNFe(chaveBruta) {
+  const chave = soDigitos(chaveBruta);
+  if (chave.length !== 44) return { ok:false, erro:`Chave precisa ter 44 dígitos (recebi ${chave.length}).` };
+  if (!validarDVChaveNFe(chave)) return { ok:false, erro:'Dígito verificador inválido. Confira o código.' };
+  const codUF = chave.substring(0, 2);
+  const aamm = chave.substring(2, 6);
+  const cnpj = chave.substring(6, 20);
+  const modelo = chave.substring(20, 22);
+  const serie = chave.substring(22, 26);
+  const numero = chave.substring(26, 35);
+  const uf = UF_POR_CODIGO[Number(codUF)] || '';
+  const ano = Number('20' + aamm.substring(0, 2));
+  const mes = Number(aamm.substring(2, 4));
+  const dataEmissao = `${ano}-${String(mes).padStart(2, '0')}-01`;
+  const tipo = modelo === '55' ? 'NF-e' : modelo === '65' ? 'NFC-e' : `Modelo ${modelo}`;
+  return {
+    ok: true, chave, uf, codUF, ano, mes, dataEmissao,
+    cnpj: mascararCNPJ(cnpj), cnpjDigitos: cnpj,
+    modelo, tipo,
+    serie: String(Number(serie)),
+    numero: String(Number(numero))
+  };
+}
+
+function aplicarChaveNFe(info) {
+  if (info.numero) $('nfNumero').value = info.numero;
+  if (!$('nfEmissao').value && info.dataEmissao) $('nfEmissao').value = info.dataEmissao;
+  if (info.serie && !$('nfPedido').value) $('nfPedido').value = `${info.tipo} · série ${info.serie}`;
+
+  // Busca SOMENTE na base local — sem chamada externa
+  const forn = DB.fornecedores.find(f => soDigitos(f.cnpj) === info.cnpjDigitos);
+  if (forn) {
+    $('nfFornecedor').value = forn.id;
+    $('nfCNPJ').value = forn.cnpj || info.cnpj;
+    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${forn.nome} selecionado.`);
+  } else {
+    $('nfCNPJ').value = info.cnpj;
+    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${info.cnpj} não está no cadastro — cadastre para vincular.`, 'aviso');
+  }
+}
+
+let html5QrCode = null;
+
+function abrirLeitor() {
+  abrirModal('modalScanner');
+  $('leitorStatus').textContent = 'Iniciando câmera…';
+  if (typeof Html5Qrcode === 'undefined') {
+    $('leitorStatus').textContent = '⚠️ Biblioteca não carregou. Use "Digitar manualmente".';
+    return;
+  }
+  iniciarScanner();
+}
+
+async function iniciarScanner() {
+  const el = $('leitorQR');
+  el.innerHTML = '';
+  if (html5QrCode) {
+    try { await html5QrCode.stop(); } catch {}
+    try { html5QrCode.clear(); } catch {}
+  }
+  html5QrCode = new Html5Qrcode('leitorQR', { verbose: false });
+  const config = {
+    fps: 10,
+    qrbox: { width: 280, height: 200 },
+    aspectRatio: 1.5,
+    formatsToSupport: [
+      Html5QrcodeSupportedFormats.CODE_128,
+      Html5QrcodeSupportedFormats.QR_CODE,
+      Html5QrcodeSupportedFormats.CODE_39,
+      Html5QrcodeSupportedFormats.ITF,
+      Html5QrcodeSupportedFormats.EAN_13
+    ]
+  };
+  try {
+    await html5QrCode.start(
+      { facingMode: 'environment' },
+      config,
+      (texto) => onScanSucesso(texto),
+      () => {}
+    );
+    $('leitorStatus').textContent = '📸 Aponte para o código…';
+  } catch (e) {
+    console.error('Scanner:', e);
+    let msg = 'Não foi possível abrir a câmera. ';
+    if (e.name === 'NotAllowedError') msg += 'Permissão negada.';
+    else if (e.name === 'NotFoundError') msg += 'Nenhuma câmera encontrada.';
+    else if (!window.isSecureContext) msg += 'Precisa HTTPS.';
+    msg += ' Use "Digitar manualmente" abaixo.';
+    $('leitorStatus').textContent = '⚠️ ' + msg;
+  }
+}
+
+function onScanSucesso(texto) {
+  const info = parsearChaveNFe(texto);
+  if (!info.ok) { $('leitorStatus').textContent = '⚠️ ' + info.erro; return; }
+  $('leitorStatus').textContent = `✅ ${info.tipo} lida! NF ${info.numero} · ${info.uf}`;
+  if (navigator.vibrate) navigator.vibrate(150);
+  aplicarChaveNFe(info);
+  setTimeout(() => fecharLeitor(), 700);
+}
+
+function usarChaveManual() {
+  const info = parsearChaveNFe($('chaveManual').value);
+  if (!info.ok) { toast(info.erro, 'erro'); return; }
+  aplicarChaveNFe(info);
+  $('chaveManual').value = '';
+  fecharLeitor();
+}
+
+async function fecharLeitor() {
+  if (html5QrCode) {
+    try { await html5QrCode.stop(); } catch {}
+    try { html5QrCode.clear(); } catch {}
+    html5QrCode = null;
+  }
+  fecharModal('modalScanner');
+}
+
+// ============================================================
+// NF — RECEBIMENTO / CONFERÊNCIA
 // ============================================================
 let contadorItemNF = 0;
-let tipoEntrada = 'showroom';
 let itemAtualFoto = null;
 let streamCamera = null;
 let autoSaveInterval = null;
-let cameraModoAtual = 'environment';
 
 function atualizarSelectsCadastros() {
   const popular = (sel, lista, placeholder) => {
@@ -1118,38 +1366,28 @@ function atualizarSelectsCadastros() {
   };
   popular($('nfFornecedor'), DB.fornecedores, '— Selecione —');
   popular($('nfTransportadora'), DB.transportadoras, '— Selecione —');
-  popular($('nfClienteSelect'), DB.clientes, '— Selecione —');
+  popular($('ocClienteSelect'), DB.clientes, '— Selecione —');
   popular($('reservaClienteSelect'), DB.clientes, '— Selecione —');
 }
 $('nfFornecedor').onchange = () => {
   const f = DB.fornecedores.find(x => x.id === $('nfFornecedor').value);
   $('nfCNPJ').value = f ? (f.cnpj || '') : '';
 };
-$('nfClienteSelect').onchange = () => {
-  const c = DB.clientes.find(x => x.id === $('nfClienteSelect').value);
-  if (c) $('nfClienteTelefone').value = c.telefone || '';
+$('ocClienteSelect').onchange = () => {
+  const c = DB.clientes.find(x => x.id === $('ocClienteSelect').value);
+  if (c) { $('ocClienteManual').value = c.nome; $('ocClienteTelefone').value = c.telefone || ''; }
 };
 $('reservaClienteSelect').onchange = () => {
   const c = DB.clientes.find(x => x.id === $('reservaClienteSelect').value);
-  if (c) {
-    $('reservaClienteManual').value = c.nome;
-    $('reservaTelefone').value = c.telefone || '';
-  }
+  if (c) { $('reservaClienteManual').value = c.nome; $('reservaTelefone').value = c.telefone || ''; }
 };
 
-function selecionarTipo(tipo) {
-  tipoEntrada = tipo;
-  $('tipoShowroom').classList.toggle('selecionado', tipo === 'showroom');
-  $('tipoOC').classList.toggle('selecionado', tipo === 'oc');
-  $('blocoDadosOC').style.display = tipo === 'oc' ? 'block' : 'none';
-}
 function abrirNovaNF() {
   $('formNF').reset();
   $('itensNF').innerHTML = '';
   contadorItemNF = 0;
   $('nfConferencia').value = hoje();
   $('nfRecebimento').value = hoje();
-  selecionarTipo('showroom');
   atualizarSelectsCadastros();
   addItemNF();
   const rasc = localStorage.getItem(RASCUNHO_KEY);
@@ -1169,6 +1407,14 @@ function iniciarAutoSave() {
 }
 function pararAutoSave() { if (autoSaveInterval) clearInterval(autoSaveInterval); autoSaveInterval = null; }
 
+window.addEventListener('beforeunload', (e) => {
+  if (!$('modalNF').classList.contains('oculto')) {
+    const algum = $('nfNumero').value || $('nfFornecedor').value ||
+      [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
+    if (algum) { e.preventDefault(); e.returnValue = ''; }
+  }
+});
+
 function coletarDadosNF() {
   const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => ({
     numero: div.querySelector('.item-numero').value,
@@ -1176,20 +1422,12 @@ function coletarDadosNF() {
     categoria: div.querySelector('.item-categoria').value,
     marca: div.querySelector('.item-marca').value,
     qtd: div.querySelector('.item-qtd').value,
-    destino: div.querySelector('.item-destino').value,
     custo: div.querySelector('.item-custo').value,
     venda: div.querySelector('.item-venda').value,
     carac: div.querySelector('.item-carac').value,
     foto: div.querySelector('.item-foto-b64').value
   }));
   return {
-    tipoEntrada,
-    numeroOC: $('nfNumeroOC').value,
-    clienteId: $('nfClienteSelect').value,
-    clienteTelefone: $('nfClienteTelefone').value,
-    dataEntrega: $('nfDataEntrega').value,
-    valorCombinado: $('nfValorCombinado').value,
-    obsOC: $('nfObsOC').value,
     numero: $('nfNumero').value,
     pedido: $('nfPedido').value,
     fornecedorId: $('nfFornecedor').value,
@@ -1214,13 +1452,6 @@ function recuperarRascunho() {
     const raw = localStorage.getItem(RASCUNHO_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    selecionarTipo(d.tipoEntrada || 'showroom');
-    $('nfNumeroOC').value = d.numeroOC || '';
-    if (d.clienteId) $('nfClienteSelect').value = d.clienteId;
-    $('nfClienteTelefone').value = d.clienteTelefone || '';
-    $('nfDataEntrega').value = d.dataEntrega || '';
-    $('nfValorCombinado').value = d.valorCombinado || '';
-    $('nfObsOC').value = d.obsOC || '';
     $('nfNumero').value = d.numero || '';
     $('nfPedido').value = d.pedido || '';
     if (d.fornecedorId) $('nfFornecedor').value = d.fornecedorId;
@@ -1246,7 +1477,6 @@ function recuperarRascunho() {
       if (it.categoria) div.querySelector('.item-categoria').value = it.categoria;
       div.querySelector('.item-marca').value = it.marca || '';
       div.querySelector('.item-qtd').value = it.qtd || 1;
-      div.querySelector('.item-destino').value = it.destino || 'showroom';
       div.querySelector('.item-custo').value = it.custo || '';
       div.querySelector('.item-venda').value = it.venda || '';
       div.querySelector('.item-carac').value = it.carac || '';
@@ -1293,12 +1523,6 @@ function templateItemNF(num) {
       <label>Marca<input type="text" class="item-marca"></label>
       <label>Nº Item NF<input type="text" class="item-numero" value="${escapeHtml(num)}"></label>
       <label>Quantidade *<input type="number" class="item-qtd" min="1" value="1" inputmode="numeric"></label>
-      <label>Destino
-        <select class="item-destino">
-          <option value="showroom">Showroom</option>
-          <option value="venda_direta">Venda direta</option>
-        </select>
-      </label>
       <label>Preço Custo *<input type="number" class="item-custo" step="0.01" min="0" inputmode="decimal"></label>
       <label>Preço Venda *<input type="number" class="item-venda" step="0.01" min="0" inputmode="decimal"></label>
     </div>
@@ -1334,63 +1558,41 @@ async function carregarFoto(input) {
 }
 
 // ============================================================
-// CÂMERA — com detecção de HTTPS e fallback
+// CÂMERA DE FOTO
 // ============================================================
 function avisoCamera(msg) {
   const el = $('cameraAviso');
   if (!el) return;
-  el.textContent = msg;
+  el.textContent = msg || '';
   el.style.display = msg ? 'block' : 'none';
 }
-
 async function tentarAbrirCamera(modo) {
   avisoCamera('');
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: modo } },
-      audio: false
-    });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: modo } }, audio: false });
     streamCamera = stream;
-    cameraModoAtual = modo;
     $('videoCamera').srcObject = stream;
   } catch (err) {
-    console.error('Câmera erro:', err);
     let msg = 'Não foi possível abrir a câmera. ';
-    if (err.name === 'NotAllowedError') msg += 'Permissão negada. Libere a câmera nas configurações do navegador.';
+    if (err.name === 'NotAllowedError') msg += 'Permissão negada.';
     else if (err.name === 'NotFoundError') msg += 'Nenhuma câmera encontrada.';
     else if (err.name === 'NotReadableError') msg += 'Câmera em uso por outro app.';
-    else if (!window.isSecureContext) msg += 'Este site precisa estar em HTTPS. Use "Galeria" para escolher uma foto.';
-    else msg += 'Use "📁 Galeria" para escolher uma foto.';
+    else if (!window.isSecureContext) msg += 'Precisa HTTPS. Use "Galeria".';
+    else msg += 'Use "📁 Galeria".';
     avisoCamera(msg);
   }
 }
-
 async function abrirCameraPara(btn) {
   itemAtualFoto = btn.closest('.foto-upload');
   abrirModal('modalCamera');
-
-  // Verificação de contexto seguro
-  if (!window.isSecureContext) {
-    avisoCamera('⚠️ Câmera só funciona em HTTPS. Use "📁 Galeria" para escolher uma foto.');
-    return;
-  }
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    avisoCamera('⚠️ Este navegador não suporta câmera. Use "📁 Galeria".');
-    return;
-  }
-
-  // Tenta traseira primeiro, senão frontal
+  if (!window.isSecureContext) { avisoCamera('⚠️ Câmera só funciona em HTTPS. Use "📁 Galeria".'); return; }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { avisoCamera('⚠️ Navegador sem suporte. Use "📁 Galeria".'); return; }
   await tentarAbrirCamera('environment');
   if (!streamCamera) await tentarAbrirCamera('user');
 }
-
 async function capturarFoto() {
-  const video = $('videoCamera');
-  const canvas = $('canvasCamera');
-  if (!streamCamera || !video.videoWidth) {
-    toast('Câmera não iniciada. Use "📁 Galeria".', 'aviso');
-    return;
-  }
+  const video = $('videoCamera'), canvas = $('canvasCamera');
+  if (!streamCamera || !video.videoWidth) { toast('Câmera não iniciada. Use "📁 Galeria".', 'aviso'); return; }
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   canvas.getContext('2d').drawImage(video, 0, 0);
@@ -1409,12 +1611,18 @@ function fecharCamera() {
   avisoCamera('');
 }
 function escolherArquivoCamera() {
-  // Chama o input file do item que abriu a câmera
   if (!itemAtualFoto) { toast('Nenhum item ativo.', 'erro'); return; }
   const input = itemAtualFoto.querySelector('input[type=file]');
+  const wrap = itemAtualFoto;
+  itemAtualFoto = null;
+  fecharCamera();
   if (input) {
+    input.onchange = null;
+    input.addEventListener('change', function handler() {
+      input.removeEventListener('change', handler);
+      carregarFoto(input);
+    }, { once: true });
     input.click();
-    fecharCamera();
   }
 }
 function aplicarFoto(wrap, dataUrl) {
@@ -1432,27 +1640,17 @@ function removerFoto(btn) {
 }
 
 // ============================================================
-// SUBMIT NF
+// SUBMIT NF — cria peças como aguardando_destino
 // ============================================================
 $('formNF').onsubmit = e => {
   e.preventDefault();
   const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
   if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
-
   const numNF = $('nfNumero').value.trim();
   if (!numNF) { toast('Informe o nº da NF.', 'erro'); $('nfNumero').focus(); return; }
-
   const fornecedorId = $('nfFornecedor').value;
   const fornecedor = DB.fornecedores.find(f => f.id === fornecedorId);
   if (!fornecedor) { toast('Selecione um fornecedor.', 'erro'); $('nfFornecedor').focus(); return; }
-
-  let cliente = null;
-  if (tipoEntrada === 'oc') {
-    if (!$('nfNumeroOC').value.trim()) { toast('Informe o nº da OC.', 'erro'); $('nfNumeroOC').focus(); return; }
-    const cliId = $('nfClienteSelect').value;
-    cliente = DB.clientes.find(c => c.id === cliId);
-    if (!cliente) { toast('Selecione o cliente da OC.', 'erro'); $('nfClienteSelect').focus(); return; }
-  }
 
   const itensValidados = [];
   for (let i = 0; i < itensDOM.length; i++) {
@@ -1463,7 +1661,6 @@ $('formNF').onsubmit = e => {
     const qtdRaw = div.querySelector('.item-qtd').value;
     const custoRaw = div.querySelector('.item-custo').value;
     const vendaRaw = div.querySelector('.item-venda').value;
-    const destino = div.querySelector('.item-destino').value;
     const carac = div.querySelector('.item-carac').value.trim();
     const foto = urlImagemSegura(div.querySelector('.item-foto-b64').value);
     const numItem = div.querySelector('.item-numero').value.trim();
@@ -1471,27 +1668,18 @@ $('formNF').onsubmit = e => {
     if (!nome) { toast(`Item ${i+1}: informe o nome.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
     if (!CATEGORIAS_FIXAS.includes(categoria)) { toast(`Item ${i+1}: categoria inválida.`, 'erro'); return; }
     const qtd = Number(qtdRaw);
-    if (!Number.isInteger(qtd) || qtd <= 0) {
-      toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro');
-      div.querySelector('.item-qtd').focus(); return;
-    }
+    if (!Number.isInteger(qtd) || qtd <= 0) { toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro'); div.querySelector('.item-qtd').focus(); return; }
     const custo = Number(custoRaw);
-    if (!Number.isFinite(custo) || custo < 0) {
-      toast(`Item ${i+1}: custo inválido.`, 'erro');
-      div.querySelector('.item-custo').focus(); return;
-    }
+    if (!Number.isFinite(custo) || custo < 0) { toast(`Item ${i+1}: custo inválido.`, 'erro'); div.querySelector('.item-custo').focus(); return; }
     const venda = Number(vendaRaw);
-    if (!Number.isFinite(venda) || venda < 0) {
-      toast(`Item ${i+1}: venda inválida.`, 'erro');
-      div.querySelector('.item-venda').focus(); return;
-    }
-    itensValidados.push({ nome, categoria, marca, qtd, custo, venda, destino, carac, foto, numItem });
+    if (!Number.isFinite(venda) || venda < 0) { toast(`Item ${i+1}: venda inválida.`, 'erro'); div.querySelector('.item-venda').focus(); return; }
+    itensValidados.push({ nome, categoria, marca, qtd, custo, venda, carac, foto, numItem });
   }
 
   const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
   const nf = {
     id: uid(),
-    tipoEntrada,
+    tipoEntrada: 'aguardando',
     numero: numNF,
     pedido: $('nfPedido').value.trim(),
     fornecedorId: fornecedor.id,
@@ -1506,22 +1694,12 @@ $('formNF').onsubmit = e => {
     status: $('nfStatus').value,
     valorTotalNF: Number($('nfValorTotal').value) || 0,
     observacoes: $('nfObservacoes').value.trim(),
-    numeroOC: $('nfNumeroOC').value.trim(),
-    cliente: cliente ? cliente.nome : '',
-    clienteId: cliente ? cliente.id : null,
-    clienteTelefone: $('nfClienteTelefone').value.trim() || (cliente ? cliente.telefone : '') || '',
-    dataEntrega: $('nfDataEntrega').value,
-    valorCombinado: Number($('nfValorCombinado').value) || 0,
-    obsOC: $('nfObsOC').value.trim(),
     dataCadastro: new Date().toISOString(),
     pecasIds: []
   };
 
   const novasPecas = [];
   itensValidados.forEach(item => {
-    const statusPeca = tipoEntrada === 'oc' ? 'reservado' : 'disponivel';
-    const localizacaoPeca = tipoEntrada === 'oc' ? 'deposito' :
-                            item.destino === 'showroom' ? 'showroom' : 'deposito';
     for (let i = 1; i <= item.qtd; i++) {
       const peca = {
         id: uid(),
@@ -1533,25 +1711,17 @@ $('formNF').onsubmit = e => {
         itemNF: item.numItem, dataConferencia: nf.dataConferencia,
         caracteristicas: item.carac,
         precoCusto: item.custo, precoVenda: item.venda,
-        localizacao: localizacaoPeca,
-        status: statusPeca,
-        numeroOC: tipoEntrada === 'oc' ? nf.numeroOC : null,
-        cliente: tipoEntrada === 'oc' ? nf.cliente : null,
-        clienteTelefone: tipoEntrada === 'oc' ? nf.clienteTelefone : null,
-        dataEntrega: tipoEntrada === 'oc' ? nf.dataEntrega : null,
-        valorCombinado: tipoEntrada === 'oc' ? nf.valorCombinado : null,
-        obsReserva: tipoEntrada === 'oc' ? nf.obsOC : '',
+        localizacao: 'deposito',
+        status: 'aguardando_destino',
+        numeroOC: null, cliente: null, clienteTelefone: null,
+        dataEntrega: null, valorCombinado: null, obsReserva: '',
         dataVenda: null,
         foto: item.foto || '',
         sequencia: item.qtd > 1 ? `${i}/${item.qtd}` : null,
         dataCadastro: new Date().toISOString(),
         historico: []
       };
-      if (tipoEntrada === 'oc') {
-        registrarHistorico(peca, 'cadastro OC', `NF ${nf.numero} · OC ${nf.numeroOC} · ${nf.cliente}`);
-      } else {
-        registrarHistorico(peca, 'cadastro showroom', `NF ${nf.numero} (item ${item.numItem})`);
-      }
+      registrarHistorico(peca, 'recebida (conferência)', `NF ${nf.numero} · item ${item.numItem} · aguardando destino`);
       novasPecas.push(peca);
       nf.pecasIds.push(peca.id);
     }
@@ -1570,7 +1740,144 @@ $('formNF').onsubmit = e => {
     return;
   }
   fecharModal('modalNF'); renderTudo();
-  toast(`✅ NF salva! ${nf.pecasIds.length} peça(s).`);
+  toast(`✅ NF salva! ${nf.pecasIds.length} peça(s) aguardando destino.`);
+};
+
+// ============================================================
+// DESTINOS — Coordenador
+// ============================================================
+function renderDestinos() {
+  if (perfilAtual !== 'coordenador') { $('listaDestinos').innerHTML = '<p class="vazio">Acesso restrito ao Coordenador Logístico.</p>'; return; }
+  const pendentes = DB.pecas.filter(p => p.status === 'aguardando_destino');
+
+  const fornSel = $('filtroFornDestino');
+  if (fornSel) {
+    const v = fornSel.value;
+    const forns = [...new Set(pendentes.map(p => p.fornecedor).filter(Boolean))].sort();
+    fornSel.innerHTML = '<option value="">Todos os fornecedores</option>' +
+      forns.map(f => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join('');
+    if (v && [...fornSel.options].some(o => o.value === v)) fornSel.value = v;
+  }
+
+  const busca = ($('buscaDestino').value || '').toLowerCase();
+  const fornFiltro = fornSel ? fornSel.value : '';
+
+  const filtradas = pendentes.filter(p => {
+    if (fornFiltro && p.fornecedor !== fornFiltro) return false;
+    if (!busca) return true;
+    return [p.nome, p.codigo, p.numeroNF, p.fornecedor, p.marca].some(v => String(v || '').toLowerCase().includes(busca));
+  });
+
+  const el = $('listaDestinos');
+  if (!filtradas.length) { el.innerHTML = '<p class="vazio">🎉 Nenhuma peça aguardando destino.</p>'; return; }
+
+  // Agrupa por NF
+  const grupos = {};
+  filtradas.forEach(p => { const k = p.numeroNF || 'Sem NF'; (grupos[k] = grupos[k] || []).push(p); });
+
+  el.innerHTML = Object.keys(grupos).sort().reverse().map(nfNum => {
+    const pecas = grupos[nfNum];
+    const forn = pecas[0]?.fornecedor || '';
+    const dataConf = pecas[0]?.dataConferencia ? formatarData(pecas[0].dataConferencia) : '';
+    const itens = pecas.map(p => {
+      const fotoSeg = urlImagemSegura(p.foto);
+      const thumb = fotoSeg ? `<span style="display:inline-block;width:32px;height:32px;border-radius:6px;background:url('${escapeHtml(fotoSeg)}') center/cover;vertical-align:middle;margin-right:6px"></span>` : '';
+      return `
+      <div class="destino-item">
+        <div class="info-peca">
+          <strong>${thumb}${escapeHtml(p.nome)} <span style="color:#b0a0a5;font-weight:400;font-size:11px">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span></strong>
+          <small>${escapeHtml(p.marca || '—')} · ${escapeHtml(brl(p.precoVenda))} · item NF ${escapeHtml(p.itemNF || '—')}</small>
+        </div>
+        <div class="btns-destino">
+          <button class="btn-sucesso" data-showroom="${escapeHtml(p.id)}">🪑 Showroom</button>
+          <button class="btn-aviso" data-oc="${escapeHtml(p.id)}">🧾 OC / Encomenda</button>
+        </div>
+      </div>`;
+    }).join('');
+    return `
+      <div class="grupo-nf">
+        <header>
+          <div>
+            <h3>NF ${escapeHtml(nfNum)} · ${escapeHtml(forn || '—')}</h3>
+            <small>${pecas.length} peça(s) pendente(s)${dataConf ? ' · conferida em ' + escapeHtml(dataConf) : ''}</small>
+          </div>
+          <div class="acoes-grupo">
+            <button class="btn-sucesso" data-showroom-todas="${escapeHtml(nfNum)}">🪑 Todas Showroom</button>
+          </div>
+        </header>
+        <div class="destino-lista">${itens}</div>
+      </div>`;
+  }).join('');
+
+  el.querySelectorAll('[data-showroom]').forEach(b => b.addEventListener('click', () => confirmarDestinoShowroom(b.dataset.showroom)));
+  el.querySelectorAll('[data-oc]').forEach(b => b.addEventListener('click', () => abrirDefinirOC(b.dataset.oc)));
+  el.querySelectorAll('[data-showroom-todas]').forEach(b => b.addEventListener('click', () => confirmarShowroomLote(b.dataset.showroomTodas)));
+}
+
+function confirmarDestinoShowroom(pecaId) {
+  const p = DB.pecas.find(x => x.id === pecaId);
+  if (!p) return;
+  if (p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
+  p.status = 'disponivel';
+  p.localizacao = 'showroom';
+  registrarHistorico(p, 'destino: showroom', 'Classificada pelo Coordenador');
+  salvar(); renderTudo();
+  toast('🪑 Enviada ao Showroom.');
+}
+
+function confirmarShowroomLote(nfNum) {
+  const pendentes = DB.pecas.filter(p => p.numeroNF === nfNum && p.status === 'aguardando_destino');
+  if (!pendentes.length) { toast('Nada pendente nessa NF.', 'aviso'); return; }
+  if (!confirm(`Enviar ${pendentes.length} peça(s) da NF ${nfNum} para o Showroom?`)) return;
+  pendentes.forEach(p => {
+    p.status = 'disponivel';
+    p.localizacao = 'showroom';
+    registrarHistorico(p, 'destino: showroom', `Em lote · NF ${nfNum}`);
+  });
+  salvar(); renderTudo();
+  toast(`🪑 ${pendentes.length} peça(s) para o Showroom.`);
+}
+
+function abrirDefinirOC(pecaId) {
+  const p = DB.pecas.find(x => x.id === pecaId);
+  if (!p) return;
+  if (p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
+  $('formDefinirOC').reset();
+  $('ocPecaId').value = pecaId;
+  $('ocPecaInfo').textContent = `${p.nome} (${p.codigo}) · ${brl(p.precoVenda)}`;
+  $('ocValor').value = p.precoVenda || '';
+  atualizarSelectsCadastros();
+  abrirModal('modalDefinirOC');
+  setTimeout(() => $('ocNumero').focus(), 100);
+}
+
+$('formDefinirOC').onsubmit = e => {
+  e.preventDefault();
+  const id = $('ocPecaId').value;
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { fecharModal('modalDefinirOC'); return; }
+  if (p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); fecharModal('modalDefinirOC'); return; }
+  const numOC = $('ocNumero').value.trim();
+  if (!numOC) { toast('Informe o nº da OC.', 'erro'); $('ocNumero').focus(); return; }
+  const cliId = $('ocClienteSelect').value;
+  const cliManual = $('ocClienteManual').value.trim();
+  const cliente = cliId ? (DB.clientes.find(c => c.id === cliId)?.nome || '') : cliManual;
+  if (!cliente) { toast('Informe o cliente.', 'erro'); return; }
+  const valor = Number($('ocValor').value);
+  if ($('ocValor').value && (!Number.isFinite(valor) || valor < 0)) { toast('Valor inválido.', 'erro'); return; }
+
+  p.status = 'reservado';
+  p.localizacao = 'deposito';
+  p.numeroOC = numOC;
+  p.cliente = cliente;
+  p.clienteTelefone = $('ocClienteTelefone').value.trim();
+  p.dataEntrega = $('ocDataEntrega').value;
+  p.valorCombinado = Number.isFinite(valor) ? valor : 0;
+  p.obsReserva = $('ocObs').value.trim();
+  registrarHistorico(p, 'destino: OC', `OC ${numOC} · cliente ${cliente}`);
+
+  salvar(); fecharModal('modalDefinirOC'); renderTudo();
+  toast('🧾 Definida como OC / Encomenda.');
 };
 
 // ============================================================
@@ -1596,15 +1903,20 @@ function renderNFs() {
   el.innerHTML = lista.map(nf => {
     const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
     const custoCalc = pecasNF.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+    const pendentes = pecasNF.filter(p => p.status === 'aguardando_destino').length;
+    const tipo = nf.tipoEntrada || 'aguardando';
+    const badgeTipo = tipo === 'oc' ? '<span class="badge oc">🧾 OC</span>'
+                   : tipo === 'showroom' ? '<span class="badge showroom">🪑 Showroom</span>'
+                   : tipo === 'aguardando' ? `<span class="badge aguardando_destino">⏳ Aguardando destino</span>`
+                   : '<span class="badge aguardando_destino">—</span>';
     return `
       <div class="card-item">
         <div class="info">
-          <h3>NF ${escapeHtml(nf.numero)} <span class="badge ${nf.tipoEntrada === 'oc' ? 'oc' : 'showroom'}">${nf.tipoEntrada === 'oc' ? '🧾 OC' : '🪑 Showroom'}</span></h3>
+          <h3>NF ${escapeHtml(nf.numero)} ${badgeTipo}</h3>
           <p>🏢 ${escapeHtml(nf.fornecedorNome)}</p>
-          ${nf.tipoEntrada === 'oc' ? `<p>👤 ${escapeHtml(nf.cliente)}${nf.clienteTelefone ? ' · ' + escapeHtml(nf.clienteTelefone) : ''} · OC ${escapeHtml(nf.numeroOC)}</p>` : ''}
           <p>📅 ${escapeHtml(formatarData(nf.dataRecebimento))} · ${escapeHtml(nf.conferidoPor || '—')}</p>
           ${nf.transportadoraNome ? `<p>🚚 ${escapeHtml(nf.transportadoraNome)}</p>` : ''}
-          <p>📦 ${pecasNF.length} peça(s) · ${escapeHtml(brl(custoCalc))}</p>
+          <p>📦 ${pecasNF.length} peça(s) · custo ${escapeHtml(brl(custoCalc))}${pendentes ? ` · <strong style="color:var(--amarelo)">${pendentes} aguardando destino</strong>` : ''}</p>
           <span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>
         </div>
         <div class="acoes">
@@ -1612,9 +1924,7 @@ function renderNFs() {
         </div>
       </div>`;
   }).join('');
-  el.querySelectorAll('[data-excluir-nf]').forEach(btn => {
-    btn.addEventListener('click', () => excluirNF(btn.dataset.excluirNf));
-  });
+  el.querySelectorAll('[data-excluir-nf]').forEach(btn => btn.addEventListener('click', () => excluirNF(btn.dataset.excluirNf)));
 }
 function excluirNF(id) {
   const nf = DB.nfs.find(n => n.id === id);
@@ -1635,17 +1945,13 @@ function renderPecas() {
   const catSel = $('filtroCategoriaPeca');
   const vCat = catSel.value;
   const cats = [...new Set(DB.pecas.map(p => p.categoria).filter(Boolean))].sort();
-  catSel.innerHTML = '';
-  const optC = document.createElement('option'); optC.value = ''; optC.textContent = 'Todas categorias'; catSel.appendChild(optC);
-  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; catSel.appendChild(o); });
+  catSel.innerHTML = '<option value="">Todas categorias</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   catSel.value = vCat;
 
   const fornSel = $('filtroFornecedorPeca');
   const vForn = fornSel.value;
   const forns = [...new Set(DB.pecas.map(p => p.fornecedor).filter(Boolean))].sort();
-  fornSel.innerHTML = '';
-  const optF = document.createElement('option'); optF.value = ''; optF.textContent = 'Todos fornecedores'; fornSel.appendChild(optF);
-  forns.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; fornSel.appendChild(o); });
+  fornSel.innerHTML = '<option value="">Todos fornecedores</option>' + forns.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   fornSel.value = vForn;
 
   const busca = ($('buscaPeca').value || '').toLowerCase();
@@ -1672,14 +1978,12 @@ function renderPecas() {
         <h3>${escapeHtml(p.nome)}</h3>
         <div class="carac">${escapeHtml(p.caracteristicas || p.marca || '—')}</div>
         <div class="preco">${escapeHtml(brl(p.precoVenda))}</div>
-        <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status)}</span>
+        <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>
         ${p.cliente ? `<div class="cliente-badge">👤 ${escapeHtml(p.cliente)}</div>` : ''}
       </div>
     </div>`;
   }).join('');
-  el.querySelectorAll('[data-peca-id]').forEach(card => {
-    card.addEventListener('click', () => abrirFichaPeca(card.dataset.pecaId));
-  });
+  el.querySelectorAll('[data-peca-id]').forEach(card => card.addEventListener('click', () => abrirFichaPeca(card.dataset.pecaId)));
 }
 
 function renderReservas() {
@@ -1737,7 +2041,7 @@ function cancelarReserva(id) {
 // ============================================================
 function abrirFichaPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
-  if (!p) return;
+  if (!p) { fecharModal('modalFichaPeca'); toast('Peça não encontrada.', 'aviso'); return; }
   const fotoSeg = urlImagemSegura(p.foto);
   const bg = fotoSeg ? `style="background-image:url('${escapeHtml(fotoSeg)}')"` : '';
   const hist = (p.historico || []).map(h => `
@@ -1745,6 +2049,7 @@ function abrirFichaPeca(id) {
       <div class="data">${escapeHtml(formatarDataHora(h.data))}</div>
       <strong>${escapeHtml(h.acao)}</strong> ${h.detalhe ? '— ' + escapeHtml(h.detalhe) : ''}
     </div>`).join('') || '<p style="color:#95a5a6">Sem histórico.</p>';
+  const badge = `<span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>`;
   $('fichaPeca').innerHTML = `
     <div class="ficha-grid">
       <div class="full"><div class="ficha-foto" ${bg}>${fotoSeg ? '' : '🪑'}</div></div>
@@ -1755,7 +2060,7 @@ function abrirFichaPeca(id) {
         <p><strong>Marca:</strong> ${escapeHtml(p.marca || '—')}</p>
         <p><strong>Fornecedor:</strong> ${escapeHtml(p.fornecedor || '—')}</p>
         <p><strong>Transportadora:</strong> ${escapeHtml(p.transportadora || '—')}</p>
-        <p><strong>NF:</strong> ${escapeHtml(p.numeroNF || 'Avulsa')} · Item ${escapeHtml(p.itemNF || '—')}</p>
+        <p><strong>NF:</strong> ${escapeHtml(p.numeroNF || '—')} · Item ${escapeHtml(p.itemNF || '—')}</p>
         <p><strong>Pedido:</strong> ${escapeHtml(p.numeroPedido || '—')}</p>
         <p><strong>Data conferência:</strong> ${escapeHtml(formatarData(p.dataConferencia))}</p>
       </div>
@@ -1763,7 +2068,7 @@ function abrirFichaPeca(id) {
         <p><strong>Custo:</strong> ${escapeHtml(brl(p.precoCusto))}</p>
         <p><strong>Venda:</strong> ${escapeHtml(brl(p.precoVenda))}</p>
         <p><strong>Local:</strong> ${escapeHtml(p.localizacao)}</p>
-        <p><strong>Status:</strong> <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status)}</span></p>
+        <p><strong>Status:</strong> ${badge}</p>
         ${p.cliente ? `<p><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</p>` : ''}
         ${p.clienteTelefone ? `<p><strong>📞:</strong> ${escapeHtml(p.clienteTelefone)}</p>` : ''}
         ${p.numeroOC ? `<p><strong>OC:</strong> ${escapeHtml(p.numeroOC)}</p>` : ''}
@@ -1777,6 +2082,8 @@ function abrirFichaPeca(id) {
         ${hist}
       </div>
       <div class="full botoes" style="justify-content:flex-start">
+        ${p.status === 'aguardando_destino' && perfilAtual === 'coordenador' ? `<button class="btn-sucesso btn-pequeno" data-acao="showroom">🪑 Showroom</button>` : ''}
+        ${p.status === 'aguardando_destino' && perfilAtual === 'coordenador' ? `<button class="btn-aviso btn-pequeno" data-acao="oc">🧾 OC</button>` : ''}
         ${p.status === 'disponivel' ? `<button class="btn-aviso btn-pequeno" data-acao="reservar">📌 Reservar</button>` : ''}
         ${p.status === 'reservado' ? `<button class="btn-sucesso btn-pequeno" data-acao="entregar">✅ Entregar</button>` : ''}
         ${p.status === 'reservado' ? `<button class="btn-aviso btn-pequeno" data-acao="cancelar-res">↩️ Cancelar</button>` : ''}
@@ -1789,7 +2096,9 @@ function abrirFichaPeca(id) {
   wrap.querySelectorAll('[data-acao]').forEach(btn => {
     btn.addEventListener('click', () => {
       const a = btn.dataset.acao;
-      if (a === 'reservar') abrirReservar(id);
+      if (a === 'showroom') { confirmarDestinoShowroom(id); fecharModal('modalFichaPeca'); }
+      else if (a === 'oc') { fecharModal('modalFichaPeca'); abrirDefinirOC(id); }
+      else if (a === 'reservar') abrirReservar(id);
       else if (a === 'entregar') entregarReserva(id);
       else if (a === 'cancelar-res') cancelarReserva(id);
       else if (a === 'mover') moverPeca(id);
@@ -1803,17 +2112,25 @@ function moverPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
   if (p.status === 'vendido') { toast('Vendida não pode ser movida.', 'erro'); return; }
-  const atual = LOCAIS_VALIDOS.indexOf(p.localizacao) >= 0 ? p.localizacao : 'showroom';
-  const resposta = prompt('Nova localização:\n1) showroom\n2) deposito\n3) transito\n\nDigite o número:', String(LOCAIS_VALIDOS.indexOf(atual) + 1));
-  if (!resposta) return;
-  const idx = parseInt(resposta, 10) - 1;
-  if (isNaN(idx) || idx < 0 || idx >= LOCAIS_VALIDOS.length) { toast('Opção inválida.', 'erro'); return; }
-  const nova = LOCAIS_VALIDOS[idx];
-  if (nova === p.localizacao) return;
+  $('moverPecaId').value = id;
+  $('moverLocal').value = LOCAIS_VALIDOS.includes(p.localizacao) ? p.localizacao : 'showroom';
+  $('moverPecaInfo').textContent = `${p.nome} (${p.codigo})`;
+  abrirModal('modalMover');
+}
+$('formMover').onsubmit = e => {
+  e.preventDefault();
+  const id = $('moverPecaId').value;
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { fecharModal('modalMover'); return; }
+  const nova = $('moverLocal').value;
+  if (!LOCAIS_VALIDOS.includes(nova)) { toast('Local inválido.', 'erro'); return; }
+  if (nova === p.localizacao) { fecharModal('modalMover'); return; }
   registrarHistorico(p, 'movida', `De ${p.localizacao} para ${nova}`);
   p.localizacao = nova;
-  salvar(); abrirFichaPeca(id); renderTudo(); toast('Localização atualizada.');
-}
+  salvar(); fecharModal('modalMover');
+  if (!$('modalFichaPeca').classList.contains('oculto')) abrirFichaPeca(id);
+  renderTudo(); toast('Localização atualizada.');
+};
 function trocarFotoPeca(id) {
   const input = document.createElement('input');
   input.type = 'file'; input.accept = 'image/*'; input.capture = 'environment';
@@ -2018,9 +2335,7 @@ $('formCliente').onsubmit = e => {
     c.nome = nome; c.telefone = telefone; c.endereco = endereco;
     cancelarEditCli(); toast('Atualizado.');
   } else {
-    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) {
-      toast('Já existe cliente.', 'erro'); return;
-    }
+    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) { toast('Já existe cliente.', 'erro'); return; }
     DB.clientes.push({ id: uid(), nome, telefone, endereco });
     toast('Cadastrado.');
   }
@@ -2070,12 +2385,12 @@ function renderClientes() {
 // RELATÓRIOS
 // ============================================================
 function atalhoRel(tipo) {
-  const hoje = new Date();
+  const hj = new Date();
   let ini, fim = new Date();
   if (tipo === 'hoje') { ini = fim; }
   else if (tipo === '7d') { ini = new Date(); ini.setDate(ini.getDate() - 6); }
   else if (tipo === '30d') { ini = new Date(); ini.setDate(ini.getDate() - 29); }
-  else if (tipo === 'mes') { ini = new Date(hoje.getFullYear(), hoje.getMonth(), 1); }
+  else if (tipo === 'mes') { ini = new Date(hj.getFullYear(), hj.getMonth(), 1); }
   else if (tipo === 'tudo') { $('relInicio').value = ''; $('relFim').value = ''; renderRelatorio(); return; }
   const fmt = d => d.toISOString().split('T')[0];
   $('relInicio').value = fmt(ini);
@@ -2097,29 +2412,20 @@ function renderRelatorio() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
 
-  // NFs recebidas no período (por data de recebimento)
   const nfsFiltradas = DB.nfs.filter(nf => {
     if (!inicio && !fim) return true;
-    const data = nf.dataRecebimento || nf.dataCadastro;
-    return dentroPeriodo(data, inicio, fim);
+    return dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim);
   });
-
-  // Peças entregues no período (baixa = dataVenda)
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
-
-  // Reservas ativas
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
+  const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
 
-  // Movimentações no período
   const movs = [];
-  DB.pecas.forEach(p => {
-    (p.historico || []).forEach(h => {
-      if (dentroPeriodo(h.data, inicio, fim)) movs.push({ ...h, peca: p.nome, codigo: p.codigo });
-    });
-  });
+  DB.pecas.forEach(p => (p.historico || []).forEach(h => {
+    if (dentroPeriodo(h.data, inicio, fim)) movs.push({ ...h, peca: p.nome, codigo: p.codigo });
+  }));
   movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
 
-  // Totais
   let custoNFs = 0;
   nfsFiltradas.forEach(nf => {
     const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
@@ -2127,33 +2433,38 @@ function renderRelatorio() {
   });
   const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
   const valorReservas = reservasAtivas.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
+  const custoEntregues = entregues.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+  const lucroEntregues = valorEntregues - custoEntregues;
+  const margemEntregues = valorEntregues > 0 ? (lucroEntregues / valorEntregues) * 100 : 0;
 
-  // Resumo
   $('relResumo').innerHTML = `
     <div class="item"><span>NFs no período</span><strong>${nfsFiltradas.length}</strong></div>
     <div class="item"><span>Custo das entradas</span><strong>${escapeHtml(brl(custoNFs))}</strong></div>
     <div class="item"><span>Peças entregues</span><strong>${entregues.length}</strong></div>
     <div class="item"><span>Valor entregue</span><strong>${escapeHtml(brl(valorEntregues))}</strong></div>
+    <div class="item" style="border-left-color:var(--verde)"><span>Lucro bruto</span><strong style="color:var(--verde)">${escapeHtml(brl(lucroEntregues))}</strong></div>
+    <div class="item" style="border-left-color:var(--verde)"><span>Margem</span><strong style="color:var(--verde)">${margemEntregues.toFixed(1)}%</strong></div>
+    <div class="item" style="border-left-color:var(--amarelo)"><span>Aguardando destino</span><strong style="color:var(--amarelo)">${aguardando.length}</strong></div>
     <div class="item"><span>Reservas ativas</span><strong>${reservasAtivas.length}</strong></div>
     <div class="item"><span>Valor reservado</span><strong>${escapeHtml(brl(valorReservas))}</strong></div>
     <div class="item"><span>Movimentações</span><strong>${movs.length}</strong></div>
-    <div class="item"><span>Total de peças</span><strong>${DB.pecas.length}</strong></div>
   `;
 
   let html = '';
 
-  // Seção NFs
   html += `<div class="rel-secao"><h3>📄 Notas Fiscais (${nfsFiltradas.length})</h3>`;
   if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:20px">Nenhuma NF no período.</p>';
   else {
     html += nfsFiltradas.map(nf => {
       const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
       const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+      const pend = pecas.filter(p => p.status === 'aguardando_destino').length;
+      const destino = nf.tipoEntrada === 'oc' ? 'OC ' + (nf.numeroOC || '') : nf.tipoEntrada === 'showroom' ? 'Showroom' : 'Aguardando destino';
       return `
         <div class="rel-linha">
           <div class="esq">
             <strong>NF ${escapeHtml(nf.numero)} · ${escapeHtml(nf.fornecedorNome)}</strong>
-            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s) · ${nf.tipoEntrada === 'oc' ? 'OC ' + escapeHtml(nf.numeroOC || '') : 'Showroom'}</small>
+            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s) · ${escapeHtml(destino)}${pend ? ' · ' + pend + ' pendente(s)' : ''}</small>
           </div>
           <div class="dir"><strong>${escapeHtml(brl(custo))}</strong></div>
         </div>`;
@@ -2161,22 +2472,28 @@ function renderRelatorio() {
   }
   html += '</div>';
 
-  // Seção Entregas (baixas)
   html += `<div class="rel-secao"><h3>✅ Peças Entregues / Baixadas (${entregues.length})</h3>`;
   if (!entregues.length) html += '<p class="vazio" style="padding:20px">Nenhuma entrega no período.</p>';
   else {
-    html += entregues.map(p => `
+    html += entregues.map(p => {
+      const receita = Number(p.valorCombinado) || Number(p.precoVenda) || 0;
+      const custo = Number(p.precoCusto) || 0;
+      const lucro = receita - custo;
+      const margem = receita > 0 ? (lucro / receita) * 100 : 0;
+      const cor = lucro >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+      return `
       <div class="rel-linha">
         <div class="esq">
           <strong>${escapeHtml(p.nome)}</strong>
           <small>${escapeHtml(p.codigo)} · 👤 ${escapeHtml(p.cliente || '—')} · ${escapeHtml(formatarData(p.dataVenda))}</small>
+          <small style="color:${cor}">Lucro: ${escapeHtml(brl(lucro))} · Margem: ${margem.toFixed(1)}%</small>
         </div>
-        <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || p.precoVenda))}</strong></div>
-      </div>`).join('');
+        <div class="dir"><strong>${escapeHtml(brl(receita))}</strong></div>
+      </div>`;
+    }).join('');
   }
   html += '</div>';
 
-  // Seção Reservas ativas
   html += `<div class="rel-secao"><h3>📌 Reservas Ativas (${reservasAtivas.length})</h3>`;
   if (!reservasAtivas.length) html += '<p class="vazio" style="padding:20px">Nenhuma reserva ativa.</p>';
   else {
@@ -2191,7 +2508,6 @@ function renderRelatorio() {
   }
   html += '</div>';
 
-  // Seção Movimentações
   html += `<div class="rel-secao"><h3>🕒 Movimentações (${movs.length})</h3>`;
   if (!movs.length) html += '<p class="vazio" style="padding:20px">Nenhuma movimentação no período.</p>';
   else {
@@ -2212,13 +2528,10 @@ function renderRelatorio() {
 function exportarRelatorioCSV() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
-
-  const nfsFiltradas = DB.nfs.filter(nf => {
-    if (!inicio && !fim) return true;
-    return dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim);
-  });
+  const nfsFiltradas = DB.nfs.filter(nf => (!inicio && !fim) ? true : dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim));
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
+  const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
 
   const linhas = [];
   linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','OBS']);
@@ -2226,13 +2539,19 @@ function exportarRelatorioCSV() {
   nfsFiltradas.forEach(nf => {
     const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
     const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
-    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', nf.tipoEntrada === 'oc' ? 'OC' : 'Showroom', nf.fornecedorNome || '', custo.toFixed(2), pecas.length + ' peça(s)']);
+    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', 'Entrada', nf.fornecedorNome || '', custo.toFixed(2), pecas.length + ' peça(s)']);
   });
   entregues.forEach(p => {
-    linhas.push(['ENTREGA', p.dataVenda || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || Number(p.precoVenda) || 0).toFixed(2), p.numeroNF || '']);
+    const receita = Number(p.valorCombinado) || Number(p.precoVenda) || 0;
+    const custo = Number(p.precoCusto) || 0;
+    const lucro = receita - custo;
+    linhas.push(['ENTREGA', p.dataVenda || '', p.codigo || '', p.nome || '', p.cliente || '', receita.toFixed(2), `custo ${custo.toFixed(2)} | lucro ${lucro.toFixed(2)}`]);
   });
   reservasAtivas.forEach(p => {
     linhas.push(['RESERVA', p.dataEntrega || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || Number(p.precoVenda) || 0).toFixed(2), p.numeroOC || '']);
+  });
+  aguardando.forEach(p => {
+    linhas.push(['AGUARDANDO_DESTINO', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', (Number(p.precoVenda) || 0).toFixed(2), 'NF ' + (p.numeroNF || '')]);
   });
 
   const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
@@ -2250,6 +2569,7 @@ function exportarRelatorioCSV() {
 // ============================================================
 function renderEstatisticas() {
   const total = DB.pecas.length;
+  const aguard = DB.pecas.filter(p => p.status === 'aguardando_destino').length;
   const disp = DB.pecas.filter(p => p.status === 'disponivel').length;
   const res = DB.pecas.filter(p => p.status === 'reservado').length;
   const vend = DB.pecas.filter(p => p.status === 'vendido').length;
@@ -2258,6 +2578,7 @@ function renderEstatisticas() {
   $('estatisticas').innerHTML = `
     <div class="dashboard">
       <div class="card"><span>Total peças</span><strong>${total}</strong></div>
+      <div class="card destino"><span>Aguardando destino</span><strong>${aguard}</strong></div>
       <div class="card"><span>Disponíveis</span><strong>${disp}</strong></div>
       <div class="card"><span>Reservadas</span><strong>${res}</strong></div>
       <div class="card"><span>Vendidas</span><strong>${vend}</strong></div>
@@ -2274,6 +2595,7 @@ document.querySelectorAll('.modal').forEach(m => {
     if (e.target === m) {
       if (m.id === 'modalNF') { tentarFecharNF(); return; }
       if (m.id === 'modalCamera') { fecharCamera(); return; }
+      if (m.id === 'modalScanner') { fecharLeitor(); return; }
       m.classList.add('oculto');
     }
   };
@@ -2284,10 +2606,12 @@ document.querySelectorAll('.modal').forEach(m => {
 // ============================================================
 async function iniciarFirebase() {
   atualizarStatusSync('iniciando');
+  carregarPerfil();
   carregarLocal();
+  aplicarPerfil();
   renderTudo();
   atualizarSelectsCadastros();
-  atalhoRel('30d'); // relatório padrão 30 dias
+  atalhoRel('30d');
   try {
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
@@ -2323,10 +2647,9 @@ async function iniciarFirebase() {
 }
 iniciarFirebase();
 
-// Expõe funções usadas em onclick inline
+// Expõe funções para onclick inline
 window.abrirNovaNF = abrirNovaNF;
 window.abrirCadastroRapido = abrirCadastroRapido;
-window.selecionarTipo = selecionarTipo;
 window.addItemNF = addItemNF;
 window.escolherArquivo = escolherArquivo;
 window.carregarFoto = carregarFoto;
@@ -2357,8 +2680,16 @@ window.abrirFichaPeca = abrirFichaPeca;
 window.renderNFs = renderNFs;
 window.renderPecas = renderPecas;
 window.renderReservas = renderReservas;
+window.renderDestinos = renderDestinos;
 window.atalhoRel = atalhoRel;
 window.exportarRelatorioCSV = exportarRelatorioCSV;
+window.alternarPerfil = alternarPerfil;
+window.abrirLeitor = abrirLeitor;
+window.fecharLeitor = fecharLeitor;
+window.usarChaveManual = usarChaveManual;
+window.confirmarDestinoShowroom = confirmarDestinoShowroom;
+window.confirmarShowroomLote = confirmarShowroomLote;
+window.abrirDefinirOC = abrirDefinirOC;
 </script>
 </body>
 </html>
