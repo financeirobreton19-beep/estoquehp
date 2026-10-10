@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#8B2E3C">
+<title>Controle de Estoque Hong Possas</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+:root {
+  --bordo: #8B2E3C;
+  --bordo-esc: #6E2430;
+  --bordo-claro: #F5E9EB;
+  --bordo-hover: #A1384A;
+  --verde: #27ae60;
+  --vermelho: #c0392b;
+  --amarelo: #d68910;
+  --cinza: #f0eef0;
+  --cinza-esc: #7d8b98;
+  --texto: #2c2c2c;
+  --borda: #ddd6d8;
+}
+html, body { height: 100%; }
+body { background: #faf7f8; color: var(--texto); padding-bottom: 85px; font-size: 15px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
+
+header {
+  background: #fff; padding: 12px 16px;
+  border-bottom: 2px solid var(--bordo-claro);
+  position: sticky; top: 0; z-index: 40;
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 16px; font-weight: 700; color: var(--bordo); }
+header .status-sync { font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 600; }
+header .status-sync.online { background: #d4edda; color: #155724; }
+header .status-sync.offline { background: #fff3cd; color: #856404; }
+header .status-sync.erro { background: #f8d7da; color: #721c24; }
+
+.tab-conteudo { display: none; padding: 16px; max-width: 1400px; margin: 0 auto; }
+.tab-conteudo.ativo { display: block; }
+h2 { font-size: 17px; margin-bottom: 12px; color: var(--bordo); }
+.subtitulo { font-size: 15px; margin: 18px 0 10px; color: var(--texto); font-weight: 600; }
+
+.dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+@media (min-width: 700px) { .dashboard { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1000px) { .dashboard { grid-template-columns: repeat(6, 1fr); } }
+.card { background: #fff; padding: 14px; border-radius: 10px; box-shadow: 0 1px 4px rgba(139,46,60,.08); display: flex; flex-direction: column; gap: 4px; border-left: 3px solid var(--bordo-claro); }
+.card span { color: var(--cinza-esc); font-size: 11px; line-height: 1.2; }
+.card strong { font-size: 20px; color: var(--bordo); }
+.card.alerta strong { color: var(--vermelho); }
+
+button {
+  background: var(--bordo); color: #fff; border: none; padding: 12px 18px;
+  border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: .15s; min-height: 44px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+}
+button:active { transform: scale(.97); background: var(--bordo-esc); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.btn-secundario { background: var(--cinza); color: var(--texto); }
+.btn-secundario:active { background: #e0dcdf; }
+.btn-perigo { background: var(--vermelho); }
+.btn-sucesso { background: var(--verde); }
+.btn-aviso { background: var(--amarelo); }
+.btn-pequeno { padding: 8px 12px; font-size: 13px; min-height: 36px; }
+.btn-bloco { width: 100%; }
+.acoes-rapidas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+@media (min-width: 600px) { .acoes-rapidas { flex-direction: row; flex-wrap: wrap; } }
+
+.topo-secao { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
+.topo-secao h2 { font-size: 17px; }
+
+.filtros { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+@media (min-width: 700px) { .filtros { flex-direction: row; flex-wrap: wrap; } }
+.filtros input, .filtros select {
+  padding: 12px 14px; border: 1px solid var(--borda); border-radius: 8px;
+  font-size: 15px; background: #fff; width: 100%; min-height: 44px;
+}
+@media (min-width: 700px) { .filtros input { flex: 1; min-width: 220px; } }
+
+.lista-cards { display: flex; flex-direction: column; gap: 10px; }
+.card-item { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); display: flex; flex-direction: column; gap: 10px; }
+@media (min-width: 700px) { .card-item { flex-direction: row; justify-content: space-between; gap: 15px; } }
+.card-item .info { flex: 1; min-width: 0; }
+.card-item h3 { font-size: 15px; margin-bottom: 6px; word-break: break-word; }
+.card-item p { font-size: 13px; color: var(--cinza-esc); margin-bottom: 3px; word-break: break-word; }
+.card-item .acoes { display: flex; gap: 6px; flex-wrap: wrap; }
+.card-item .acoes button { flex: 1; }
+
+.badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.badge.conferida, .badge.disponivel { background: #d4edda; color: #155724; }
+.badge.pendente, .badge.reservado { background: #fff3cd; color: #856404; }
+.badge.divergencia, .badge.cancelada { background: #f8d7da; color: #721c24; }
+.badge.devolvida { background: #ffe0b2; color: #7a4a00; }
+.badge.vendido, .badge.entregue { background: #cce5ff; color: #004085; }
+.badge.showroom { background: #e3f2fd; color: #1565c0; }
+.badge.oc { background: #f3e5f5; color: #6a1b9a; }
+
+.grid-pecas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 600px) { .grid-pecas { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+.peca-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(139,46,60,.06); cursor: pointer; transition: .2s; display: flex; flex-direction: column; }
+.peca-card:active { transform: scale(.97); }
+.peca-card .foto { height: 130px; background: var(--bordo-claro); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 40px; background-size: cover; background-position: center; }
+@media (min-width: 600px) { .peca-card .foto { height: 160px; } }
+.peca-card .corpo { padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.peca-card .corpo h3 { font-size: 13px; line-height: 1.25; }
+.peca-card .corpo .cod { font-size: 10px; color: #b0a0a5; font-family: monospace; }
+.peca-card .corpo .preco { font-size: 15px; font-weight: 700; color: var(--bordo); }
+.peca-card .corpo .carac { font-size: 11px; color: var(--cinza-esc); flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.peca-card .corpo .cliente-badge { font-size: 10px; color: #856404; background: #fff3cd; padding: 3px 6px; border-radius: 4px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
+@media (min-width: 700px) { .modal { align-items: center; padding: 20px; } }
+.modal.oculto { display: none; }
+.modal-conteudo { background: #fff; padding: 20px; border-radius: 18px 18px 0 0; width: 100%; max-height: 95vh; overflow-y: auto; position: relative; animation: slideUp .25s ease-out; }
+@media (min-width: 700px) { .modal-conteudo { border-radius: 12px; max-width: 560px; max-height: 90vh; animation: fadeIn .2s ease-out; } .modal-conteudo.modal-grande { max-width: 900px; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
+.modal-conteudo::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 40px; height: 4px; background: var(--borda); border-radius: 2px; }
+@media (min-width: 700px) { .modal-conteudo::before { display: none; } }
+.modal-conteudo h2 { margin: 8px 30px 16px 0; font-size: 18px; color: var(--bordo); }
+.modal-conteudo h3 { margin: 18px 0 10px; font-size: 15px; color: var(--texto); }
+.fechar-x { position: absolute; top: 14px; right: 14px; background: var(--cinza); color: var(--texto); border-radius: 50%; width: 34px; height: 34px; padding: 0; font-size: 16px; min-height: 34px; }
+.fechar-x:active { background: var(--vermelho); color: #fff; }
+
+label { display: block; margin-bottom: 12px; font-size: 13px; color: #555; font-weight: 600; }
+label input, label select, label textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid var(--borda); border-radius: 8px; font-size: 15px; font-family: inherit; background: #fff; min-height: 44px; -webkit-appearance: none; }
+label textarea { min-height: auto; }
+label input:focus, label select:focus, label textarea:focus { outline: none; border-color: var(--bordo); box-shadow: 0 0 0 3px rgba(139,46,60,.15); }
+label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
+
+.grid-2, .grid-3 { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 0 12px; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 12px; } }
+.botoes { display: flex; flex-direction: column-reverse; gap: 8px; margin-top: 20px; }
+@media (min-width: 600px) { .botoes { flex-direction: row; justify-content: flex-end; } }
+.botoes button { width: 100%; }
+@media (min-width: 600px) { .botoes button { width: auto; } }
+
+.item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: 10px; padding: 14px; margin-bottom: 12px; position: relative; }
+.item-nf h4 { font-size: 13px; margin-bottom: 10px; color: var(--texto); font-weight: 700; }
+.item-nf .remover { position: absolute; top: 10px; right: 10px; background: var(--vermelho); padding: 5px 10px; font-size: 12px; min-height: 30px; }
+
+.tipo-entrada { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0 15px; }
+.tipo-opcao { border: 2px solid var(--borda); border-radius: 10px; padding: 12px 8px; cursor: pointer; text-align: center; transition: .2s; background: #fff; }
+.tipo-opcao:active { transform: scale(.97); }
+.tipo-opcao.selecionado { border-color: var(--bordo); background: var(--bordo-claro); box-shadow: 0 0 0 3px rgba(139,46,60,.15); }
+.tipo-opcao .icone { font-size: 26px; margin-bottom: 5px; }
+.tipo-opcao .titulo { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.tipo-opcao .desc { font-size: 10px; color: var(--cinza-esc); line-height: 1.3; }
+
+.foto-upload { border: 2px dashed var(--borda); border-radius: 10px; padding: 12px; text-align: center; background: #faf7f8; margin-top: 4px; }
+.foto-upload .preview { max-width: 100%; max-height: 220px; border-radius: 8px; margin-bottom: 10px; display: none; }
+.foto-upload .botoes-foto { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+.foto-upload button { padding: 10px 12px; font-size: 13px; flex: 1; min-width: 100px; }
+
+.camera-modal video { width: 100%; border-radius: 10px; background: #000; }
+.camera-modal canvas { display: none; }
+.camera-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; color: #856404; }
+
+.aviso-rascunho { background: #fff3cd; border: 1px solid #ffc107; padding: 12px 14px; border-radius: 10px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+@media (min-width: 600px) { .aviso-rascunho { flex-direction: row; justify-content: space-between; align-items: center; } }
+.aviso-rascunho .botoes-aviso { display: flex; gap: 8px; flex-wrap: wrap; }
+.aviso-rascunho button { padding: 8px 14px; font-size: 13px; min-height: 36px; }
+
+.bloco-oc { background: #f9eef0; border-radius: 10px; padding: 14px; margin-bottom: 15px; border-left: 4px solid var(--bordo); }
+.bloco-oc h3 { margin-top: 0 !important; color: var(--bordo); }
+
+.alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 14px; margin-bottom: 18px; }
+.alerta-parada h4 { color: #856404; margin-bottom: 8px; font-size: 14px; }
+.alerta-parada .peca-parada { font-size: 12px; color: #856404; padding: 3px 0; }
+
+.historico-item { padding: 10px 12px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 6px; border-radius: 6px; font-size: 13px; }
+.historico-item .data { color: #b0a0a5; font-size: 11px; margin-bottom: 2px; }
+.lista-historico .historico-item { border-left-color: var(--verde); }
+
+.ficha-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 700px) { .ficha-grid { grid-template-columns: 1fr 1fr; } }
+.ficha-grid .full { grid-column: 1/-1; }
+.ficha-foto { width: 100%; height: 220px; background: var(--bordo-claro); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 60px; background-size: cover; background-position: center; }
+@media (min-width: 700px) { .ficha-foto { height: 300px; } }
+.ficha-info p { font-size: 14px; margin-bottom: 6px; word-break: break-word; }
+.ficha-info strong { color: var(--texto); }
+
+.lista-mini { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 600px) { .lista-mini { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
+.mini-card { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.mini-card h4 { font-size: 14px; margin-bottom: 3px; word-break: break-word; }
+.mini-card p { font-size: 12px; color: var(--cinza-esc); word-break: break-word; }
+.mini-card .acoes-mini { display: flex; gap: 4px; flex-shrink: 0; }
+
+.vazio { text-align: center; padding: 40px 20px; color: #b0a0a5; font-size: 14px; }
+
+.toast { position: fixed; bottom: 100px; left: 16px; right: 16px; background: var(--verde); color: #fff; padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transition: .3s; pointer-events: none; z-index: 200; font-size: 14px; font-weight: 500; text-align: center; }
+@media (min-width: 600px) { .toast { left: auto; right: 25px; bottom: 25px; max-width: 380px; text-align: left; } }
+.toast.visivel { opacity: 1; transform: translateY(-5px); }
+.toast.erro { background: var(--vermelho); }
+.toast.aviso { background: var(--amarelo); }
+
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--bordo-claro); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 10px rgba(139,46,60,.06); }
+.bottom-nav .nav-btn { flex: 1; background: transparent; color: #a89898; border: none; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 600; min-height: 60px; border-radius: 0; cursor: pointer; }
+.bottom-nav .nav-btn .ico { font-size: 20px; }
+.bottom-nav .nav-btn.ativo { color: var(--bordo); background: transparent; }
+@media (min-width: 800px) { body { padding-bottom: 20px; } .bottom-nav { display: none; } header { padding: 15px 25px; } header h1 { font-size: 20px; } .tab-conteudo { padding: 25px; } .desktop-nav { display: flex !important; } }
+.desktop-nav { display: none; gap: 6px; flex-wrap: wrap; }
+.desktop-nav .nav-btn { background: transparent; color: #555; border: 1px solid var(--borda); padding: 8px 14px; border-radius: 6px; font-size: 14px; min-height: auto; flex-direction: row; }
+.desktop-nav .nav-btn.ativo { background: var(--bordo); color: #fff; border-color: var(--bordo); }
+
+.duplicado-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 13px; }
+.duplicado-aviso strong { color: #856404; }
+.duplicado-aviso .btn-usar { margin-top: 8px; width: 100%; }
+.divisor { height: 1px; background: var(--borda); margin: 20px 0; }
+.campo-com-botao { display: flex; gap: 8px; align-items: stretch; margin-top: 5px; }
+.campo-com-botao select { flex: 1; margin-top: 0; }
+.campo-com-botao button { padding: 0 14px; min-height: 44px; white-space: nowrap; }
+.banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 10px 16px; font-size: 13px; color: #856404; text-align: center; font-weight: 600; }
+
+/* ===== RELATÓRIOS ===== */
+.rel-periodo {
+  background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(139,46,60,.06);
+}
+.rel-periodo .linha { display: flex; gap: 10px; flex-wrap: wrap; }
+.rel-periodo .linha > label { flex: 1; min-width: 140px; margin-bottom: 0; }
+.rel-atalhos { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.rel-atalhos button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; }
+
+.rel-resumo {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin-bottom: 20px;
+}
+@media (min-width: 700px) { .rel-resumo { grid-template-columns: repeat(4, 1fr); } }
+.rel-resumo .item {
+  background: #fff; border-radius: 10px; padding: 14px;
+  box-shadow: 0 1px 4px rgba(139,46,60,.06);
+  border-left: 3px solid var(--bordo);
+}
+.rel-resumo .item span { font-size: 11px; color: var(--cinza-esc); display: block; margin-bottom: 4px; }
+.rel-resumo .item strong { font-size: 18px; color: var(--bordo); }
+
+.rel-secao {
+  background: #fff; border-radius: 10px; padding: 14px;
+  box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px;
+}
+.rel-secao h3 {
+  font-size: 14px; color: var(--bordo); margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rel-linha {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 8px 0; border-bottom: 1px solid #f0eef0;
+  font-size: 13px;
+}
+.rel-linha:last-child { border-bottom: none; }
+.rel-linha .esq { flex: 1; min-width: 0; }
+.rel-linha .esq strong { display: block; font-size: 13px; margin-bottom: 2px; }
+.rel-linha .esq small { color: var(--cinza-esc); font-size: 11px; }
+.rel-linha .dir { text-align: right; flex-shrink: 0; }
+.rel-linha .dir strong { color: var(--bordo); font-size: 13px; }
+
+.export-btns { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.export-btns button { flex: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛋️ Controle de Estoque Hong Possas</h1>
+  <span id="statusSync" class="status-sync offline">🟡 Conectando…</span>
+  <nav class="desktop-nav" id="desktopNav">
+    <button class="nav-btn ativo" data-tab="dashboard">📊 Dashboard</button>
+    <button class="nav-btn" data-tab="nfs">📄 NFs</button>
+    <button class="nav-btn" data-tab="showroom">🪑 Showroom</button>
+    <button class="nav-btn" data-tab="reservas">📌 Reservas</button>
+    <button class="nav-btn" data-tab="relatorios">📈 Relatórios</button>
+    <button class="nav-btn" data-tab="cadastros">🏢 Cadastros</button>
+    <button class="nav-btn" data-tab="config">⚙️ Backup</button>
+  </nav>
+</header>
+<div id="bannerOffline" class="banner-offline" style="display:none">⚠️ Sem conexão — alterações salvas localmente e sincronizadas quando voltar online</div>
+
+<!-- DASHBOARD -->
+<section id="tab-dashboard" class="tab-conteudo ativo">
+  <div class="dashboard">
+    <div class="card"><span>Peças no Showroom</span><strong id="dashShowroom">0</strong></div>
+    <div class="card"><span>Valor em Estoque</span><strong id="dashValor">R$ 0,00</strong></div>
+    <div class="card"><span>Reservas Ativas</span><strong id="dashReservas">0</strong></div>
+    <div class="card"><span>NFs Cadastradas</span><strong id="dashNFs">0</strong></div>
+    <div class="card"><span>Vendidas</span><strong id="dashVendidas">0</strong></div>
+    <div class="card alerta"><span>NFs Pendentes</span><strong id="dashPendentes">0</strong></div>
+  </div>
+  <div id="alertaParadas"></div>
+  <h2 class="subtitulo">⚡ Ações rápidas</h2>
+  <div class="acoes-rapidas">
+    <button class="btn-bloco" onclick="abrirNovaNF()">+ Cadastrar NF</button>
+  </div>
+  <h2 class="subtitulo">🕒 Últimas movimentações</h2>
+  <div id="ultimasMovs" class="lista-historico"></div>
+</section>
+
+<!-- NFs -->
+<section id="tab-nfs" class="tab-conteudo">
+  <div class="topo-secao">
+    <h2>📄 Notas Fiscais</h2>
+    <button onclick="abrirNovaNF()">+ Nova</button>
+  </div>
+  <div class="filtros">
+    <input type="text" id="buscaNF" placeholder="🔍 Buscar NF, fornecedor, cliente..." oninput="renderNFs()">
+    <select id="filtroStatusNF" onchange="renderNFs()">
+      <option value="">Todos os status</option>
+      <option value="pendente">Pendente</option>
+      <option value="conferida">Conferida</option>
+      <option value="divergencia">Divergência</option>
+      <option value="devolvida">Devolvida</option>
+      <option value="cancelada">Cancelada</option>
+    </select>
+    <select id="filtroTipoNF" onchange="renderNFs()">
+      <option value="">Todos os tipos</option>
+      <option value="showroom">Showroom</option>
+      <option value="oc">OC / Encomenda</option>
+    </select>
+  </div>
+  <div id="listaNFs" class="lista-cards"></div>
+</section>
+
+<!-- SHOWROOM -->
+<section id="tab-showroom" class="tab-conteudo">
+  <div class="topo-secao"><h2>🪑 Showroom</h2></div>
+  <div class="filtros">
+    <input type="text" id="buscaPeca" placeholder="🔍 Buscar peça, marca, código..." oninput="renderPecas()">
+    <select id="filtroCategoriaPeca" onchange="renderPecas()"><option value="">Todas as categorias</option></select>
+    <select id="filtroFornecedorPeca" onchange="renderPecas()"><option value="">Todos os fornecedores</option></select>
+    <select id="filtroStatusPeca" onchange="renderPecas()">
+      <option value="">Todos os status</option>
+      <option value="disponivel">Disponível</option>
+      <option value="reservado">Reservado</option>
+      <option value="vendido">Vendido</option>
+    </select>
+  </div>
+  <div id="gridPecas" class="grid-pecas"></div>
+</section>
+
+<!-- RESERVAS -->
+<section id="tab-reservas" class="tab-conteudo">
+  <div class="topo-secao"><h2>📌 Reservas</h2></div>
+  <div class="filtros">
+    <input type="text" id="buscaReserva" placeholder="🔍 Buscar por cliente, peça, OC..." oninput="renderReservas()">
+  </div>
+  <div id="listaReservas" class="lista-cards"></div>
+</section>
+
+<!-- RELATÓRIOS -->
+<section id="tab-relatorios" class="tab-conteudo">
+  <div class="topo-secao">
+    <h2>📈 Relatórios</h2>
+    <button class="btn-secundario btn-pequeno" onclick="exportarRelatorioCSV()">⬇️ CSV</button>
+  </div>
+
+  <div class="rel-periodo">
+    <div class="linha">
+      <label>Data inicial<input type="date" id="relInicio"></label>
+      <label>Data final<input type="date" id="relFim"></label>
+    </div>
+    <div class="rel-atalhos">
+      <button class="btn-secundario" onclick="atalhoRel('hoje')">Hoje</button>
+      <button class="btn-secundario" onclick="atalhoRel('7d')">7 dias</button>
+      <button class="btn-secundario" onclick="atalhoRel('30d')">30 dias</button>
+      <button class="btn-secundario" onclick="atalhoRel('mes')">Este mês</button>
+      <button class="btn-secundario" onclick="atalhoRel('tudo')">Tudo</button>
+    </div>
+  </div>
+
+  <div class="rel-resumo" id="relResumo"></div>
+
+  <div id="relConteudo"></div>
+</section>
+
+<!-- CADASTROS -->
+<section id="tab-cadastros" class="tab-conteudo">
+  <h2>🏢 Cadastros Base</h2>
+  <p style="color:var(--cinza-esc);font-size:13px;margin:10px 0 20px;">💡 Cadastre uma vez e use sempre. O CNPJ evita duplicados.</p>
+  <h3 class="subtitulo">📦 Fornecedores</h3>
+  <form id="formFornecedor" style="margin-bottom:14px">
+    <div class="grid-3">
+      <label>CNPJ *<input type="text" id="fornCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
+      <label>Nome *<input type="text" id="fornNome" required></label>
+      <label>Contato<input type="text" id="fornContato"></label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="submit" id="btnForn">+ Adicionar</button>
+      <button type="button" class="btn-secundario" onclick="cancelarEditForn()" id="btnCancelForn" style="display:none">Cancelar</button>
+    </div>
+  </form>
+  <div id="listaFornecedores" class="lista-mini"></div>
+  <div class="divisor"></div>
+  <h3 class="subtitulo">🚚 Transportadoras</h3>
+  <form id="formTransportadora" style="margin-bottom:14px">
+    <div class="grid-3">
+      <label>CNPJ *<input type="text" id="transpCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
+      <label>Nome *<input type="text" id="transpNome" required></label>
+      <label>Contato<input type="text" id="transpContato"></label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="submit" id="btnTransp">+ Adicionar</button>
+      <button type="button" class="btn-secundario" onclick="cancelarEditTransp()" id="btnCancelTransp" style="display:none">Cancelar</button>
+    </div>
+  </form>
+  <div id="listaTransportadoras" class="lista-mini"></div>
+  <div class="divisor"></div>
+  <h3 class="subtitulo">👤 Clientes</h3>
+  <form id="formCliente" style="margin-bottom:14px">
+    <div class="grid-3">
+      <label>Nome *<input type="text" id="cliNome" required></label>
+      <label>Telefone<input type="text" id="cliTelefone" inputmode="tel"></label>
+      <label>Endereço<input type="text" id="cliEndereco"></label>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button type="submit" id="btnCli">+ Adicionar</button>
+      <button type="button" class="btn-secundario" onclick="cancelarEditCli()" id="btnCancelCli" style="display:none">Cancelar</button>
+    </div>
+  </form>
+  <div id="listaClientes" class="lista-mini"></div>
+</section>
+
+<!-- CONFIG -->
+<section id="tab-config" class="tab-conteudo">
+  <h2>⚙️ Backup</h2>
+  <p style="margin:14px 0;color:var(--cinza-esc);font-size:13px;">Os dados são sincronizados com a nuvem (Firebase). Faça backup manual periodicamente.</p>
+  <div class="acoes-rapidas">
+    <button class="btn-bloco" onclick="exportarBackup()">⬇️ Exportar Backup</button>
+    <button class="btn-bloco btn-secundario" onclick="$('inputImport').click()">⬆️ Importar Backup</button>
+    <button class="btn-bloco btn-perigo" onclick="limparTudo()">🗑️ Apagar Tudo</button>
+    <input type="file" id="inputImport" accept=".json" style="display:none" onchange="importarBackup(event)">
+  </div>
+  <h3 class="subtitulo">📊 Estatísticas</h3>
+  <div id="estatisticas"></div>
+  <h3 class="subtitulo">☁️ Sincronização</h3>
+  <div id="infoSync" style="font-size:13px;color:var(--cinza-esc)"></div>
+</section>
+
+<!-- MODAL NF -->
+<div id="modalNF" class="modal oculto">
+  <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="tentarFecharNF()">✕</button>
+    <h2>Nova Nota Fiscal</h2>
+    <div id="avisoRascunho" class="aviso-rascunho" style="display:none">
+      <span>⚠️ Existe um rascunho. Recuperar?</span>
+      <div class="botoes-aviso">
+        <button class="btn-sucesso" onclick="recuperarRascunho()">Recuperar</button>
+        <button class="btn-secundario" onclick="descartarRascunho()">Descartar</button>
+      </div>
+    </div>
+    <form id="formNF" novalidate>
+      <h3 class="subtitulo">🎯 Tipo de entrada</h3>
+      <div class="tipo-entrada">
+        <div class="tipo-opcao selecionado" id="tipoShowroom" onclick="selecionarTipo('showroom')">
+          <div class="icone">🪑</div><div class="titulo">Showroom</div>
+          <div class="desc">Compra normal. Peça fica disponível.</div>
+        </div>
+        <div class="tipo-opcao" id="tipoOC" onclick="selecionarTipo('oc')">
+          <div class="icone">🧾</div><div class="titulo">OC</div>
+          <div class="desc">Já vendida. Vai reservada p/ cliente.</div>
+        </div>
+      </div>
+      <div id="blocoDadosOC" class="bloco-oc" style="display:none">
+        <h3 class="subtitulo" style="margin-top:0">👤 Dados do cliente</h3>
+        <div class="grid-3">
+          <label>Nº da OC *<input type="text" id="nfNumeroOC"></label>
+          <label>Cliente *
+            <div class="campo-com-botao">
+              <select id="nfClienteSelect"><option value="">— Selecione —</option></select>
+              <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
+            </div>
+          </label>
+          <label>Telefone<input type="text" id="nfClienteTelefone" inputmode="tel"></label>
+          <label>Data de entrega<input type="date" id="nfDataEntrega"></label>
+          <label>Valor combinado (R$)<input type="number" id="nfValorCombinado" step="0.01" min="0"></label>
+          <label>Observações OC<input type="text" id="nfObsOC"></label>
+        </div>
+      </div>
+      <h3 class="subtitulo">📋 Dados da NF</h3>
+      <div class="grid-3">
+        <label>Nº da NF *<input type="text" id="nfNumero"></label>
+        <label>Nº do Pedido<input type="text" id="nfPedido"></label>
+        <label>Fornecedor *
+          <div class="campo-com-botao">
+            <select id="nfFornecedor"><option value="">— Selecione —</option></select>
+            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('fornecedor')">+ Novo</button>
+          </div>
+        </label>
+        <label>CNPJ Fornecedor<input type="text" id="nfCNPJ" readonly></label>
+        <label>Transportadora
+          <div class="campo-com-botao">
+            <select id="nfTransportadora"><option value="">— Selecione —</option></select>
+            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('transportadora')">+ Novo</button>
+          </div>
+        </label>
+        <label>Data de Emissão<input type="date" id="nfEmissao"></label>
+        <label>Data de Recebimento<input type="date" id="nfRecebimento"></label>
+        <label>Data de Conferência<input type="date" id="nfConferencia"></label>
+        <label>Conferido por<input type="text" id="nfConferidoPor"></label>
+        <label>Status
+          <select id="nfStatus">
+            <option value="conferida">Conferida</option>
+            <option value="pendente">Pendente</option>
+            <option value="divergencia">Divergência</option>
+            <option value="devolvida">Devolvida</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </label>
+        <label>Valor Total (R$)<input type="number" id="nfValorTotal" step="0.01" min="0"></label>
+      </div>
+      <label>Observações da NF<textarea id="nfObservacoes" rows="2"></textarea></label>
+      <h3 class="subtitulo">📦 Itens da NF</h3>
+      <div id="itensNF"></div>
+      <button type="button" class="btn-secundario btn-bloco" onclick="addItemNF()">+ Adicionar item</button>
+      <div class="botoes" style="margin-top:20px">
+        <button type="button" class="btn-secundario" onclick="salvarRascunhoManual()">💾 Rascunho</button>
+        <button type="button" class="btn-secundario" onclick="tentarFecharNF()">Cancelar</button>
+        <button type="submit" class="btn-sucesso">✅ Salvar NF</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CADASTRO RÁPIDO -->
+<div id="modalCadastroRapido" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalCadastroRapido')">✕</button>
+    <h2 id="tituloCadastroRapido">Novo Cadastro</h2>
+    <div id="avisoDuplicado"></div>
+    <form id="formCadastroRapido">
+      <input type="hidden" id="tipoCadastroRapido">
+      <label id="labelCNPJ">CNPJ *<input type="text" id="crCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
+      <label>Nome *<input type="text" id="crNome" required></label>
+      <label>Contato / Telefone<input type="text" id="crContato" inputmode="tel"></label>
+      <label id="labelEndereco" style="display:none">Endereço<input type="text" id="crEndereco"></label>
+      <div class="botoes">
+        <button type="button" class="btn-secundario" onclick="fecharModal('modalCadastroRapido')">Cancelar</button>
+        <button type="submit" class="btn-sucesso">💾 Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL FICHA PEÇA -->
+<div id="modalFichaPeca" class="modal oculto">
+  <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalFichaPeca')">✕</button>
+    <div id="fichaPeca"></div>
+  </div>
+</div>
+
+<!-- MODAL RESERVAR -->
+<div id="modalReservar" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalReservar')">✕</button>
+    <h2>📌 Reservar Peça</h2>
+    <p id="reservaPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <form id="formReservar">
+      <input type="hidden" id="reservaPecaId">
+      <label>Cliente *
+        <div class="campo-com-botao">
+          <select id="reservaClienteSelect"><option value="">— Selecione —</option></select>
+          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
+        </div>
+      </label>
+      <label>Ou digite o nome<input type="text" id="reservaClienteManual"></label>
+      <div class="grid-2">
+        <label>Telefone<input type="text" id="reservaTelefone" inputmode="tel"></label>
+        <label>Data de entrega<input type="date" id="reservaDataEntrega"></label>
+        <label>Valor (R$)<input type="number" id="reservaValor" step="0.01" min="0"></label>
+        <label>Nº da OC<input type="text" id="reservaNumOC"></label>
+      </div>
+      <label>Observações<textarea id="reservaObs" rows="2"></textarea></label>
+      <div class="botoes">
+        <button type="button" class="btn-secundario" onclick="fecharModal('modalReservar')">Cancelar</button>
+        <button type="submit" class="btn-sucesso">📌 Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL CÂMERA -->
+<div id="modalCamera" class="modal oculto">
+  <div class="modal-conteudo camera-modal" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharCamera()">✕</button>
+    <h2>📷 Tirar Foto</h2>
+    <div id="cameraAviso" class="camera-aviso" style="display:none"></div>
+    <video id="videoCamera" autoplay playsinline muted></video>
+    <canvas id="canvasCamera"></canvas>
+    <div class="botoes">
+      <button type="button" class="btn-secundario" onclick="fecharCamera()">Cancelar</button>
+      <button type="button" class="btn-secundario" onclick="escolherArquivoCamera()">📁 Galeria</button>
+      <button type="button" class="btn-sucesso" onclick="capturarFoto()">📸 Capturar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn ativo" data-tab="dashboard"><span class="ico">📊</span>Início</button>
+  <button class="nav-btn" data-tab="nfs"><span class="ico">📄</span>NFs</button>
+  <button class="nav-btn" data-tab="showroom"><span class="ico">🪑</span>Showroom</button>
+  <button class="nav-btn" data-tab="relatorios"><span class="ico">📈</span>Relatórios</button>
+  <button class="nav-btn" data-tab="cadastros"><span class="ico">🏢</span>Cadastros</button>
+</nav>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInAnonymously, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC5zMuFvIIBbGN1x8ZIduECWIZ4YPTOybk",
+  authDomain: "estoquebreton-661ac.firebaseapp.com",
+  projectId: "estoquebreton-661ac",
+  storageBucket: "estoquebreton-661ac.firebasestorage.app",
+  messagingSenderId: "1015582889655",
+  appId: "1:1015582889655:web:f2701677daab1714921f32",
+  measurementId: "G-RWDMD5V56E"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const DOC_REF = doc(db, 'estoque', 'principal');
+
+// ============================================================
+// CONSTANTES
+// ============================================================
+const CATEGORIAS_FIXAS = ['Sofá','Mesa','Cadeira','Poltrona','Cama','Armário','Rack','Aparador','Iluminação','Decoração','Estante','Buffet','Escrivaninha','Outro'];
+const LOCAIS_VALIDOS = ['showroom', 'deposito', 'transito'];
+const STORAGE_KEY = 'estoqueMoveisV4';
+const RASCUNHO_KEY = 'rascunhoNF';
+const BACKUP_KEY = 'estoqueMoveisV4_backup';
+const MAX_FOTO_KB = 200;
+
+const DB = {
+  nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [],
+  contadores: { peca: 0 },
+  editandoFornId: null, editandoTranspId: null, editandoCliId: null
+};
+
+let firebaseReady = false;
+let firebaseUser = null;
+let syncStatus = 'iniciando';
+let ultimaSyncRemota = 0;
+let salvandoRemoto = false;
+
+// ============================================================
+// HELPERS
+// ============================================================
+const $ = id => document.getElementById(id);
+const brl = v => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const hoje = () => new Date().toISOString().split('T')[0];
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10));
+const soDigitos = s => String(s || '').replace(/\D/g, '');
+const formatarData = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('pt-BR') : '—';
+const formatarDataHora = d => d ? new Date(d).toLocaleString('pt-BR') : '—';
+
+function escapeHtml(v) {
+  if (v === null || v === undefined) return '';
+  return String(v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function urlImagemSegura(url) {
+  if (!url) return '';
+  const s = String(url).trim();
+  if (s.startsWith('data:image/')) return s;
+  if (/^https:\/\//i.test(s)) return s;
+  return '';
+}
+function mascararCNPJ(v) {
+  const d = soDigitos(v).substring(0, 14);
+  let r = d;
+  if (d.length > 2) r = d.substring(0, 2) + '.' + d.substring(2);
+  if (d.length > 5) r = r.substring(0, 6) + '.' + d.substring(5);
+  if (d.length > 8) r = r.substring(0, 10) + '/' + d.substring(8);
+  if (d.length > 12) r = r.substring(0, 15) + '-' + d.substring(12);
+  return r;
+}
+function gerarCodigo(categoria, nome) {
+  DB.contadores.peca = (DB.contadores.peca || 0) + 1;
+  const base = (categoria || nome || 'PEC').substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'PEC') || 'PEC';
+  return `${base}-${String(DB.contadores.peca).padStart(4, '0')}`;
+}
+function registrarHistorico(peca, acao, detalhe = '') {
+  peca.historico = peca.historico || [];
+  peca.historico.unshift({ data: new Date().toISOString(), acao, detalhe });
+}
+function toast(msg, tipo = 'ok') {
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast visivel' + (tipo === 'erro' ? ' erro' : tipo === 'aviso' ? ' aviso' : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.className = 'toast', 3200);
+}
+function fecharModal(id) { $(id).classList.add('oculto'); }
+function abrirModal(id) { $(id).classList.remove('oculto'); }
+
+// Compressão de imagem
+async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+      const MAX_DIM = 1000;
+      if (width > MAX_DIM || height > MAX_DIM) {
+        if (width > height) { height = Math.round(height * MAX_DIM / width); width = MAX_DIM; }
+        else { width = Math.round(width * MAX_DIM / height); height = MAX_DIM; }
+      }
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      let quality = 0.8;
+      let dataUrl = canvas.toDataURL('image/jpeg', quality);
+      while (dataUrl.length > maxKB * 1024 * 1.37 && quality > 0.3) {
+        quality -= 0.1;
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+      }
+      resolve(dataUrl);
+    };
+    img.onerror = () => reject(new Error('Imagem inválida'));
+    if (typeof fileOuDataUrl === 'string') img.src = fileOuDataUrl;
+    else {
+      const reader = new FileReader();
+      reader.onload = e => { img.src = e.target.result; };
+      reader.onerror = () => reject(new Error('Falha ao ler arquivo'));
+      reader.readAsDataURL(fileOuDataUrl);
+    }
+  });
+}
+
+// ============================================================
+// PERSISTÊNCIA
+// ============================================================
+function carregarLocal() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const dados = JSON.parse(raw);
+    if (!dados || typeof dados !== 'object') return false;
+    if (Array.isArray(dados.nfs)) DB.nfs = dados.nfs;
+    if (Array.isArray(dados.pecas)) DB.pecas = dados.pecas;
+    if (Array.isArray(dados.fornecedores)) DB.fornecedores = dados.fornecedores;
+    if (Array.isArray(dados.transportadoras)) DB.transportadoras = dados.transportadoras;
+    if (Array.isArray(dados.clientes)) DB.clientes = dados.clientes;
+    if (dados.contadores && typeof dados.contadores === 'object') DB.contadores = dados.contadores;
+    return true;
+  } catch (e) { console.error('Erro load local:', e); return false; }
+}
+function salvarLocal(silencioso = false) {
+  try {
+    const payload = {
+      nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
+      transportadoras: DB.transportadoras, clientes: DB.clientes,
+      contadores: DB.contadores, _ts: Date.now()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    return true;
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      if (!silencioso) toast('⚠️ Armazenamento cheio! Faça backup.', 'erro');
+    } else if (!silencioso) toast('Erro ao salvar localmente.', 'erro');
+    return false;
+  }
+}
+function atualizarStatusSync(st, msg) {
+  syncStatus = st;
+  const el = $('statusSync');
+  if (!el) return;
+  const map = {
+    online: { txt: '🟢 Sincronizado', cls: 'online' },
+    offline: { txt: '🟡 Offline', cls: 'offline' },
+    iniciando: { txt: '🟡 Conectando…', cls: 'offline' },
+    erro: { txt: '🔴 Erro', cls: 'erro' }
+  };
+  el.textContent = map[st].txt;
+  el.className = 'status-sync ' + map[st].cls;
+  if (msg) el.title = msg;
+  const banner = $('bannerOffline');
+  if (banner) banner.style.display = st === 'offline' ? 'block' : 'none';
+}
+async function salvarRemoto() {
+  if (!firebaseReady || !firebaseUser || salvandoRemoto) return;
+  salvandoRemoto = true;
+  try {
+    await setDoc(DOC_REF, {
+      nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
+      transportadoras: DB.transportadoras, clientes: DB.clientes,
+      contadores: DB.contadores,
+      _atualizadoEm: serverTimestamp(),
+      _atualizadoPor: firebaseUser.uid
+    }, { merge: false });
+    ultimaSyncRemota = Date.now();
+    atualizarStatusSync('online');
+  } catch (e) {
+    console.error('salvarRemoto:', e);
+    atualizarStatusSync('offline', e.message);
+  } finally { salvandoRemoto = false; }
+}
+function salvar() {
+  const ok = salvarLocal();
+  salvarRemoto();
+  return ok;
+}
+
+// ============================================================
+// BACKUP
+// ============================================================
+function validarBackup(dados) {
+  const erros = [];
+  if (!dados || typeof dados !== 'object') return ['Arquivo não é um objeto JSON.'];
+  const lists = ['nfs', 'pecas', 'fornecedores', 'transportadoras', 'clientes'];
+  for (const k of lists) {
+    if (k in dados && !Array.isArray(dados[k])) erros.push(`Campo "${k}" deve ser uma lista.`);
+  }
+  if (dados.contadores && typeof dados.contadores !== 'object') erros.push('"contadores" inválido.');
+  const pecasIds = new Set((dados.pecas || []).map(p => p && p.id).filter(Boolean));
+  for (const nf of dados.nfs || []) {
+    if (!nf || typeof nf !== 'object') { erros.push('NF inválida.'); continue; }
+    if (!nf.numero) erros.push('NF sem número.');
+    if (Array.isArray(nf.pecasIds)) {
+      for (const pid of nf.pecasIds) {
+        if (!pecasIds.has(pid)) { erros.push('Peças referenciadas por NFs não encontradas.'); break; }
+      }
+    }
+  }
+  return erros;
+}
+function exportarBackup() {
+  try {
+    const dados = {
+      _app: 'estoque-hong-possas', _versao: 4,
+      _exportadoEm: new Date().toISOString(),
+      nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
+      transportadoras: DB.transportadoras, clientes: DB.clientes,
+      contadores: DB.contadores
+    };
+    const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `backup-hong-possas-${hoje()}.json`;
+    a.click();
+    toast('Backup exportado.');
+  } catch { toast('Erro ao exportar.', 'erro'); }
+}
+function importarBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    let dados;
+    try { dados = JSON.parse(e.target.result); }
+    catch { toast('Arquivo não é JSON válido.', 'erro'); event.target.value = ''; return; }
+    const erros = validarBackup(dados);
+    if (erros.length) {
+      toast('Backup inválido: ' + erros[0], 'erro');
+      alert('Arquivo inválido:\n\n' + erros.join('\n'));
+      event.target.value = '';
+      return;
+    }
+    if (!confirm('Substituir TODOS os dados atuais?')) { event.target.value = ''; return; }
+    try { localStorage.setItem(BACKUP_KEY, localStorage.getItem(STORAGE_KEY) || ''); } catch {}
+    try {
+      DB.nfs = dados.nfs || [];
+      DB.pecas = dados.pecas || [];
+      DB.fornecedores = dados.fornecedores || [];
+      DB.transportadoras = dados.transportadoras || [];
+      DB.clientes = dados.clientes || [];
+      DB.contadores = dados.contadores || { peca: 0 };
+      salvar(); renderTudo(); atualizarSelectsCadastros();
+      toast('✅ Backup restaurado.');
+    } catch {
+      try {
+        const prev = localStorage.getItem(BACKUP_KEY);
+        if (prev) localStorage.setItem(STORAGE_KEY, prev);
+      } catch {}
+      toast('Erro ao restaurar. Dados anteriores preservados.', 'erro');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+async function limparTudo() {
+  if (!confirm('⚠️ Apagar TODOS os dados?')) return;
+  if (!confirm('Tem certeza? Faça backup antes.')) return;
+  try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(RASCUNHO_KEY); } catch {}
+  DB.nfs = []; DB.pecas = []; DB.fornecedores = []; DB.transportadoras = []; DB.clientes = [];
+  DB.contadores = { peca: 0 };
+  if (firebaseReady && firebaseUser) {
+    try { await setDoc(DOC_REF, { nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [], contadores: { peca: 0 } }); } catch {}
+  }
+  renderTudo(); toast('Dados apagados.');
+}
+
+// ============================================================
+// NAVEGAÇÃO
+// ============================================================
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.onclick = () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tab === tab));
+    document.querySelectorAll('.tab-conteudo').forEach(s => s.classList.remove('ativo'));
+    $('tab-' + tab).classList.add('ativo');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    renderTudo();
+  };
+});
+
+// ============================================================
+// RENDER GERAL
+// ============================================================
+function renderTudo() {
+  renderDashboard(); renderNFs(); renderPecas(); renderReservas();
+  renderFornecedores(); renderTransportadoras(); renderClientes();
+  renderEstatisticas(); renderInfoSync(); renderRelatorio();
+}
+
+function renderInfoSync() {
+  const el = $('infoSync');
+  if (!el) return;
+  if (!firebaseUser) { el.textContent = 'Conectando…'; return; }
+  const uidCurto = firebaseUser.uid.substring(0, 8);
+  const ult = ultimaSyncRemota ? formatarDataHora(new Date(ultimaSyncRemota).toISOString()) : '—';
+  el.innerHTML = `
+    <p>Status: <strong>${escapeHtml(syncStatus)}</strong></p>
+    <p>Dispositivo: <code>${escapeHtml(uidCurto)}</code></p>
+    <p>Última sincronização: ${escapeHtml(ult)}</p>
+    <p>Peças: ${DB.pecas.length} · NFs: ${DB.nfs.length}</p>
+  `;
+}
+
+function renderDashboard() {
+  const showroom = DB.pecas.filter(p => p.status === 'disponivel');
+  $('dashShowroom').textContent = showroom.length;
+  $('dashValor').textContent = brl(showroom.reduce((s, p) => s + (Number(p.precoVenda) || 0), 0));
+  $('dashReservas').textContent = DB.pecas.filter(p => p.status === 'reservado').length;
+  $('dashNFs').textContent = DB.nfs.length;
+  $('dashVendidas').textContent = DB.pecas.filter(p => p.status === 'vendido').length;
+  $('dashPendentes').textContent = DB.nfs.filter(n => n.status === 'pendente').length;
+
+  const LIMITE_DIAS = 90;
+  const agora = Date.now();
+  const paradas = DB.pecas
+    .filter(p => p.status === 'disponivel' && p.dataCadastro)
+    .map(p => ({ ...p, diasParada: Math.floor((agora - new Date(p.dataCadastro).getTime()) / 86400000) }))
+    .filter(p => p.diasParada >= LIMITE_DIAS)
+    .sort((a, b) => b.diasParada - a.diasParada);
+
+  const elP = $('alertaParadas');
+  if (!paradas.length) { elP.innerHTML = ''; }
+  else {
+    const linhas = paradas.slice(0, 5).map(p =>
+      `<div class="peca-parada">• <strong>${escapeHtml(p.nome)}</strong> (${escapeHtml(p.codigo)}) — ${p.diasParada} dias · ${escapeHtml(brl(p.precoVenda))}</div>`
+    ).join('');
+    const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:6px">...e mais ${paradas.length - 5}</div>` : '';
+    elP.innerHTML = `<div class="alerta-parada"><h4>⚠️ ${paradas.length} peça(s) parada(s) +90 dias</h4>${linhas}${extra}</div>`;
+  }
+
+  const movs = [];
+  DB.pecas.forEach(p => (p.historico || []).forEach(h => movs.push({ ...h, peca: p.nome, codigo: p.codigo })));
+  movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
+  const elM = $('ultimasMovs');
+  if (!movs.length) { elM.innerHTML = '<p class="vazio">Nenhuma movimentação ainda.</p>'; return; }
+  elM.innerHTML = movs.slice(0, 10).map(m => `
+    <div class="historico-item">
+      <div class="data">${escapeHtml(formatarDataHora(m.data))}</div>
+      <strong>${escapeHtml(m.peca)}</strong> <span style="color:#95a5a6">(${escapeHtml(m.codigo)})</span> — ${escapeHtml(m.acao)}
+      ${m.detalhe ? `<div style="color:var(--cinza-esc);font-size:12px;margin-top:2px">${escapeHtml(m.detalhe)}</div>` : ''}
+    </div>`).join('');
+}
+
+// ============================================================
+// CADASTRO RÁPIDO
+// ============================================================
+function abrirCadastroRapido(tipo) {
+  $('formCadastroRapido').reset();
+  $('avisoDuplicado').innerHTML = '';
+  $('tipoCadastroRapido').value = tipo;
+  $('labelCNPJ').style.display = tipo === 'cliente' ? 'none' : 'block';
+  $('labelEndereco').style.display = tipo === 'cliente' ? 'block' : 'none';
+  const titulos = { fornecedor: '📦 Novo Fornecedor', transportadora: '🚚 Nova Transportadora', cliente: '👤 Novo Cliente' };
+  $('tituloCadastroRapido').textContent = titulos[tipo] || 'Novo Cadastro';
+  abrirModal('modalCadastroRapido');
+  setTimeout(() => $('crNome').focus(), 100);
+}
+$('crCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
+$('fornCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
+$('transpCNPJ').addEventListener('input', e => { e.target.value = mascararCNPJ(e.target.value); });
+$('crCNPJ').addEventListener('blur', verificarDuplicidade);
+$('crNome').addEventListener('blur', verificarDuplicidade);
+
+function verificarDuplicidade() {
+  const tipo = $('tipoCadastroRapido').value;
+  const cnpj = soDigitos($('crCNPJ').value);
+  const nome = $('crNome').value.trim().toLowerCase();
+  if (tipo === 'cliente') {
+    if (!nome) { $('avisoDuplicado').innerHTML = ''; return; }
+    const dup = DB.clientes.find(c => String(c.nome || '').toLowerCase() === nome);
+    if (dup) mostrarAvisoDuplicado('cliente', dup);
+    else $('avisoDuplicado').innerHTML = '';
+    return;
+  }
+  if (cnpj && cnpj.length === 14) {
+    const lista = tipo === 'fornecedor' ? DB.fornecedores : DB.transportadoras;
+    const dup = lista.find(x => soDigitos(x.cnpj) === cnpj);
+    if (dup) { mostrarAvisoDuplicado(tipo, dup); return; }
+  }
+  if (nome) {
+    const lista = tipo === 'fornecedor' ? DB.fornecedores : DB.transportadoras;
+    const dup = lista.find(x => String(x.nome || '').toLowerCase() === nome);
+    if (dup) { mostrarAvisoDuplicado(tipo, dup); return; }
+  }
+  $('avisoDuplicado').innerHTML = '';
+}
+function mostrarAvisoDuplicado(tipo, item) {
+  const el = $('avisoDuplicado');
+  const div = document.createElement('div');
+  div.className = 'duplicado-aviso';
+  div.innerHTML = `<strong>⚠️ Já existe:</strong> ${escapeHtml(item.nome)}${item.cnpj ? ' · ' + escapeHtml(item.cnpj) : ''}`;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn-usar btn-sucesso btn-pequeno';
+  btn.textContent = '✅ Usar este cadastro';
+  btn.addEventListener('click', () => usarDuplicado(tipo, item.id));
+  div.appendChild(btn);
+  el.innerHTML = '';
+  el.appendChild(div);
+}
+function usarDuplicado(tipo, id) {
+  if (tipo === 'fornecedor') {
+    $('nfFornecedor').value = id;
+    const f = DB.fornecedores.find(x => x.id === id);
+    $('nfCNPJ').value = f ? (f.cnpj || '') : '';
+  } else if (tipo === 'transportadora') $('nfTransportadora').value = id;
+  else if (tipo === 'cliente') {
+    $('nfClienteSelect').value = id;
+    const c = DB.clientes.find(x => x.id === id);
+    if (c) $('nfClienteTelefone').value = c.telefone || '';
+  }
+  fecharModal('modalCadastroRapido');
+  toast('Cadastro selecionado.');
+}
+$('formCadastroRapido').onsubmit = e => {
+  e.preventDefault();
+  const tipo = $('tipoCadastroRapido').value;
+  const nome = $('crNome').value.trim();
+  const contato = $('crContato').value.trim();
+  const cnpjRaw = $('crCNPJ').value.trim();
+  const cnpj = cnpjRaw ? mascararCNPJ(cnpjRaw) : '';
+  const endereco = $('crEndereco').value.trim();
+  if (!nome) { toast('Informe o nome.', 'erro'); return; }
+
+  if (tipo === 'cliente') {
+    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) {
+      toast('Já existe cliente.', 'erro'); return;
+    }
+    const novo = { id: uid(), nome, telefone: contato, endereco };
+    DB.clientes.push(novo);
+    salvar(); atualizarSelectsCadastros();
+    if (!$('modalNF').classList.contains('oculto')) $('nfClienteSelect').value = novo.id;
+    else if (!$('modalReservar').classList.contains('oculto')) {
+      $('reservaClienteSelect').value = novo.id;
+      $('reservaClienteManual').value = nome;
+      $('reservaTelefone').value = contato;
+    }
+    fecharModal('modalCadastroRapido'); renderTudo();
+    toast('✅ Cliente cadastrado!');
+    return;
+  }
+  if (soDigitos(cnpj).length !== 14) { toast('CNPJ deve ter 14 dígitos.', 'erro'); return; }
+  const lista = tipo === 'fornecedor' ? DB.fornecedores : DB.transportadoras;
+  if (lista.some(x => soDigitos(x.cnpj) === soDigitos(cnpj))) {
+    mostrarAvisoDuplicado(tipo, lista.find(x => soDigitos(x.cnpj) === soDigitos(cnpj)));
+    toast('CNPJ já cadastrado!', 'erro'); return;
+  }
+  if (lista.some(x => String(x.nome || '').toLowerCase() === nome.toLowerCase())) {
+    toast('Já existe com esse nome.', 'erro'); return;
+  }
+  const novo = { id: uid(), nome, cnpj, contato };
+  lista.push(novo);
+  salvar(); atualizarSelectsCadastros();
+  if (tipo === 'fornecedor') { $('nfFornecedor').value = novo.id; $('nfCNPJ').value = cnpj; }
+  else $('nfTransportadora').value = novo.id;
+  fecharModal('modalCadastroRapido'); renderTudo();
+  toast(`✅ Cadastrado!`);
+};
+
+// ============================================================
+// NF
+// ============================================================
+let contadorItemNF = 0;
+let tipoEntrada = 'showroom';
+let itemAtualFoto = null;
+let streamCamera = null;
+let autoSaveInterval = null;
+let cameraModoAtual = 'environment';
+
+function atualizarSelectsCadastros() {
+  const popular = (sel, lista, placeholder) => {
+    if (!sel) return;
+    const v = sel.value;
+    sel.innerHTML = '';
+    const opt0 = document.createElement('option');
+    opt0.value = ''; opt0.textContent = placeholder;
+    sel.appendChild(opt0);
+    for (const x of lista) {
+      const o = document.createElement('option');
+      o.value = x.id;
+      o.textContent = x.nome + (x.cnpj ? ' · ' + x.cnpj : '') + (x.telefone ? ' · ' + x.telefone : '');
+      sel.appendChild(o);
+    }
+    if (v && [...sel.options].some(o => o.value === v)) sel.value = v;
+  };
+  popular($('nfFornecedor'), DB.fornecedores, '— Selecione —');
+  popular($('nfTransportadora'), DB.transportadoras, '— Selecione —');
+  popular($('nfClienteSelect'), DB.clientes, '— Selecione —');
+  popular($('reservaClienteSelect'), DB.clientes, '— Selecione —');
+}
+$('nfFornecedor').onchange = () => {
+  const f = DB.fornecedores.find(x => x.id === $('nfFornecedor').value);
+  $('nfCNPJ').value = f ? (f.cnpj || '') : '';
+};
+$('nfClienteSelect').onchange = () => {
+  const c = DB.clientes.find(x => x.id === $('nfClienteSelect').value);
+  if (c) $('nfClienteTelefone').value = c.telefone || '';
+};
+$('reservaClienteSelect').onchange = () => {
+  const c = DB.clientes.find(x => x.id === $('reservaClienteSelect').value);
+  if (c) {
+    $('reservaClienteManual').value = c.nome;
+    $('reservaTelefone').value = c.telefone || '';
+  }
+};
+
+function selecionarTipo(tipo) {
+  tipoEntrada = tipo;
+  $('tipoShowroom').classList.toggle('selecionado', tipo === 'showroom');
+  $('tipoOC').classList.toggle('selecionado', tipo === 'oc');
+  $('blocoDadosOC').style.display = tipo === 'oc' ? 'block' : 'none';
+}
+function abrirNovaNF() {
+  $('formNF').reset();
+  $('itensNF').innerHTML = '';
+  contadorItemNF = 0;
+  $('nfConferencia').value = hoje();
+  $('nfRecebimento').value = hoje();
+  selecionarTipo('showroom');
+  atualizarSelectsCadastros();
+  addItemNF();
+  const rasc = localStorage.getItem(RASCUNHO_KEY);
+  $('avisoRascunho').style.display = rasc ? 'flex' : 'none';
+  abrirModal('modalNF');
+  iniciarAutoSave();
+}
+function iniciarAutoSave() {
+  if (autoSaveInterval) clearInterval(autoSaveInterval);
+  autoSaveInterval = setInterval(() => {
+    if (!$('modalNF').classList.contains('oculto')) {
+      const algum = $('nfNumero').value || $('nfFornecedor').value ||
+        [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
+      if (algum) salvarRascunhoAuto();
+    }
+  }, 3000);
+}
+function pararAutoSave() { if (autoSaveInterval) clearInterval(autoSaveInterval); autoSaveInterval = null; }
+
+function coletarDadosNF() {
+  const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => ({
+    numero: div.querySelector('.item-numero').value,
+    nome: div.querySelector('.item-nome').value,
+    categoria: div.querySelector('.item-categoria').value,
+    marca: div.querySelector('.item-marca').value,
+    qtd: div.querySelector('.item-qtd').value,
+    destino: div.querySelector('.item-destino').value,
+    custo: div.querySelector('.item-custo').value,
+    venda: div.querySelector('.item-venda').value,
+    carac: div.querySelector('.item-carac').value,
+    foto: div.querySelector('.item-foto-b64').value
+  }));
+  return {
+    tipoEntrada,
+    numeroOC: $('nfNumeroOC').value,
+    clienteId: $('nfClienteSelect').value,
+    clienteTelefone: $('nfClienteTelefone').value,
+    dataEntrega: $('nfDataEntrega').value,
+    valorCombinado: $('nfValorCombinado').value,
+    obsOC: $('nfObsOC').value,
+    numero: $('nfNumero').value,
+    pedido: $('nfPedido').value,
+    fornecedorId: $('nfFornecedor').value,
+    transportadoraId: $('nfTransportadora').value,
+    dataEmissao: $('nfEmissao').value,
+    dataRecebimento: $('nfRecebimento').value,
+    dataConferencia: $('nfConferencia').value,
+    conferidoPor: $('nfConferidoPor').value,
+    status: $('nfStatus').value,
+    valorTotalNF: $('nfValorTotal').value,
+    observacoes: $('nfObservacoes').value,
+    itens
+  };
+}
+function salvarRascunhoAuto() {
+  try { localStorage.setItem(RASCUNHO_KEY, JSON.stringify(coletarDadosNF())); }
+  catch (e) { if (e.name === 'QuotaExceededError') toast('⚠️ Sem espaço p/ rascunho.', 'erro'); }
+}
+function salvarRascunhoManual() { salvarRascunhoAuto(); toast('💾 Rascunho salvo.', 'aviso'); }
+function recuperarRascunho() {
+  try {
+    const raw = localStorage.getItem(RASCUNHO_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    selecionarTipo(d.tipoEntrada || 'showroom');
+    $('nfNumeroOC').value = d.numeroOC || '';
+    if (d.clienteId) $('nfClienteSelect').value = d.clienteId;
+    $('nfClienteTelefone').value = d.clienteTelefone || '';
+    $('nfDataEntrega').value = d.dataEntrega || '';
+    $('nfValorCombinado').value = d.valorCombinado || '';
+    $('nfObsOC').value = d.obsOC || '';
+    $('nfNumero').value = d.numero || '';
+    $('nfPedido').value = d.pedido || '';
+    if (d.fornecedorId) $('nfFornecedor').value = d.fornecedorId;
+    $('nfCNPJ').value = DB.fornecedores.find(f => f.id === d.fornecedorId)?.cnpj || '';
+    if (d.transportadoraId) $('nfTransportadora').value = d.transportadoraId;
+    $('nfEmissao').value = d.dataEmissao || '';
+    $('nfRecebimento').value = d.dataRecebimento || hoje();
+    $('nfConferencia').value = d.dataConferencia || hoje();
+    $('nfConferidoPor').value = d.conferidoPor || '';
+    $('nfStatus').value = d.status || 'conferida';
+    $('nfValorTotal').value = d.valorTotalNF || '';
+    $('nfObservacoes').value = d.observacoes || '';
+    $('itensNF').innerHTML = '';
+    contadorItemNF = 0;
+    (d.itens || []).forEach(it => {
+      contadorItemNF++;
+      const div = document.createElement('div');
+      div.className = 'item-nf';
+      div.innerHTML = templateItemNF(contadorItemNF);
+      $('itensNF').appendChild(div);
+      div.querySelector('.item-numero').value = it.numero || contadorItemNF;
+      div.querySelector('.item-nome').value = it.nome || '';
+      if (it.categoria) div.querySelector('.item-categoria').value = it.categoria;
+      div.querySelector('.item-marca').value = it.marca || '';
+      div.querySelector('.item-qtd').value = it.qtd || 1;
+      div.querySelector('.item-destino').value = it.destino || 'showroom';
+      div.querySelector('.item-custo').value = it.custo || '';
+      div.querySelector('.item-venda').value = it.venda || '';
+      div.querySelector('.item-carac').value = it.carac || '';
+      const fotoSegura = urlImagemSegura(it.foto);
+      if (fotoSegura) {
+        const wrap = div.querySelector('.foto-upload');
+        wrap.querySelector('.preview').src = fotoSegura;
+        wrap.querySelector('.preview').style.display = 'block';
+        wrap.querySelector('.item-foto-b64').value = fotoSegura;
+      }
+    });
+    if (!d.itens || !d.itens.length) addItemNF();
+    $('avisoRascunho').style.display = 'none';
+    toast('Rascunho recuperado.', 'aviso');
+  } catch { toast('Erro ao recuperar rascunho.', 'erro'); }
+}
+function descartarRascunho() {
+  try { localStorage.removeItem(RASCUNHO_KEY); } catch {}
+  $('avisoRascunho').style.display = 'none';
+  toast('Rascunho descartado.');
+}
+function tentarFecharNF() {
+  const algum = $('nfNumero').value || $('nfFornecedor').value ||
+    [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
+  if (algum) {
+    if (!confirm('Fechar e salvar como rascunho?')) return;
+    salvarRascunhoAuto();
+    toast('Rascunho salvo.', 'aviso');
+  }
+  pararAutoSave();
+  fecharModal('modalNF');
+}
+function templateItemNF(num) {
+  return `
+    <button type="button" class="remover" onclick="this.parentElement.remove()">✕</button>
+    <h4>Item ${escapeHtml(num)}</h4>
+    <label>Nome da Peça *<input type="text" class="item-nome"></label>
+    <div class="grid-3">
+      <label>Categoria
+        <select class="item-categoria">
+          ${CATEGORIAS_FIXAS.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('')}
+        </select>
+      </label>
+      <label>Marca<input type="text" class="item-marca"></label>
+      <label>Nº Item NF<input type="text" class="item-numero" value="${escapeHtml(num)}"></label>
+      <label>Quantidade *<input type="number" class="item-qtd" min="1" value="1" inputmode="numeric"></label>
+      <label>Destino
+        <select class="item-destino">
+          <option value="showroom">Showroom</option>
+          <option value="venda_direta">Venda direta</option>
+        </select>
+      </label>
+      <label>Preço Custo *<input type="number" class="item-custo" step="0.01" min="0" inputmode="decimal"></label>
+      <label>Preço Venda *<input type="number" class="item-venda" step="0.01" min="0" inputmode="decimal"></label>
+    </div>
+    <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas..."></textarea></label>
+    <div class="foto-upload">
+      <img class="preview" alt="preview">
+      <div class="botoes-foto">
+        <button type="button" class="btn-secundario" onclick="abrirCameraPara(this)">📷 Câmera</button>
+        <button type="button" class="btn-secundario" onclick="escolherArquivo(this)">🖼️ Galeria</button>
+        <button type="button" class="btn-perigo" onclick="removerFoto(this)">✕</button>
+      </div>
+      <input type="file" accept="image/*" style="display:none" onchange="carregarFoto(this)">
+      <input type="hidden" class="item-foto-b64">
+    </div>`;
+}
+function addItemNF() {
+  contadorItemNF++;
+  const div = document.createElement('div');
+  div.className = 'item-nf';
+  div.innerHTML = templateItemNF(contadorItemNF);
+  $('itensNF').appendChild(div);
+}
+function escolherArquivo(btn) { btn.closest('.foto-upload').querySelector('input[type=file]').click(); }
+async function carregarFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { toast('Arquivo não é imagem.', 'erro'); return; }
+  try {
+    const comprimida = await comprimirImagem(file);
+    aplicarFoto(input.closest('.foto-upload'), comprimida);
+  } catch { toast('Erro ao processar imagem.', 'erro'); }
+  input.value = '';
+}
+
+// ============================================================
+// CÂMERA — com detecção de HTTPS e fallback
+// ============================================================
+function avisoCamera(msg) {
+  const el = $('cameraAviso');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+async function tentarAbrirCamera(modo) {
+  avisoCamera('');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: modo } },
+      audio: false
+    });
+    streamCamera = stream;
+    cameraModoAtual = modo;
+    $('videoCamera').srcObject = stream;
+  } catch (err) {
+    console.error('Câmera erro:', err);
+    let msg = 'Não foi possível abrir a câmera. ';
+    if (err.name === 'NotAllowedError') msg += 'Permissão negada. Libere a câmera nas configurações do navegador.';
+    else if (err.name === 'NotFoundError') msg += 'Nenhuma câmera encontrada.';
+    else if (err.name === 'NotReadableError') msg += 'Câmera em uso por outro app.';
+    else if (!window.isSecureContext) msg += 'Este site precisa estar em HTTPS. Use "Galeria" para escolher uma foto.';
+    else msg += 'Use "📁 Galeria" para escolher uma foto.';
+    avisoCamera(msg);
+  }
+}
+
+async function abrirCameraPara(btn) {
+  itemAtualFoto = btn.closest('.foto-upload');
+  abrirModal('modalCamera');
+
+  // Verificação de contexto seguro
+  if (!window.isSecureContext) {
+    avisoCamera('⚠️ Câmera só funciona em HTTPS. Use "📁 Galeria" para escolher uma foto.');
+    return;
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    avisoCamera('⚠️ Este navegador não suporta câmera. Use "📁 Galeria".');
+    return;
+  }
+
+  // Tenta traseira primeiro, senão frontal
+  await tentarAbrirCamera('environment');
+  if (!streamCamera) await tentarAbrirCamera('user');
+}
+
+async function capturarFoto() {
+  const video = $('videoCamera');
+  const canvas = $('canvasCamera');
+  if (!streamCamera || !video.videoWidth) {
+    toast('Câmera não iniciada. Use "📁 Galeria".', 'aviso');
+    return;
+  }
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const bruta = canvas.toDataURL('image/jpeg', 0.8);
+  try {
+    const comprimida = await comprimirImagem(bruta);
+    if (itemAtualFoto) aplicarFoto(itemAtualFoto, comprimida);
+  } catch { toast('Erro ao capturar.', 'erro'); }
+  fecharCamera();
+}
+function fecharCamera() {
+  if (streamCamera) { streamCamera.getTracks().forEach(t => t.stop()); streamCamera = null; }
+  $('videoCamera').srcObject = null;
+  fecharModal('modalCamera');
+  itemAtualFoto = null;
+  avisoCamera('');
+}
+function escolherArquivoCamera() {
+  // Chama o input file do item que abriu a câmera
+  if (!itemAtualFoto) { toast('Nenhum item ativo.', 'erro'); return; }
+  const input = itemAtualFoto.querySelector('input[type=file]');
+  if (input) {
+    input.click();
+    fecharCamera();
+  }
+}
+function aplicarFoto(wrap, dataUrl) {
+  const segura = urlImagemSegura(dataUrl);
+  if (!segura) return;
+  wrap.querySelector('.preview').src = segura;
+  wrap.querySelector('.preview').style.display = 'block';
+  wrap.querySelector('.item-foto-b64').value = segura;
+}
+function removerFoto(btn) {
+  const wrap = btn.closest('.foto-upload');
+  wrap.querySelector('.preview').src = '';
+  wrap.querySelector('.preview').style.display = 'none';
+  wrap.querySelector('.item-foto-b64').value = '';
+}
+
+// ============================================================
+// SUBMIT NF
+// ============================================================
+$('formNF').onsubmit = e => {
+  e.preventDefault();
+  const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
+  if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
+
+  const numNF = $('nfNumero').value.trim();
+  if (!numNF) { toast('Informe o nº da NF.', 'erro'); $('nfNumero').focus(); return; }
+
+  const fornecedorId = $('nfFornecedor').value;
+  const fornecedor = DB.fornecedores.find(f => f.id === fornecedorId);
+  if (!fornecedor) { toast('Selecione um fornecedor.', 'erro'); $('nfFornecedor').focus(); return; }
+
+  let cliente = null;
+  if (tipoEntrada === 'oc') {
+    if (!$('nfNumeroOC').value.trim()) { toast('Informe o nº da OC.', 'erro'); $('nfNumeroOC').focus(); return; }
+    const cliId = $('nfClienteSelect').value;
+    cliente = DB.clientes.find(c => c.id === cliId);
+    if (!cliente) { toast('Selecione o cliente da OC.', 'erro'); $('nfClienteSelect').focus(); return; }
+  }
+
+  const itensValidados = [];
+  for (let i = 0; i < itensDOM.length; i++) {
+    const div = itensDOM[i];
+    const nome = div.querySelector('.item-nome').value.trim();
+    const categoria = div.querySelector('.item-categoria').value;
+    const marca = div.querySelector('.item-marca').value.trim();
+    const qtdRaw = div.querySelector('.item-qtd').value;
+    const custoRaw = div.querySelector('.item-custo').value;
+    const vendaRaw = div.querySelector('.item-venda').value;
+    const destino = div.querySelector('.item-destino').value;
+    const carac = div.querySelector('.item-carac').value.trim();
+    const foto = urlImagemSegura(div.querySelector('.item-foto-b64').value);
+    const numItem = div.querySelector('.item-numero').value.trim();
+
+    if (!nome) { toast(`Item ${i+1}: informe o nome.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
+    if (!CATEGORIAS_FIXAS.includes(categoria)) { toast(`Item ${i+1}: categoria inválida.`, 'erro'); return; }
+    const qtd = Number(qtdRaw);
+    if (!Number.isInteger(qtd) || qtd <= 0) {
+      toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro');
+      div.querySelector('.item-qtd').focus(); return;
+    }
+    const custo = Number(custoRaw);
+    if (!Number.isFinite(custo) || custo < 0) {
+      toast(`Item ${i+1}: custo inválido.`, 'erro');
+      div.querySelector('.item-custo').focus(); return;
+    }
+    const venda = Number(vendaRaw);
+    if (!Number.isFinite(venda) || venda < 0) {
+      toast(`Item ${i+1}: venda inválida.`, 'erro');
+      div.querySelector('.item-venda').focus(); return;
+    }
+    itensValidados.push({ nome, categoria, marca, qtd, custo, venda, destino, carac, foto, numItem });
+  }
+
+  const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
+  const nf = {
+    id: uid(),
+    tipoEntrada,
+    numero: numNF,
+    pedido: $('nfPedido').value.trim(),
+    fornecedorId: fornecedor.id,
+    fornecedorNome: fornecedor.nome,
+    fornecedorCNPJ: fornecedor.cnpj || '',
+    transportadoraId: transportadora ? transportadora.id : null,
+    transportadoraNome: transportadora ? transportadora.nome : '',
+    dataEmissao: $('nfEmissao').value,
+    dataRecebimento: $('nfRecebimento').value,
+    dataConferencia: $('nfConferencia').value,
+    conferidoPor: $('nfConferidoPor').value.trim(),
+    status: $('nfStatus').value,
+    valorTotalNF: Number($('nfValorTotal').value) || 0,
+    observacoes: $('nfObservacoes').value.trim(),
+    numeroOC: $('nfNumeroOC').value.trim(),
+    cliente: cliente ? cliente.nome : '',
+    clienteId: cliente ? cliente.id : null,
+    clienteTelefone: $('nfClienteTelefone').value.trim() || (cliente ? cliente.telefone : '') || '',
+    dataEntrega: $('nfDataEntrega').value,
+    valorCombinado: Number($('nfValorCombinado').value) || 0,
+    obsOC: $('nfObsOC').value.trim(),
+    dataCadastro: new Date().toISOString(),
+    pecasIds: []
+  };
+
+  const novasPecas = [];
+  itensValidados.forEach(item => {
+    const statusPeca = tipoEntrada === 'oc' ? 'reservado' : 'disponivel';
+    const localizacaoPeca = tipoEntrada === 'oc' ? 'deposito' :
+                            item.destino === 'showroom' ? 'showroom' : 'deposito';
+    for (let i = 1; i <= item.qtd; i++) {
+      const peca = {
+        id: uid(),
+        codigo: gerarCodigo(item.categoria, item.nome),
+        nome: item.nome, categoria: item.categoria, marca: item.marca,
+        fornecedor: nf.fornecedorNome, fornecedorId: nf.fornecedorId,
+        transportadora: nf.transportadoraNome,
+        numeroNF: nf.numero, numeroPedido: nf.pedido,
+        itemNF: item.numItem, dataConferencia: nf.dataConferencia,
+        caracteristicas: item.carac,
+        precoCusto: item.custo, precoVenda: item.venda,
+        localizacao: localizacaoPeca,
+        status: statusPeca,
+        numeroOC: tipoEntrada === 'oc' ? nf.numeroOC : null,
+        cliente: tipoEntrada === 'oc' ? nf.cliente : null,
+        clienteTelefone: tipoEntrada === 'oc' ? nf.clienteTelefone : null,
+        dataEntrega: tipoEntrada === 'oc' ? nf.dataEntrega : null,
+        valorCombinado: tipoEntrada === 'oc' ? nf.valorCombinado : null,
+        obsReserva: tipoEntrada === 'oc' ? nf.obsOC : '',
+        dataVenda: null,
+        foto: item.foto || '',
+        sequencia: item.qtd > 1 ? `${i}/${item.qtd}` : null,
+        dataCadastro: new Date().toISOString(),
+        historico: []
+      };
+      if (tipoEntrada === 'oc') {
+        registrarHistorico(peca, 'cadastro OC', `NF ${nf.numero} · OC ${nf.numeroOC} · ${nf.cliente}`);
+      } else {
+        registrarHistorico(peca, 'cadastro showroom', `NF ${nf.numero} (item ${item.numItem})`);
+      }
+      novasPecas.push(peca);
+      nf.pecasIds.push(peca.id);
+    }
+  });
+
+  DB.pecas.push(...novasPecas);
+  DB.nfs.push(nf);
+  try { localStorage.removeItem(RASCUNHO_KEY); } catch {}
+  pararAutoSave();
+
+  const ok = salvar();
+  if (!ok && !firebaseUser) {
+    DB.pecas = DB.pecas.filter(p => !nf.pecasIds.includes(p.id));
+    DB.nfs = DB.nfs.filter(n => n.id !== nf.id);
+    toast('Erro ao salvar. NF não registrada.', 'erro');
+    return;
+  }
+  fecharModal('modalNF'); renderTudo();
+  toast(`✅ NF salva! ${nf.pecasIds.length} peça(s).`);
+};
+
+// ============================================================
+// LISTAGENS
+// ============================================================
+function renderNFs() {
+  const busca = ($('buscaNF').value || '').toLowerCase();
+  const status = $('filtroStatusNF').value;
+  const tipo = $('filtroTipoNF').value;
+  const lista = DB.nfs.filter(nf => {
+    const mB = !busca ||
+      String(nf.numero || '').toLowerCase().includes(busca) ||
+      String(nf.fornecedorNome || '').toLowerCase().includes(busca) ||
+      String(nf.transportadoraNome || '').toLowerCase().includes(busca) ||
+      String(nf.cliente || '').toLowerCase().includes(busca) ||
+      String(nf.numeroOC || '').toLowerCase().includes(busca) ||
+      String(nf.pedido || '').toLowerCase().includes(busca);
+    return mB && (!status || nf.status === status) && (!tipo || nf.tipoEntrada === tipo);
+  }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
+
+  const el = $('listaNFs');
+  if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma NF encontrada.</p>'; return; }
+  el.innerHTML = lista.map(nf => {
+    const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+    const custoCalc = pecasNF.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+    return `
+      <div class="card-item">
+        <div class="info">
+          <h3>NF ${escapeHtml(nf.numero)} <span class="badge ${nf.tipoEntrada === 'oc' ? 'oc' : 'showroom'}">${nf.tipoEntrada === 'oc' ? '🧾 OC' : '🪑 Showroom'}</span></h3>
+          <p>🏢 ${escapeHtml(nf.fornecedorNome)}</p>
+          ${nf.tipoEntrada === 'oc' ? `<p>👤 ${escapeHtml(nf.cliente)}${nf.clienteTelefone ? ' · ' + escapeHtml(nf.clienteTelefone) : ''} · OC ${escapeHtml(nf.numeroOC)}</p>` : ''}
+          <p>📅 ${escapeHtml(formatarData(nf.dataRecebimento))} · ${escapeHtml(nf.conferidoPor || '—')}</p>
+          ${nf.transportadoraNome ? `<p>🚚 ${escapeHtml(nf.transportadoraNome)}</p>` : ''}
+          <p>📦 ${pecasNF.length} peça(s) · ${escapeHtml(brl(custoCalc))}</p>
+          <span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>
+        </div>
+        <div class="acoes">
+          <button class="btn-perigo btn-pequeno" data-excluir-nf="${escapeHtml(nf.id)}">Excluir</button>
+        </div>
+      </div>`;
+  }).join('');
+  el.querySelectorAll('[data-excluir-nf]').forEach(btn => {
+    btn.addEventListener('click', () => excluirNF(btn.dataset.excluirNf));
+  });
+}
+function excluirNF(id) {
+  const nf = DB.nfs.find(n => n.id === id);
+  if (!nf) return;
+  const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+  const vendidas = pecasNF.filter(p => p.status === 'vendido');
+  const reservadas = pecasNF.filter(p => p.status === 'reservado');
+  if (vendidas.length) { toast(`Não pode excluir: ${vendidas.length} vendida(s).`, 'erro'); return; }
+  if (reservadas.length) { toast(`Não pode excluir: ${reservadas.length} reservada(s).`, 'erro'); return; }
+  const msg = `Excluir NF ${nf.numero}?\n\nSerão removidas ${pecasNF.length} peça(s).\n\nNão pode ser desfeito.`;
+  if (!confirm(msg)) return;
+  DB.pecas = DB.pecas.filter(p => !(nf.pecasIds || []).includes(p.id));
+  DB.nfs = DB.nfs.filter(n => n.id !== id);
+  salvar(); renderTudo(); toast('NF excluída.');
+}
+
+function renderPecas() {
+  const catSel = $('filtroCategoriaPeca');
+  const vCat = catSel.value;
+  const cats = [...new Set(DB.pecas.map(p => p.categoria).filter(Boolean))].sort();
+  catSel.innerHTML = '';
+  const optC = document.createElement('option'); optC.value = ''; optC.textContent = 'Todas categorias'; catSel.appendChild(optC);
+  cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; catSel.appendChild(o); });
+  catSel.value = vCat;
+
+  const fornSel = $('filtroFornecedorPeca');
+  const vForn = fornSel.value;
+  const forns = [...new Set(DB.pecas.map(p => p.fornecedor).filter(Boolean))].sort();
+  fornSel.innerHTML = '';
+  const optF = document.createElement('option'); optF.value = ''; optF.textContent = 'Todos fornecedores'; fornSel.appendChild(optF);
+  forns.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; fornSel.appendChild(o); });
+  fornSel.value = vForn;
+
+  const busca = ($('buscaPeca').value || '').toLowerCase();
+  const cat = catSel.value, forn = fornSel.value, status = $('filtroStatusPeca').value;
+  const lista = DB.pecas.filter(p => {
+    const mB = !busca ||
+      String(p.nome || '').toLowerCase().includes(busca) ||
+      String(p.codigo || '').toLowerCase().includes(busca) ||
+      String(p.marca || '').toLowerCase().includes(busca) ||
+      String(p.caracteristicas || '').toLowerCase().includes(busca);
+    return mB && (!cat || p.categoria === cat) && (!forn || p.fornecedor === forn) && (!status || p.status === status);
+  }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
+
+  const el = $('gridPecas');
+  if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma peça encontrada.</p>'; return; }
+  el.innerHTML = lista.map(p => {
+    const fotoSeg = urlImagemSegura(p.foto);
+    const bg = fotoSeg ? `style="background-image:url('${escapeHtml(fotoSeg)}')"` : '';
+    return `
+    <div class="peca-card" data-peca-id="${escapeHtml(p.id)}">
+      <div class="foto" ${bg}>${fotoSeg ? '' : '🪑'}</div>
+      <div class="corpo">
+        <div class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</div>
+        <h3>${escapeHtml(p.nome)}</h3>
+        <div class="carac">${escapeHtml(p.caracteristicas || p.marca || '—')}</div>
+        <div class="preco">${escapeHtml(brl(p.precoVenda))}</div>
+        <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status)}</span>
+        ${p.cliente ? `<div class="cliente-badge">👤 ${escapeHtml(p.cliente)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  el.querySelectorAll('[data-peca-id]').forEach(card => {
+    card.addEventListener('click', () => abrirFichaPeca(card.dataset.pecaId));
+  });
+}
+
+function renderReservas() {
+  const busca = ($('buscaReserva').value || '').toLowerCase();
+  const lista = DB.pecas.filter(p => p.status === 'reservado')
+    .filter(p => !busca ||
+      String(p.cliente || '').toLowerCase().includes(busca) ||
+      String(p.nome || '').toLowerCase().includes(busca) ||
+      String(p.numeroOC || '').toLowerCase().includes(busca))
+    .sort((a, b) => String(a.dataEntrega || '').localeCompare(String(b.dataEntrega || '')));
+  const el = $('listaReservas');
+  if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma reserva.</p>'; return; }
+  el.innerHTML = lista.map(p => `
+    <div class="card-item">
+      <div class="info">
+        <h3>${escapeHtml(p.nome)} <span style="color:#95a5a6;font-size:12px">${escapeHtml(p.codigo)}</span></h3>
+        <p>👤 <strong>${escapeHtml(p.cliente || '—')}</strong>${p.clienteTelefone ? ' · 📞 ' + escapeHtml(p.clienteTelefone) : ''}</p>
+        ${p.numeroOC ? `<p>🧾 OC: ${escapeHtml(p.numeroOC)}</p>` : ''}
+        <p>📅 Entrega: ${escapeHtml(formatarData(p.dataEntrega))}${p.valorCombinado ? ' · 💰 ' + escapeHtml(brl(p.valorCombinado)) : ''}</p>
+        ${p.obsReserva ? `<p>📝 ${escapeHtml(p.obsReserva)}</p>` : ''}
+      </div>
+      <div class="acoes">
+        <button class="btn-sucesso btn-pequeno" data-entregar="${escapeHtml(p.id)}">✅ Entregar</button>
+        <button class="btn-aviso btn-pequeno" data-cancelar-res="${escapeHtml(p.id)}">↩️ Cancelar</button>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('[data-entregar]').forEach(b => b.addEventListener('click', () => entregarReserva(b.dataset.entregar)));
+  el.querySelectorAll('[data-cancelar-res]').forEach(b => b.addEventListener('click', () => cancelarReserva(b.dataset.cancelarRes)));
+}
+function entregarReserva(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
+  if (p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
+  if (!confirm(`Entregar "${p.nome}" para ${p.cliente}?`)) return;
+  p.status = 'vendido';
+  p.dataVenda = hoje();
+  p.localizacao = 'transito';
+  registrarHistorico(p, 'entregue', `Cliente ${p.cliente} · ${brl(p.valorCombinado || p.precoVenda)}`);
+  salvar(); renderTudo(); toast('✅ Entregue!');
+}
+function cancelarReserva(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
+  if (p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
+  if (!confirm(`Cancelar reserva de "${p.nome}"?`)) return;
+  registrarHistorico(p, 'reserva cancelada', `Era cliente: ${p.cliente || '—'}`);
+  p.status = 'disponivel';
+  p.cliente = null; p.clienteTelefone = null; p.numeroOC = null;
+  p.dataEntrega = null; p.valorCombinado = null; p.obsReserva = '';
+  salvar(); renderTudo(); toast('Reserva cancelada.');
+}
+
+// ============================================================
+// FICHA PEÇA
+// ============================================================
+function abrirFichaPeca(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  const fotoSeg = urlImagemSegura(p.foto);
+  const bg = fotoSeg ? `style="background-image:url('${escapeHtml(fotoSeg)}')"` : '';
+  const hist = (p.historico || []).map(h => `
+    <div class="historico-item">
+      <div class="data">${escapeHtml(formatarDataHora(h.data))}</div>
+      <strong>${escapeHtml(h.acao)}</strong> ${h.detalhe ? '— ' + escapeHtml(h.detalhe) : ''}
+    </div>`).join('') || '<p style="color:#95a5a6">Sem histórico.</p>';
+  $('fichaPeca').innerHTML = `
+    <div class="ficha-grid">
+      <div class="full"><div class="ficha-foto" ${bg}>${fotoSeg ? '' : '🪑'}</div></div>
+      <div class="ficha-info">
+        <h2>${escapeHtml(p.nome)}</h2>
+        <p><strong>Código:</strong> ${escapeHtml(p.codigo)}${p.sequencia ? ' (' + escapeHtml(p.sequencia) + ')' : ''}</p>
+        <p><strong>Categoria:</strong> ${escapeHtml(p.categoria || '—')}</p>
+        <p><strong>Marca:</strong> ${escapeHtml(p.marca || '—')}</p>
+        <p><strong>Fornecedor:</strong> ${escapeHtml(p.fornecedor || '—')}</p>
+        <p><strong>Transportadora:</strong> ${escapeHtml(p.transportadora || '—')}</p>
+        <p><strong>NF:</strong> ${escapeHtml(p.numeroNF || 'Avulsa')} · Item ${escapeHtml(p.itemNF || '—')}</p>
+        <p><strong>Pedido:</strong> ${escapeHtml(p.numeroPedido || '—')}</p>
+        <p><strong>Data conferência:</strong> ${escapeHtml(formatarData(p.dataConferencia))}</p>
+      </div>
+      <div class="ficha-info">
+        <p><strong>Custo:</strong> ${escapeHtml(brl(p.precoCusto))}</p>
+        <p><strong>Venda:</strong> ${escapeHtml(brl(p.precoVenda))}</p>
+        <p><strong>Local:</strong> ${escapeHtml(p.localizacao)}</p>
+        <p><strong>Status:</strong> <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status)}</span></p>
+        ${p.cliente ? `<p><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</p>` : ''}
+        ${p.clienteTelefone ? `<p><strong>📞:</strong> ${escapeHtml(p.clienteTelefone)}</p>` : ''}
+        ${p.numeroOC ? `<p><strong>OC:</strong> ${escapeHtml(p.numeroOC)}</p>` : ''}
+        ${p.dataEntrega ? `<p><strong>Entrega:</strong> ${escapeHtml(formatarData(p.dataEntrega))}</p>` : ''}
+        ${p.valorCombinado ? `<p><strong>Combinado:</strong> ${escapeHtml(brl(p.valorCombinado))}</p>` : ''}
+      </div>
+      <div class="full"><p><strong>Características:</strong> ${escapeHtml(p.caracteristicas || '—')}</p></div>
+      ${p.obsReserva ? `<div class="full"><p><strong>Obs reserva:</strong> ${escapeHtml(p.obsReserva)}</p></div>` : ''}
+      <div class="full">
+        <h3 class="subtitulo">🕒 Histórico</h3>
+        ${hist}
+      </div>
+      <div class="full botoes" style="justify-content:flex-start">
+        ${p.status === 'disponivel' ? `<button class="btn-aviso btn-pequeno" data-acao="reservar">📌 Reservar</button>` : ''}
+        ${p.status === 'reservado' ? `<button class="btn-sucesso btn-pequeno" data-acao="entregar">✅ Entregar</button>` : ''}
+        ${p.status === 'reservado' ? `<button class="btn-aviso btn-pequeno" data-acao="cancelar-res">↩️ Cancelar</button>` : ''}
+        <button class="btn-secundario btn-pequeno" data-acao="mover">📍 Mover</button>
+        <button class="btn-secundario btn-pequeno" data-acao="foto">📷 Foto</button>
+        <button class="btn-perigo btn-pequeno" data-acao="excluir">🗑️ Excluir</button>
+      </div>
+    </div>`;
+  const wrap = $('fichaPeca');
+  wrap.querySelectorAll('[data-acao]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const a = btn.dataset.acao;
+      if (a === 'reservar') abrirReservar(id);
+      else if (a === 'entregar') entregarReserva(id);
+      else if (a === 'cancelar-res') cancelarReserva(id);
+      else if (a === 'mover') moverPeca(id);
+      else if (a === 'foto') trocarFotoPeca(id);
+      else if (a === 'excluir') excluirPeca(id);
+    });
+  });
+  abrirModal('modalFichaPeca');
+}
+function moverPeca(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  if (p.status === 'vendido') { toast('Vendida não pode ser movida.', 'erro'); return; }
+  const atual = LOCAIS_VALIDOS.indexOf(p.localizacao) >= 0 ? p.localizacao : 'showroom';
+  const resposta = prompt('Nova localização:\n1) showroom\n2) deposito\n3) transito\n\nDigite o número:', String(LOCAIS_VALIDOS.indexOf(atual) + 1));
+  if (!resposta) return;
+  const idx = parseInt(resposta, 10) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= LOCAIS_VALIDOS.length) { toast('Opção inválida.', 'erro'); return; }
+  const nova = LOCAIS_VALIDOS[idx];
+  if (nova === p.localizacao) return;
+  registrarHistorico(p, 'movida', `De ${p.localizacao} para ${nova}`);
+  p.localizacao = nova;
+  salvar(); abrirFichaPeca(id); renderTudo(); toast('Localização atualizada.');
+}
+function trocarFotoPeca(id) {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/*'; input.capture = 'environment';
+  input.onchange = async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { toast('Não é imagem.', 'erro'); return; }
+    try {
+      const nova = await comprimirImagem(file);
+      const p = DB.pecas.find(x => x.id === id);
+      if (!p) return;
+      const antiga = p.foto;
+      p.foto = nova;
+      if (!salvar()) { p.foto = antiga; toast('Erro ao salvar foto.', 'erro'); return; }
+      registrarHistorico(p, 'foto atualizada', '');
+      salvar(); abrirFichaPeca(id); renderTudo(); toast('Foto atualizada.');
+    } catch { toast('Erro ao processar imagem.', 'erro'); }
+  };
+  input.click();
+}
+function excluirPeca(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  if (p.status === 'vendido') { toast('Vendida não pode excluir.', 'erro'); return; }
+  if (p.status === 'reservado') { toast('Cancele a reserva antes.', 'erro'); return; }
+  const emNF = DB.nfs.find(n => (n.pecasIds || []).includes(id));
+  const aviso = emNF ? `\n\n⚠️ Esta peça pertence à NF ${emNF.numero}.` : '';
+  if (!confirm(`Excluir "${p.nome}" (${p.codigo})?${aviso}`)) return;
+  DB.pecas = DB.pecas.filter(x => x.id !== id);
+  DB.nfs.forEach(n => { if (n.pecasIds) n.pecasIds = n.pecasIds.filter(pid => pid !== id); });
+  salvar(); fecharModal('modalFichaPeca'); renderTudo(); toast('Peça excluída.');
+}
+
+// ============================================================
+// RESERVAR
+// ============================================================
+function abrirReservar(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  if (p.status !== 'disponivel') { toast('Só peças disponíveis.', 'erro'); return; }
+  $('formReservar').reset();
+  $('reservaPecaId').value = id;
+  $('reservaPecaInfo').textContent = `${p.nome} (${p.codigo}) · ${brl(p.precoVenda)}`;
+  $('reservaValor').value = p.precoVenda || '';
+  atualizarSelectsCadastros();
+  fecharModal('modalFichaPeca');
+  abrirModal('modalReservar');
+}
+$('formReservar').onsubmit = e => {
+  e.preventDefault();
+  const id = $('reservaPecaId').value;
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
+  if (p.status !== 'disponivel') { toast('Peça não disponível.', 'erro'); return; }
+  const cliId = $('reservaClienteSelect').value;
+  const cliManual = $('reservaClienteManual').value.trim();
+  const cliente = cliId ? (DB.clientes.find(c => c.id === cliId)?.nome || '') : cliManual;
+  if (!cliente) { toast('Informe o cliente.', 'erro'); return; }
+  const valor = Number($('reservaValor').value);
+  if ($('reservaValor').value && (!Number.isFinite(valor) || valor < 0)) { toast('Valor inválido.', 'erro'); return; }
+  p.status = 'reservado';
+  p.cliente = cliente;
+  p.clienteTelefone = $('reservaTelefone').value.trim();
+  p.dataEntrega = $('reservaDataEntrega').value;
+  p.valorCombinado = Number.isFinite(valor) ? valor : 0;
+  p.numeroOC = $('reservaNumOC').value.trim() || null;
+  p.obsReserva = $('reservaObs').value.trim();
+  registrarHistorico(p, 'reservada', `Cliente ${cliente}`);
+  salvar(); fecharModal('modalReservar'); renderTudo(); toast('📌 Reservada!');
+};
+
+// ============================================================
+// CADASTROS (aba)
+// ============================================================
+$('formFornecedor').onsubmit = e => {
+  e.preventDefault();
+  const cnpj = $('fornCNPJ').value.trim();
+  const nome = $('fornNome').value.trim();
+  const contato = $('fornContato').value.trim();
+  if (soDigitos(cnpj).length !== 14) { toast('CNPJ inválido.', 'erro'); return; }
+  if (!nome) { toast('Informe o nome.', 'erro'); return; }
+  if (DB.editandoFornId) {
+    const f = DB.fornecedores.find(x => x.id === DB.editandoFornId);
+    if (!f) { toast('Não encontrado.', 'erro'); return; }
+    const dup = DB.fornecedores.find(x => x.id !== f.id && soDigitos(x.cnpj) === soDigitos(cnpj));
+    if (dup) { toast('CNPJ já cadastrado.', 'erro'); return; }
+    f.nome = nome; f.cnpj = cnpj; f.contato = contato;
+    cancelarEditForn(); toast('Atualizado.');
+  } else {
+    if (DB.fornecedores.some(f => soDigitos(f.cnpj) === soDigitos(cnpj))) { toast('CNPJ já cadastrado.', 'erro'); return; }
+    DB.fornecedores.push({ id: uid(), nome, cnpj, contato });
+    toast('Cadastrado.');
+  }
+  $('formFornecedor').reset();
+  salvar(); renderTudo(); atualizarSelectsCadastros();
+};
+function editarForn(id) {
+  const f = DB.fornecedores.find(x => x.id === id);
+  if (!f) return;
+  DB.editandoFornId = id;
+  $('fornCNPJ').value = f.cnpj || '';
+  $('fornNome').value = f.nome;
+  $('fornContato').value = f.contato || '';
+  $('btnForn').textContent = '💾 Salvar';
+  $('btnCancelForn').style.display = 'inline-flex';
+}
+function cancelarEditForn() {
+  DB.editandoFornId = null;
+  $('formFornecedor').reset();
+  $('btnForn').textContent = '+ Adicionar';
+  $('btnCancelForn').style.display = 'none';
+}
+function excluirForn(id) {
+  if (DB.nfs.some(n => n.fornecedorId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
+  if (!confirm('Excluir?')) return;
+  DB.fornecedores = DB.fornecedores.filter(f => f.id !== id);
+  salvar(); renderTudo(); atualizarSelectsCadastros(); toast('Excluído.');
+}
+function renderFornecedores() {
+  const el = $('listaFornecedores');
+  if (!DB.fornecedores.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
+  el.innerHTML = DB.fornecedores.map(f => `
+    <div class="mini-card">
+      <div><h4>${escapeHtml(f.nome)}</h4><p>${escapeHtml(f.cnpj || '')}${f.contato ? ' · ' + escapeHtml(f.contato) : ''}</p></div>
+      <div class="acoes-mini">
+        <button class="btn-secundario btn-pequeno" data-edit-f="${escapeHtml(f.id)}">✏️</button>
+        <button class="btn-perigo btn-pequeno" data-del-f="${escapeHtml(f.id)}">🗑️</button>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('[data-edit-f]').forEach(b => b.addEventListener('click', () => editarForn(b.dataset.editF)));
+  el.querySelectorAll('[data-del-f]').forEach(b => b.addEventListener('click', () => excluirForn(b.dataset.delF)));
+}
+
+$('formTransportadora').onsubmit = e => {
+  e.preventDefault();
+  const cnpj = $('transpCNPJ').value.trim();
+  const nome = $('transpNome').value.trim();
+  const contato = $('transpContato').value.trim();
+  if (soDigitos(cnpj).length !== 14) { toast('CNPJ inválido.', 'erro'); return; }
+  if (!nome) { toast('Informe o nome.', 'erro'); return; }
+  if (DB.editandoTranspId) {
+    const t = DB.transportadoras.find(x => x.id === DB.editandoTranspId);
+    if (!t) { toast('Não encontrada.', 'erro'); return; }
+    const dup = DB.transportadoras.find(x => x.id !== t.id && soDigitos(x.cnpj) === soDigitos(cnpj));
+    if (dup) { toast('CNPJ já cadastrado.', 'erro'); return; }
+    t.nome = nome; t.cnpj = cnpj; t.contato = contato;
+    cancelarEditTransp(); toast('Atualizado.');
+  } else {
+    if (DB.transportadoras.some(t => soDigitos(t.cnpj) === soDigitos(cnpj))) { toast('CNPJ já cadastrado.', 'erro'); return; }
+    DB.transportadoras.push({ id: uid(), nome, cnpj, contato });
+    toast('Cadastrada.');
+  }
+  $('formTransportadora').reset();
+  salvar(); renderTudo(); atualizarSelectsCadastros();
+};
+function editarTransp(id) {
+  const t = DB.transportadoras.find(x => x.id === id);
+  if (!t) return;
+  DB.editandoTranspId = id;
+  $('transpCNPJ').value = t.cnpj || '';
+  $('transpNome').value = t.nome;
+  $('transpContato').value = t.contato || '';
+  $('btnTransp').textContent = '💾 Salvar';
+  $('btnCancelTransp').style.display = 'inline-flex';
+}
+function cancelarEditTransp() {
+  DB.editandoTranspId = null;
+  $('formTransportadora').reset();
+  $('btnTransp').textContent = '+ Adicionar';
+  $('btnCancelTransp').style.display = 'none';
+}
+function excluirTransp(id) {
+  if (DB.nfs.some(n => n.transportadoraId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
+  if (!confirm('Excluir?')) return;
+  DB.transportadoras = DB.transportadoras.filter(t => t.id !== id);
+  salvar(); renderTudo(); atualizarSelectsCadastros(); toast('Excluída.');
+}
+function renderTransportadoras() {
+  const el = $('listaTransportadoras');
+  if (!DB.transportadoras.length) { el.innerHTML = '<p class="vazio">Nenhuma cadastrada.</p>'; return; }
+  el.innerHTML = DB.transportadoras.map(t => `
+    <div class="mini-card">
+      <div><h4>${escapeHtml(t.nome)}</h4><p>${escapeHtml(t.cnpj || '')}${t.contato ? ' · ' + escapeHtml(t.contato) : ''}</p></div>
+      <div class="acoes-mini">
+        <button class="btn-secundario btn-pequeno" data-edit-t="${escapeHtml(t.id)}">✏️</button>
+        <button class="btn-perigo btn-pequeno" data-del-t="${escapeHtml(t.id)}">🗑️</button>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('[data-edit-t]').forEach(b => b.addEventListener('click', () => editarTransp(b.dataset.editT)));
+  el.querySelectorAll('[data-del-t]').forEach(b => b.addEventListener('click', () => excluirTransp(b.dataset.delT)));
+}
+
+$('formCliente').onsubmit = e => {
+  e.preventDefault();
+  const nome = $('cliNome').value.trim();
+  const telefone = $('cliTelefone').value.trim();
+  const endereco = $('cliEndereco').value.trim();
+  if (!nome) { toast('Informe o nome.', 'erro'); return; }
+  if (DB.editandoCliId) {
+    const c = DB.clientes.find(x => x.id === DB.editandoCliId);
+    if (!c) return;
+    c.nome = nome; c.telefone = telefone; c.endereco = endereco;
+    cancelarEditCli(); toast('Atualizado.');
+  } else {
+    if (DB.clientes.some(c => String(c.nome || '').toLowerCase() === nome.toLowerCase())) {
+      toast('Já existe cliente.', 'erro'); return;
+    }
+    DB.clientes.push({ id: uid(), nome, telefone, endereco });
+    toast('Cadastrado.');
+  }
+  $('formCliente').reset();
+  salvar(); renderTudo(); atualizarSelectsCadastros();
+};
+function editarCli(id) {
+  const c = DB.clientes.find(x => x.id === id);
+  if (!c) return;
+  DB.editandoCliId = id;
+  $('cliNome').value = c.nome;
+  $('cliTelefone').value = c.telefone || '';
+  $('cliEndereco').value = c.endereco || '';
+  $('btnCli').textContent = '💾 Salvar';
+  $('btnCancelCli').style.display = 'inline-flex';
+}
+function cancelarEditCli() {
+  DB.editandoCliId = null;
+  $('formCliente').reset();
+  $('btnCli').textContent = '+ Adicionar';
+  $('btnCancelCli').style.display = 'none';
+}
+function excluirCli(id) {
+  const c = DB.clientes.find(x => x.id === id);
+  if (!c) return;
+  if (DB.pecas.some(p => p.cliente === c.nome)) { toast('Tem peças vinculadas.', 'erro'); return; }
+  if (!confirm('Excluir?')) return;
+  DB.clientes = DB.clientes.filter(x => x.id !== id);
+  salvar(); renderTudo(); atualizarSelectsCadastros(); toast('Excluído.');
+}
+function renderClientes() {
+  const el = $('listaClientes');
+  if (!DB.clientes.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
+  el.innerHTML = DB.clientes.map(c => `
+    <div class="mini-card">
+      <div><h4>${escapeHtml(c.nome)}</h4><p>${c.telefone ? '📞 ' + escapeHtml(c.telefone) : ''}${c.endereco ? ' · 📍 ' + escapeHtml(c.endereco) : ''}</p></div>
+      <div class="acoes-mini">
+        <button class="btn-secundario btn-pequeno" data-edit-c="${escapeHtml(c.id)}">✏️</button>
+        <button class="btn-perigo btn-pequeno" data-del-c="${escapeHtml(c.id)}">🗑️</button>
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('[data-edit-c]').forEach(b => b.addEventListener('click', () => editarCli(b.dataset.editC)));
+  el.querySelectorAll('[data-del-c]').forEach(b => b.addEventListener('click', () => excluirCli(b.dataset.delC)));
+}
+
+// ============================================================
+// RELATÓRIOS
+// ============================================================
+function atalhoRel(tipo) {
+  const hoje = new Date();
+  let ini, fim = new Date();
+  if (tipo === 'hoje') { ini = fim; }
+  else if (tipo === '7d') { ini = new Date(); ini.setDate(ini.getDate() - 6); }
+  else if (tipo === '30d') { ini = new Date(); ini.setDate(ini.getDate() - 29); }
+  else if (tipo === 'mes') { ini = new Date(hoje.getFullYear(), hoje.getMonth(), 1); }
+  else if (tipo === 'tudo') { $('relInicio').value = ''; $('relFim').value = ''; renderRelatorio(); return; }
+  const fmt = d => d.toISOString().split('T')[0];
+  $('relInicio').value = fmt(ini);
+  $('relFim').value = fmt(fim);
+  renderRelatorio();
+}
+$('relInicio').addEventListener('change', renderRelatorio);
+$('relFim').addEventListener('change', renderRelatorio);
+
+function dentroPeriodo(dataISO, inicio, fim) {
+  if (!dataISO) return false;
+  const d = new Date(dataISO).getTime();
+  if (inicio && d < new Date(inicio + 'T00:00:00').getTime()) return false;
+  if (fim && d > new Date(fim + 'T23:59:59').getTime()) return false;
+  return true;
+}
+
+function renderRelatorio() {
+  const inicio = $('relInicio').value;
+  const fim = $('relFim').value;
+
+  // NFs recebidas no período (por data de recebimento)
+  const nfsFiltradas = DB.nfs.filter(nf => {
+    if (!inicio && !fim) return true;
+    const data = nf.dataRecebimento || nf.dataCadastro;
+    return dentroPeriodo(data, inicio, fim);
+  });
+
+  // Peças entregues no período (baixa = dataVenda)
+  const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
+
+  // Reservas ativas
+  const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
+
+  // Movimentações no período
+  const movs = [];
+  DB.pecas.forEach(p => {
+    (p.historico || []).forEach(h => {
+      if (dentroPeriodo(h.data, inicio, fim)) movs.push({ ...h, peca: p.nome, codigo: p.codigo });
+    });
+  });
+  movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
+
+  // Totais
+  let custoNFs = 0;
+  nfsFiltradas.forEach(nf => {
+    const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+    custoNFs += pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+  });
+  const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
+  const valorReservas = reservasAtivas.reduce((s, p) => s + (Number(p.valorCombinado) || Number(p.precoVenda) || 0), 0);
+
+  // Resumo
+  $('relResumo').innerHTML = `
+    <div class="item"><span>NFs no período</span><strong>${nfsFiltradas.length}</strong></div>
+    <div class="item"><span>Custo das entradas</span><strong>${escapeHtml(brl(custoNFs))}</strong></div>
+    <div class="item"><span>Peças entregues</span><strong>${entregues.length}</strong></div>
+    <div class="item"><span>Valor entregue</span><strong>${escapeHtml(brl(valorEntregues))}</strong></div>
+    <div class="item"><span>Reservas ativas</span><strong>${reservasAtivas.length}</strong></div>
+    <div class="item"><span>Valor reservado</span><strong>${escapeHtml(brl(valorReservas))}</strong></div>
+    <div class="item"><span>Movimentações</span><strong>${movs.length}</strong></div>
+    <div class="item"><span>Total de peças</span><strong>${DB.pecas.length}</strong></div>
+  `;
+
+  let html = '';
+
+  // Seção NFs
+  html += `<div class="rel-secao"><h3>📄 Notas Fiscais (${nfsFiltradas.length})</h3>`;
+  if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:20px">Nenhuma NF no período.</p>';
+  else {
+    html += nfsFiltradas.map(nf => {
+      const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+      const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+      return `
+        <div class="rel-linha">
+          <div class="esq">
+            <strong>NF ${escapeHtml(nf.numero)} · ${escapeHtml(nf.fornecedorNome)}</strong>
+            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s) · ${nf.tipoEntrada === 'oc' ? 'OC ' + escapeHtml(nf.numeroOC || '') : 'Showroom'}</small>
+          </div>
+          <div class="dir"><strong>${escapeHtml(brl(custo))}</strong></div>
+        </div>`;
+    }).join('');
+  }
+  html += '</div>';
+
+  // Seção Entregas (baixas)
+  html += `<div class="rel-secao"><h3>✅ Peças Entregues / Baixadas (${entregues.length})</h3>`;
+  if (!entregues.length) html += '<p class="vazio" style="padding:20px">Nenhuma entrega no período.</p>';
+  else {
+    html += entregues.map(p => `
+      <div class="rel-linha">
+        <div class="esq">
+          <strong>${escapeHtml(p.nome)}</strong>
+          <small>${escapeHtml(p.codigo)} · 👤 ${escapeHtml(p.cliente || '—')} · ${escapeHtml(formatarData(p.dataVenda))}</small>
+        </div>
+        <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || p.precoVenda))}</strong></div>
+      </div>`).join('');
+  }
+  html += '</div>';
+
+  // Seção Reservas ativas
+  html += `<div class="rel-secao"><h3>📌 Reservas Ativas (${reservasAtivas.length})</h3>`;
+  if (!reservasAtivas.length) html += '<p class="vazio" style="padding:20px">Nenhuma reserva ativa.</p>';
+  else {
+    html += reservasAtivas.map(p => `
+      <div class="rel-linha">
+        <div class="esq">
+          <strong>${escapeHtml(p.nome)}</strong>
+          <small>${escapeHtml(p.codigo)} · 👤 ${escapeHtml(p.cliente || '—')} · Entrega ${escapeHtml(formatarData(p.dataEntrega))}</small>
+        </div>
+        <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || p.precoVenda))}</strong></div>
+      </div>`).join('');
+  }
+  html += '</div>';
+
+  // Seção Movimentações
+  html += `<div class="rel-secao"><h3>🕒 Movimentações (${movs.length})</h3>`;
+  if (!movs.length) html += '<p class="vazio" style="padding:20px">Nenhuma movimentação no período.</p>';
+  else {
+    html += movs.slice(0, 100).map(m => `
+      <div class="rel-linha">
+        <div class="esq">
+          <strong>${escapeHtml(m.peca)} (${escapeHtml(m.codigo)})</strong>
+          <small>${escapeHtml(formatarDataHora(m.data))} · ${escapeHtml(m.acao)} ${m.detalhe ? '— ' + escapeHtml(m.detalhe) : ''}</small>
+        </div>
+      </div>`).join('');
+    if (movs.length > 100) html += `<p style="text-align:center;padding:10px;color:var(--cinza-esc);font-size:12px">Mostrando 100 de ${movs.length}. Exporte o CSV para ver tudo.</p>`;
+  }
+  html += '</div>';
+
+  $('relConteudo').innerHTML = html;
+}
+
+function exportarRelatorioCSV() {
+  const inicio = $('relInicio').value;
+  const fim = $('relFim').value;
+
+  const nfsFiltradas = DB.nfs.filter(nf => {
+    if (!inicio && !fim) return true;
+    return dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim);
+  });
+  const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
+  const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
+
+  const linhas = [];
+  linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','OBS']);
+
+  nfsFiltradas.forEach(nf => {
+    const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+    const custo = pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', nf.tipoEntrada === 'oc' ? 'OC' : 'Showroom', nf.fornecedorNome || '', custo.toFixed(2), pecas.length + ' peça(s)']);
+  });
+  entregues.forEach(p => {
+    linhas.push(['ENTREGA', p.dataVenda || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || Number(p.precoVenda) || 0).toFixed(2), p.numeroNF || '']);
+  });
+  reservasAtivas.forEach(p => {
+    linhas.push(['RESERVA', p.dataEntrega || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || Number(p.precoVenda) || 0).toFixed(2), p.numeroOC || '']);
+  });
+
+  const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const periodo = (inicio || 'inicio') + '_' + (fim || 'fim');
+  a.download = `relatorio-${periodo}.csv`;
+  a.click();
+  toast('CSV exportado.');
+}
+
+// ============================================================
+// ESTATÍSTICAS
+// ============================================================
+function renderEstatisticas() {
+  const total = DB.pecas.length;
+  const disp = DB.pecas.filter(p => p.status === 'disponivel').length;
+  const res = DB.pecas.filter(p => p.status === 'reservado').length;
+  const vend = DB.pecas.filter(p => p.status === 'vendido').length;
+  const custo = DB.pecas.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
+  const vendaPot = DB.pecas.filter(p => p.status === 'disponivel').reduce((s, p) => s + (Number(p.precoVenda) || 0), 0);
+  $('estatisticas').innerHTML = `
+    <div class="dashboard">
+      <div class="card"><span>Total peças</span><strong>${total}</strong></div>
+      <div class="card"><span>Disponíveis</span><strong>${disp}</strong></div>
+      <div class="card"><span>Reservadas</span><strong>${res}</strong></div>
+      <div class="card"><span>Vendidas</span><strong>${vend}</strong></div>
+      <div class="card"><span>Custo total</span><strong>${escapeHtml(brl(custo))}</strong></div>
+      <div class="card"><span>Venda potencial</span><strong>${escapeHtml(brl(vendaPot))}</strong></div>
+    </div>`;
+}
+
+// ============================================================
+// FECHAR MODAIS
+// ============================================================
+document.querySelectorAll('.modal').forEach(m => {
+  m.onclick = e => {
+    if (e.target === m) {
+      if (m.id === 'modalNF') { tentarFecharNF(); return; }
+      if (m.id === 'modalCamera') { fecharCamera(); return; }
+      m.classList.add('oculto');
+    }
+  };
+});
+
+// ============================================================
+// FIREBASE
+// ============================================================
+async function iniciarFirebase() {
+  atualizarStatusSync('iniciando');
+  carregarLocal();
+  renderTudo();
+  atualizarSelectsCadastros();
+  atalhoRel('30d'); // relatório padrão 30 dias
+  try {
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        try { await signInAnonymously(auth); }
+        catch (e) { atualizarStatusSync('offline', 'Falha no login'); }
+        return;
+      }
+      firebaseUser = user;
+      firebaseReady = true;
+      onSnapshot(DOC_REF, (snap) => {
+        if (!snap.exists()) {
+          if (DB.pecas.length || DB.nfs.length || DB.fornecedores.length) salvarRemoto();
+          else atualizarStatusSync('online');
+          return;
+        }
+        const remoto = snap.data() || {};
+        if (Date.now() - ultimaSyncRemota < 1500) return;
+        if (Array.isArray(remoto.nfs)) DB.nfs = remoto.nfs;
+        if (Array.isArray(remoto.pecas)) DB.pecas = remoto.pecas;
+        if (Array.isArray(remoto.fornecedores)) DB.fornecedores = remoto.fornecedores;
+        if (Array.isArray(remoto.transportadoras)) DB.transportadoras = remoto.transportadoras;
+        if (Array.isArray(remoto.clientes)) DB.clientes = remoto.clientes;
+        if (remoto.contadores && typeof remoto.contadores === 'object') DB.contadores = remoto.contadores;
+        salvarLocal(true);
+        atualizarStatusSync('online');
+        renderTudo(); atualizarSelectsCadastros();
+      }, (err) => { atualizarStatusSync('erro', err.message); });
+    });
+  } catch (e) {
+    atualizarStatusSync('offline', e.message);
+    renderTudo(); atualizarSelectsCadastros();
+  }
+}
+iniciarFirebase();
+
+// Expõe funções usadas em onclick inline
+window.abrirNovaNF = abrirNovaNF;
+window.abrirCadastroRapido = abrirCadastroRapido;
+window.selecionarTipo = selecionarTipo;
+window.addItemNF = addItemNF;
+window.escolherArquivo = escolherArquivo;
+window.carregarFoto = carregarFoto;
+window.abrirCameraPara = abrirCameraPara;
+window.capturarFoto = capturarFoto;
+window.fecharCamera = fecharCamera;
+window.escolherArquivoCamera = escolherArquivoCamera;
+window.removerFoto = removerFoto;
+window.salvarRascunhoManual = salvarRascunhoManual;
+window.tentarFecharNF = tentarFecharNF;
+window.recuperarRascunho = recuperarRascunho;
+window.descartarRascunho = descartarRascunho;
+window.fecharModal = fecharModal;
+window.exportarBackup = exportarBackup;
+window.importarBackup = importarBackup;
+window.limparTudo = limparTudo;
+window.cancelarEditForn = cancelarEditForn;
+window.cancelarEditTransp = cancelarEditTransp;
+window.cancelarEditCli = cancelarEditCli;
+window.excluirNF = excluirNF;
+window.excluirPeca = excluirPeca;
+window.entregarReserva = entregarReserva;
+window.cancelarReserva = cancelarReserva;
+window.moverPeca = moverPeca;
+window.trocarFotoPeca = trocarFotoPeca;
+window.abrirReservar = abrirReservar;
+window.abrirFichaPeca = abrirFichaPeca;
+window.renderNFs = renderNFs;
+window.renderPecas = renderPecas;
+window.renderReservas = renderReservas;
+window.atalhoRel = atalhoRel;
+window.exportarRelatorioCSV = exportarRelatorioCSV;
+</script>
+</body>
+</html>
