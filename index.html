@@ -11,34 +11,35 @@
   --bordo: #8B2E3C; --bordo-esc: #6E2430; --bordo-claro: #F5E9EB; --bordo-hover: #A1384A;
   --verde: #27ae60; --vermelho: #c0392b; --amarelo: #d68910; --azul: #1565c0;
   --cinza: #f0eef0; --cinza-esc: #7d8b98; --texto: #2c2c2c; --borda: #ddd6d8;
+  --r: 8px; --r-sm: 6px;
 }
 html, body { height: 100%; }
-body { background: #faf7f8; color: var(--texto); padding-bottom: 85px; font-size: 15px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
+body { background: #faf7f8; color: var(--texto); padding-bottom: 68px; font-size: 14px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
 
-header { background: #fff; padding: 12px 16px; border-bottom: 2px solid var(--bordo-claro); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-header h1 { font-size: 16px; font-weight: 700; color: var(--bordo); }
-header .status-sync { font-size: 11px; padding: 4px 8px; border-radius: 12px; font-weight: 600; }
+header { background: #fff; padding: 8px 12px; border-bottom: 2px solid var(--bordo-claro); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+header h1 { font-size: 15px; font-weight: 700; color: var(--bordo); }
+header .status-sync { font-size: 10px; padding: 3px 7px; border-radius: 10px; font-weight: 600; }
 header .status-sync.online { background: #d4edda; color: #155724; }
 header .status-sync.offline { background: #fff3cd; color: #856404; }
 header .status-sync.erro { background: #f8d7da; color: #721c24; }
-.perfil-btn { font-size: 12px; padding: 6px 12px; min-height: 34px; border-radius: 16px; font-weight: 600; }
+.perfil-btn { font-size: 11px; padding: 5px 10px; min-height: 30px; border-radius: 14px; font-weight: 600; }
 
-.tab-conteudo { display: none; padding: 16px; max-width: 1400px; margin: 0 auto; }
+.tab-conteudo { display: none; padding: 10px; max-width: 1400px; margin: 0 auto; }
 .tab-conteudo.ativo { display: block; }
-h2 { font-size: 17px; margin-bottom: 12px; color: var(--bordo); }
-.subtitulo { font-size: 15px; margin: 18px 0 10px; color: var(--texto); font-weight: 600; }
+h2 { font-size: 15px; margin-bottom: 8px; color: var(--bordo); }
+.subtitulo { font-size: 13px; margin: 10px 0 6px; color: var(--texto); font-weight: 600; }
 
-.dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+.dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
 @media (min-width: 700px) { .dashboard { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1000px) { .dashboard { grid-template-columns: repeat(6, 1fr); } }
-.card { background: #fff; padding: 14px; border-radius: 10px; box-shadow: 0 1px 4px rgba(139,46,60,.08); display: flex; flex-direction: column; gap: 4px; border-left: 3px solid var(--bordo-claro); }
-.card span { color: var(--cinza-esc); font-size: 11px; line-height: 1.2; }
-.card strong { font-size: 20px; color: var(--bordo); }
+.card { background: #fff; padding: 8px 10px; border-radius: var(--r); box-shadow: 0 1px 3px rgba(139,46,60,.07); display: flex; flex-direction: column; gap: 2px; border-left: 3px solid var(--bordo-claro); }
+.card span { color: var(--cinza-esc); font-size: 10px; line-height: 1.15; }
+.card strong { font-size: 16px; color: var(--bordo); }
 .card.alerta strong { color: var(--vermelho); }
 .card.destino { border-left-color: var(--amarelo); }
 .card.destino strong { color: var(--amarelo); }
 
-button { background: var(--bordo); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; transition: .15s; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+button { background: var(--bordo); color: #fff; border: none; padding: 8px 12px; border-radius: var(--r-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: .15s; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
 button:active { transform: scale(.97); background: var(--bordo-esc); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-secundario { background: var(--cinza); color: var(--texto); }
@@ -47,33 +48,139 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-sucesso { background: var(--verde); }
 .btn-aviso { background: var(--amarelo); }
 .btn-azul { background: var(--azul); }
-.btn-pequeno { padding: 8px 12px; font-size: 13px; min-height: 36px; }
+.btn-pequeno { padding: 5px 9px; font-size: 11px; min-height: 28px; }
 .btn-bloco { width: 100%; }
-.acoes-rapidas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.acoes-rapidas { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 @media (min-width: 600px) { .acoes-rapidas { flex-direction: row; flex-wrap: wrap; } }
 
-.topo-secao { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; gap: 10px; }
-.topo-secao h2 { font-size: 17px; }
+.topo-secao { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
+.topo-secao h2 { font-size: 15px; }
 
-.filtros { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.filtros { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
 @media (min-width: 700px) { .filtros { flex-direction: row; flex-wrap: wrap; } }
-.filtros input, .filtros select { padding: 12px 14px; border: 1px solid var(--borda); border-radius: 8px; font-size: 15px; background: #fff; width: 100%; min-height: 44px; }
-@media (min-width: 700px) { .filtros input { flex: 1; min-width: 220px; } }
+.filtros input, .filtros select { padding: 8px 10px; border: 1px solid var(--borda); border-radius: var(--r-sm); font-size: 13px; background: #fff; width: 100%; min-height: 36px; }
+@media (min-width: 700px) { .filtros input { flex: 1; min-width: 200px; } }
 
-.lista-cards { display: flex; flex-direction: column; gap: 10px; }
-.card-item { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); display: flex; flex-direction: column; gap: 10px; }
-@media (min-width: 700px) { .card-item { flex-direction: row; justify-content: space-between; gap: 15px; } }
-.card-item .info { flex: 1; min-width: 0; }
-.card-item h3 { font-size: 15px; margin-bottom: 6px; word-break: break-word; }
-.card-item p { font-size: 13px; color: var(--cinza-esc); margin-bottom: 3px; word-break: break-word; }
-.card-item .acoes { display: flex; gap: 6px; flex-wrap: wrap; }
-.card-item .acoes button { flex: 1; }
+/* ===== LAYOUT EM LINHAS (B) ===== */
+.lista-linhas { display: flex; flex-direction: column; gap: 4px; }
 
-.pedido-destaque { display: inline-flex; align-items: center; gap: 6px; background: #fff8e1; border: 1px solid var(--amarelo); border-left: 4px solid var(--amarelo); padding: 6px 10px; border-radius: 6px; font-size: 13px; color: #856404; margin: 4px 0; font-weight: 600; }
-.pedido-destaque strong { font-size: 15px; font-weight: 800; color: #5c3c00; }
+.lista-linhas .cabecalho {
+  display: none;
+  padding: 6px 10px;
+  background: var(--bordo-claro);
+  border-radius: var(--r);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--bordo);
+  letter-spacing: .3px;
+  gap: 8px;
+}
+
+.lista-linhas .item {
+  background: #fff;
+  border-radius: var(--r);
+  padding: 8px 10px;
+  box-shadow: 0 1px 3px rgba(139,46,60,.06);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-left: 3px solid transparent;
+}
+.lista-linhas .item.clicavel { cursor: pointer; }
+.lista-linhas .item.clicavel:active { background: #faf7f8; }
+.lista-linhas .item.cond-avaria { border-left-color: var(--vermelho); }
+.lista-linhas .item.cond-observacao { border-left-color: var(--azul); }
+
+.lista-linhas .item .l1 {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  word-break: break-word;
+}
+.lista-linhas .item .l1 .nome-principal { flex: 1; min-width: 0; }
+.lista-linhas .item .l1 .cod { font-family: monospace; color: var(--cinza-esc); font-size: 11px; font-weight: 400; }
+
+.lista-linhas .item .l2 {
+  font-size: 11.5px;
+  color: var(--cinza-esc);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  word-break: break-word;
+}
+.lista-linhas .item .l2 .sep { color: #d6d6d6; }
+
+.lista-linhas .item .l3 {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+.lista-linhas .item .l3 button {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 11px;
+  min-height: 28px;
+}
+
+.lista-linhas .item .foto-indicador {
+  font-size: 11px;
+  color: var(--cinza-esc);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.lista-linhas .item .foto-indicador.tem { color: var(--verde); font-weight: 600; }
+
+@media (min-width: 700px) {
+  .lista-linhas .cabecalho {
+    display: grid;
+    grid-template-columns: var(--cols);
+    align-items: center;
+  }
+  .lista-linhas .item {
+    display: grid;
+    grid-template-columns: var(--cols);
+    gap: 8px;
+    align-items: center;
+    padding: 6px 10px;
+  }
+  .lista-linhas .item .l1,
+  .lista-linhas .item .l2,
+  .lista-linhas .item .l3 {
+    display: contents;
+  }
+  .lista-linhas .item .l1 > * {
+    font-size: 12.5px;
+  }
+  .lista-linhas .item .l2 > * {
+    font-size: 11.5px;
+  }
+  .lista-linhas .item .l3 {
+    display: flex;
+    justify-content: flex-end;
+    gap: 3px;
+    margin-top: 0;
+  }
+  .lista-linhas .item .l3 button {
+    flex: none;
+    padding: 3px 8px;
+    font-size: 11px;
+    min-height: 24px;
+  }
+}
+
+.pedido-destaque { display: inline-flex; align-items: center; gap: 4px; background: #fff8e1; border: 1px solid var(--amarelo); border-left: 3px solid var(--amarelo); padding: 3px 7px; border-radius: 5px; font-size: 11.5px; color: #856404; margin: 2px 0; font-weight: 600; }
+.pedido-destaque strong { font-size: 13px; font-weight: 800; color: #5c3c00; }
 .pedido-destaque.inline { display: inline-flex; margin: 0; }
+.pedido-destaque.mini { font-size: 10.5px; padding: 2px 5px; }
 
-.badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; }
+.badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
 .badge.conferida, .badge.disponivel { background: #d4edda; color: #155724; }
 .badge.pendente, .badge.reservado, .badge.aguardando_destino { background: #fff3cd; color: #856404; }
 .badge.divergencia, .badge.cancelada { background: #f8d7da; color: #721c24; }
@@ -84,176 +191,157 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .badge.showroom { background: #e3f2fd; color: #1565c0; }
 .badge.oc { background: #f3e5f5; color: #6a1b9a; }
 
-.grid-pecas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-@media (min-width: 600px) { .grid-pecas { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
-.peca-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(139,46,60,.06); cursor: pointer; transition: .2s; display: flex; flex-direction: column; position: relative; }
-.peca-card:active { transform: scale(.97); }
-.peca-card .foto { height: 130px; background: var(--bordo-claro); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 40px; background-size: cover; background-position: center; position: relative; }
-@media (min-width: 600px) { .peca-card .foto { height: 160px; } }
-.peca-card .foto .foto-count { position: absolute; bottom: 6px; right: 6px; background: rgba(0,0,0,.6); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 700; }
-.peca-card .corpo { padding: 10px; flex: 1; display: flex; flex-direction: column; gap: 5px; }
-.peca-card .corpo h3 { font-size: 13px; line-height: 1.25; }
-.peca-card .corpo .cod { font-size: 10px; color: #b0a0a5; font-family: monospace; }
-.peca-card .corpo .preco { font-size: 15px; font-weight: 700; color: var(--bordo); }
-.peca-card .corpo .carac { font-size: 11px; color: var(--cinza-esc); flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.peca-card .corpo .cliente-badge { font-size: 10px; color: #856404; background: #fff3cd; padding: 3px 6px; border-radius: 4px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.peca-card .badge-cond { position: absolute; top: 6px; right: 6px; font-size: 9px; padding: 3px 8px; border-radius: 10px; font-weight: 800; z-index: 2; }
-.peca-card .badge-cond.avaria { background: var(--vermelho); color: #fff; }
-.peca-card .badge-cond.observacao { background: var(--azul); color: #fff; }
-
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
-@media (min-width: 700px) { .modal { align-items: center; padding: 20px; } }
+@media (min-width: 700px) { .modal { align-items: center; padding: 12px; } }
 .modal.oculto { display: none; }
-.modal-conteudo { background: #fff; padding: 20px; border-radius: 18px 18px 0 0; width: 100%; max-height: 95vh; overflow-y: auto; position: relative; animation: slideUp .25s ease-out; }
-@media (min-width: 700px) { .modal-conteudo { border-radius: 12px; max-width: 560px; max-height: 90vh; animation: fadeIn .2s ease-out; } .modal-conteudo.modal-grande { max-width: 900px; } }
+.modal-conteudo { background: #fff; padding: 14px; border-radius: 16px 16px 0 0; width: 100%; max-height: 95vh; overflow-y: auto; position: relative; animation: slideUp .22s ease-out; }
+@media (min-width: 700px) { .modal-conteudo { border-radius: var(--r); max-width: 560px; max-height: 90vh; animation: fadeIn .18s ease-out; } .modal-conteudo.modal-grande { max-width: 860px; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-@keyframes fadeIn { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
-.modal-conteudo::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 40px; height: 4px; background: var(--borda); border-radius: 2px; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
+.modal-conteudo::before { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 36px; height: 3px; background: var(--borda); border-radius: 2px; }
 @media (min-width: 700px) { .modal-conteudo::before { display: none; } }
-.modal-conteudo h2 { margin: 8px 30px 16px 0; font-size: 18px; color: var(--bordo); }
-.modal-conteudo h3 { margin: 18px 0 10px; font-size: 15px; color: var(--texto); }
-.fechar-x { position: absolute; top: 14px; right: 14px; background: var(--cinza); color: var(--texto); border-radius: 50%; width: 34px; height: 34px; padding: 0; font-size: 16px; min-height: 34px; }
+.modal-conteudo h2 { margin: 4px 26px 10px 0; font-size: 15px; color: var(--bordo); }
+.modal-conteudo h3 { margin: 10px 0 6px; font-size: 13px; color: var(--texto); }
+.fechar-x { position: absolute; top: 10px; right: 10px; background: var(--cinza); color: var(--texto); border-radius: 50%; width: 30px; height: 30px; padding: 0; font-size: 14px; min-height: 30px; }
 .fechar-x:active { background: var(--vermelho); color: #fff; }
 
-label { display: block; margin-bottom: 12px; font-size: 13px; color: #555; font-weight: 600; }
-label input, label select, label textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid var(--borda); border-radius: 8px; font-size: 15px; font-family: inherit; background: #fff; min-height: 44px; -webkit-appearance: none; }
+label { display: block; margin-bottom: 8px; font-size: 12px; color: #555; font-weight: 600; }
+label input, label select, label textarea { width: 100%; padding: 8px 10px; margin-top: 3px; border: 1px solid var(--borda); border-radius: var(--r-sm); font-size: 13px; font-family: inherit; background: #fff; min-height: 36px; -webkit-appearance: none; }
 label textarea { min-height: auto; }
-label input:focus, label select:focus, label textarea:focus { outline: none; border-color: var(--bordo); box-shadow: 0 0 0 3px rgba(139,46,60,.15); }
+label input:focus, label select:focus, label textarea:focus { outline: none; border-color: var(--bordo); box-shadow: 0 0 0 2px rgba(139,46,60,.15); }
 label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
-label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
+label input.obrigatorio-vazio, label select.obrigatorio-vazio { border-color: var(--vermelho); background: #fff5f5; }
+label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 10px; }
+label .req { color: var(--vermelho); font-weight: 700; }
 
 .grid-2, .grid-3 { display: grid; grid-template-columns: 1fr; gap: 0; }
-@media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 0 12px; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 12px; } }
-.botoes { display: flex; flex-direction: column-reverse; gap: 8px; margin-top: 20px; }
+@media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 0 8px; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 8px; } }
+.botoes { display: flex; flex-direction: column-reverse; gap: 6px; margin-top: 12px; }
 @media (min-width: 600px) { .botoes { flex-direction: row; justify-content: flex-end; } }
 .botoes button { width: 100%; }
 @media (min-width: 600px) { .botoes button { width: auto; } }
 
-.item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: 10px; padding: 14px; margin-bottom: 12px; position: relative; }
-.item-nf h4 { font-size: 13px; margin-bottom: 10px; color: var(--texto); font-weight: 700; }
-.item-nf .remover { position: absolute; top: 10px; right: 10px; background: var(--vermelho); padding: 5px 10px; font-size: 12px; min-height: 30px; }
+.item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: var(--r); padding: 10px; margin-bottom: 8px; position: relative; }
+.item-nf.falta-foto { border-color: var(--vermelho); background: #fff5f5; }
+.item-nf h4 { font-size: 12px; margin-bottom: 6px; color: var(--texto); font-weight: 700; }
+.item-nf .remover { position: absolute; top: 8px; right: 8px; background: var(--vermelho); padding: 4px 8px; font-size: 11px; min-height: 26px; }
 .item-nf.cond-avaria { border-left: 4px solid var(--vermelho); }
 .item-nf.cond-observacao { border-left: 4px solid var(--azul); }
+.item-nf .aviso-foto { background: #f8d7da; color: #721c24; padding: 6px 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; display: none; }
+.item-nf.falta-foto .aviso-foto { display: block; }
 
-.info-destino-futuro { background: #e3f2fd; border-left: 4px solid var(--azul); padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 13px; color: #0d47a1; }
-.info-destino-futuro strong { display: block; margin-bottom: 4px; }
+.info-destino-futuro { background: #e3f2fd; border-left: 4px solid var(--azul); padding: 8px 10px; border-radius: var(--r-sm); margin-bottom: 10px; font-size: 12px; color: #0d47a1; }
+.info-destino-futuro strong { display: block; margin-bottom: 2px; }
 
-.foto-upload { border: 2px dashed var(--borda); border-radius: 10px; padding: 12px; background: #faf7f8; margin-top: 4px; }
-.foto-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.foto-grid:empty { display: none; }
-.foto-thumb { width: 74px; height: 74px; border-radius: 8px; background-size: cover; background-position: center; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-.foto-thumb .rm { position: absolute; top: -8px; right: -8px; background: var(--vermelho); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; min-height: 0; padding: 0; line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
+.foto-upload { border: 2px dashed var(--borda); border-radius: var(--r); padding: 10px; background: #faf7f8; margin-top: 3px; }
+.item-nf.falta-foto .foto-upload { border-color: var(--vermelho); }
+.foto-preview { display: flex; justify-content: center; margin-bottom: 8px; }
+.foto-preview:empty { display: none; }
+.foto-thumb { width: 100px; height: 100px; border-radius: var(--r-sm); background-size: cover; background-position: center; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.foto-thumb .rm { position: absolute; top: -6px; right: -6px; background: var(--vermelho); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; min-height: 0; padding: 0; line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
 .foto-upload .botoes-foto { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-.foto-upload button { padding: 10px 12px; font-size: 13px; flex: 1; min-width: 100px; }
+.foto-upload button { padding: 8px 10px; font-size: 12px; flex: 1; min-width: 90px; }
 
-.camera-modal video { width: 100%; border-radius: 10px; background: #000; }
+.camera-modal video { width: 100%; border-radius: var(--r); background: #000; }
 .camera-modal canvas { display: none; }
-.camera-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; color: #856404; }
+.camera-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r-sm); margin-bottom: 8px; font-size: 12px; color: #856404; }
 
-.aviso-rascunho { background: #fff3cd; border: 1px solid #ffc107; padding: 12px 14px; border-radius: 10px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+.aviso-rascunho { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r); margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
 @media (min-width: 600px) { .aviso-rascunho { flex-direction: row; justify-content: space-between; align-items: center; } }
-.aviso-rascunho .botoes-aviso { display: flex; gap: 8px; flex-wrap: wrap; }
-.aviso-rascunho button { padding: 8px 14px; font-size: 13px; min-height: 36px; }
+.aviso-rascunho .botoes-aviso { display: flex; gap: 6px; flex-wrap: wrap; }
+.aviso-rascunho button { padding: 6px 10px; font-size: 12px; min-height: 30px; }
 
-.alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: 10px; padding: 14px; margin-bottom: 18px; }
-.alerta-parada h4 { color: #856404; margin-bottom: 8px; font-size: 14px; }
-.alerta-parada .peca-parada { font-size: 12px; color: #856404; padding: 3px 0; }
+.alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--r); padding: 8px 10px; margin-bottom: 10px; }
+.alerta-parada h4 { color: #856404; margin-bottom: 4px; font-size: 12px; }
+.alerta-parada .peca-parada { font-size: 11px; color: #856404; padding: 2px 0; }
 
-.alerta-destino { background: #fff8e1; border: 1px solid var(--amarelo); border-left: 5px solid var(--amarelo); border-radius: 10px; padding: 14px; margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px; }
+.alerta-destino { background: #fff8e1; border: 1px solid var(--amarelo); border-left: 5px solid var(--amarelo); border-radius: var(--r); padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
 @media (min-width: 600px) { .alerta-destino { flex-direction: row; justify-content: space-between; align-items: center; } }
-.alerta-destino h4 { color: #856404; font-size: 14px; margin-bottom: 4px; }
-.alerta-destino p { font-size: 13px; color: #856404; }
-.alerta-destino button { flex-shrink: 0; }
+.alerta-destino h4 { color: #856404; font-size: 12px; margin-bottom: 2px; }
+.alerta-destino p { font-size: 11.5px; color: #856404; }
 
-.historico-item { padding: 10px 12px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 6px; border-radius: 6px; font-size: 13px; }
-.historico-item .data { color: #b0a0a5; font-size: 11px; margin-bottom: 2px; }
-.lista-historico .historico-item { border-left-color: var(--verde); }
-
-.ficha-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+.ficha-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 700px) { .ficha-grid { grid-template-columns: 1fr 1fr; } }
 .ficha-grid .full { grid-column: 1/-1; }
-.ficha-foto { width: 100%; height: 220px; background: var(--bordo-claro); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 60px; background-size: cover; background-position: center; }
-@media (min-width: 700px) { .ficha-foto { height: 300px; } }
-.ficha-galeria { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
-.ficha-galeria img { height: 90px; border-radius: 8px; cursor: pointer; flex-shrink: 0; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-.ficha-info p { font-size: 14px; margin-bottom: 6px; word-break: break-word; }
+.ficha-foto { width: 100%; height: 200px; background: var(--bordo-claro); border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 48px; background-size: cover; background-position: center; cursor: pointer; }
+@media (min-width: 700px) { .ficha-foto { height: 260px; } }
+.ficha-foto:hover { opacity: .92; }
+.ficha-info p { font-size: 12.5px; margin-bottom: 4px; word-break: break-word; }
 .ficha-info strong { color: var(--texto); }
 
-.lista-mini { display: grid; grid-template-columns: 1fr; gap: 10px; }
-@media (min-width: 600px) { .lista-mini { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); } }
-.mini-card { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-.mini-card h4 { font-size: 14px; margin-bottom: 3px; word-break: break-word; }
-.mini-card p { font-size: 12px; color: var(--cinza-esc); word-break: break-word; }
-.mini-card .acoes-mini { display: flex; gap: 4px; flex-shrink: 0; }
+.historico-item { padding: 6px 8px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 4px; border-radius: 5px; font-size: 12px; }
+.historico-item .data { color: #b0a0a5; font-size: 10px; margin-bottom: 1px; }
 
-.vazio { text-align: center; padding: 40px 20px; color: #b0a0a5; font-size: 14px; }
+.vazio { text-align: center; padding: 26px 14px; color: #b0a0a5; font-size: 13px; }
 
-.toast { position: fixed; bottom: 100px; left: 16px; right: 16px; background: var(--verde); color: #fff; padding: 14px 18px; border-radius: 10px; box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transition: .3s; pointer-events: none; z-index: 200; font-size: 14px; font-weight: 500; text-align: center; }
-@media (min-width: 600px) { .toast { left: auto; right: 25px; bottom: 25px; max-width: 380px; text-align: left; } }
-.toast.visivel { opacity: 1; transform: translateY(-5px); }
+.toast { position: fixed; bottom: 78px; left: 12px; right: 12px; background: var(--verde); color: #fff; padding: 10px 14px; border-radius: var(--r); box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transition: .3s; pointer-events: none; z-index: 200; font-size: 13px; font-weight: 500; text-align: center; }
+@media (min-width: 600px) { .toast { left: auto; right: 20px; bottom: 20px; max-width: 340px; text-align: left; } }
+.toast.visivel { opacity: 1; transform: translateY(-4px); }
 .toast.erro { background: var(--vermelho); }
 .toast.aviso { background: var(--amarelo); }
 
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--bordo-claro); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 10px rgba(139,46,60,.06); }
-.bottom-nav .nav-btn { flex: 1; background: transparent; color: #a89898; border: none; padding: 8px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; font-weight: 600; min-height: 60px; border-radius: 0; cursor: pointer; }
-.bottom-nav .nav-btn .ico { font-size: 20px; }
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--bordo-claro); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 8px rgba(139,46,60,.06); }
+.bottom-nav .nav-btn { flex: 1; background: transparent; color: #a89898; border: none; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 9.5px; font-weight: 600; min-height: 52px; border-radius: 0; cursor: pointer; }
+.bottom-nav .nav-btn .ico { font-size: 17px; }
 .bottom-nav .nav-btn.ativo { color: var(--bordo); background: transparent; }
-@media (min-width: 800px) { body { padding-bottom: 20px; } .bottom-nav { display: none; } header { padding: 15px 25px; } header h1 { font-size: 20px; } .tab-conteudo { padding: 25px; } .desktop-nav { display: flex !important; } }
-.desktop-nav { display: none; gap: 6px; flex-wrap: wrap; }
-.desktop-nav .nav-btn { background: transparent; color: #555; border: 1px solid var(--borda); padding: 8px 14px; border-radius: 6px; font-size: 14px; min-height: auto; flex-direction: row; }
+@media (min-width: 800px) { body { padding-bottom: 16px; } .bottom-nav { display: none; } header { padding: 10px 18px; } header h1 { font-size: 18px; } .tab-conteudo { padding: 16px; } .desktop-nav { display: flex !important; } }
+.desktop-nav { display: none; gap: 4px; flex-wrap: wrap; }
+.desktop-nav .nav-btn { background: transparent; color: #555; border: 1px solid var(--borda); padding: 5px 10px; border-radius: 5px; font-size: 12px; min-height: auto; flex-direction: row; }
 .desktop-nav .nav-btn.ativo { background: var(--bordo); color: #fff; border-color: var(--bordo); }
 
-.duplicado-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 13px; }
+.duplicado-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r-sm); margin: 6px 0; font-size: 12px; }
 .duplicado-aviso strong { color: #856404; }
-.duplicado-aviso .btn-usar { margin-top: 8px; width: 100%; }
-.divisor { height: 1px; background: var(--borda); margin: 20px 0; }
-.campo-com-botao { display: flex; gap: 8px; align-items: stretch; margin-top: 5px; }
+.duplicado-aviso .btn-usar { margin-top: 6px; width: 100%; }
+.divisor { height: 1px; background: var(--borda); margin: 12px 0; }
+.campo-com-botao { display: flex; gap: 6px; align-items: stretch; margin-top: 3px; }
 .campo-com-botao select, .campo-com-botao input { flex: 1; margin-top: 0; }
-.campo-com-botao button { padding: 0 14px; min-height: 44px; white-space: nowrap; }
-.banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 10px 16px; font-size: 13px; color: #856404; text-align: center; font-weight: 600; }
+.campo-com-botao button { padding: 0 10px; min-height: 36px; white-space: nowrap; }
+.banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 6px 12px; font-size: 12px; color: #856404; text-align: center; font-weight: 600; }
 
-.campo-pedido { background: #fff8e1; padding: 12px; border-radius: 10px; border-left: 4px solid var(--amarelo); margin-bottom: 15px; }
-.campo-pedido label { color: #856404; font-weight: 700; }
-.campo-pedido input { background: #fff; font-size: 16px; font-weight: 700; color: #5c3c00; border-color: var(--amarelo); }
+.campo-pedido { background: #fff8e1; padding: 8px 10px; border-radius: var(--r); border-left: 4px solid var(--amarelo); margin-bottom: 10px; }
+.campo-pedido label { color: #856404; font-weight: 700; margin-bottom: 4px; }
+.campo-pedido input { background: #fff; font-size: 14px; font-weight: 700; color: #5c3c00; border-color: var(--amarelo); }
 
-.grupo-nf { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px; }
-.grupo-nf > header { background: transparent; border: none; padding: 0 0 10px; border-bottom: 1px solid var(--borda); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; position: static; flex-wrap: wrap; }
-.grupo-nf > header h3 { font-size: 14px; color: var(--bordo); }
-.grupo-nf > header small { font-size: 11px; color: var(--cinza-esc); display: block; margin-top: 2px; }
-.grupo-nf .acoes-grupo { display: flex; gap: 6px; flex-wrap: wrap; }
-.grupo-nf .acoes-grupo button { padding: 8px 12px; font-size: 12px; min-height: 36px; }
-.destino-lista { display: flex; flex-direction: column; gap: 8px; }
-.destino-item { background: #faf7f8; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
-@media (min-width: 600px) { .destino-item { flex-direction: row; justify-content: space-between; align-items: center; } }
-.destino-item.cond-avaria { border-left: 4px solid var(--vermelho); background: #fff5f5; }
-.destino-item.cond-observacao { border-left: 4px solid var(--azul); background: #f0f7ff; }
-.destino-item .info-peca { flex: 1; min-width: 0; }
-.destino-item .info-peca strong { font-size: 13px; display: block; }
-.destino-item .info-peca small { font-size: 11px; color: var(--cinza-esc); display: block; }
-.destino-item .btns-destino { display: flex; gap: 6px; flex-wrap: wrap; }
-.destino-item .btns-destino button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; min-width: 110px; }
+.grupo-nf { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); margin-bottom: 10px; }
+.grupo-nf > header { background: transparent; border: none; padding: 0 0 6px; border-bottom: 1px solid var(--borda); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; position: static; flex-wrap: wrap; }
+.grupo-nf > header h3 { font-size: 12.5px; color: var(--bordo); }
+.grupo-nf > header small { font-size: 10.5px; color: var(--cinza-esc); display: block; margin-top: 2px; }
+.grupo-nf .acoes-grupo { display: flex; gap: 4px; flex-wrap: wrap; }
+.grupo-nf .acoes-grupo button { padding: 5px 9px; font-size: 11px; min-height: 28px; }
 
-.rel-periodo { background: #fff; border-radius: 10px; padding: 14px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(139,46,60,.06); }
-.rel-periodo .linha { display: flex; gap: 10px; flex-wrap: wrap; }
-.rel-periodo .linha > label { flex: 1; min-width: 140px; margin-bottom: 0; }
-.rel-atalhos { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
-.rel-atalhos button { padding: 8px 12px; font-size: 12px; min-height: 36px; flex: 1; }
+.rel-periodo { background: #fff; border-radius: var(--r); padding: 10px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
+.rel-periodo .linha { display: flex; gap: 6px; flex-wrap: wrap; }
+.rel-periodo .linha > label { flex: 1; min-width: 120px; margin-bottom: 0; }
+.rel-atalhos { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.rel-atalhos button { padding: 5px 9px; font-size: 11px; min-height: 28px; flex: 1; }
 
-.rel-resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.rel-resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
 @media (min-width: 700px) { .rel-resumo { grid-template-columns: repeat(4, 1fr); } }
-.rel-resumo .item { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); border-left: 3px solid var(--bordo); }
-.rel-resumo .item span { font-size: 11px; color: var(--cinza-esc); display: block; margin-bottom: 4px; }
-.rel-resumo .item strong { font-size: 18px; color: var(--bordo); }
+.rel-resumo .item { background: #fff; border-radius: var(--r); padding: 8px 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); border-left: 3px solid var(--bordo); }
+.rel-resumo .item span { font-size: 10px; color: var(--cinza-esc); display: block; margin-bottom: 2px; }
+.rel-resumo .item strong { font-size: 15px; color: var(--bordo); }
 
-.rel-secao { background: #fff; border-radius: 10px; padding: 14px; box-shadow: 0 1px 4px rgba(139,46,60,.06); margin-bottom: 14px; }
-.rel-secao h3 { font-size: 14px; color: var(--bordo); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-.rel-linha { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f0eef0; font-size: 13px; }
+.rel-secao { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); margin-bottom: 10px; }
+.rel-secao h3 { font-size: 12.5px; color: var(--bordo); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+.rel-linha { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px solid #f0eef0; font-size: 12px; }
 .rel-linha:last-child { border-bottom: none; }
 .rel-linha .esq { flex: 1; min-width: 0; }
-.rel-linha .esq strong { display: block; font-size: 13px; margin-bottom: 2px; }
-.rel-linha .esq small { color: var(--cinza-esc); font-size: 11px; display: block; }
+.rel-linha .esq strong { display: block; font-size: 12px; margin-bottom: 1px; }
+.rel-linha .esq small { color: var(--cinza-esc); font-size: 10.5px; display: block; }
 .rel-linha .dir { text-align: right; flex-shrink: 0; }
-.rel-linha .dir strong { color: var(--bordo); font-size: 13px; }
+.rel-linha .dir strong { color: var(--bordo); font-size: 12px; }
+
+.estoque-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 700px) { .estoque-grid { grid-template-columns: repeat(3, 1fr); } }
+.estoque-bloco { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
+.estoque-bloco h4 { font-size: 12px; color: var(--bordo); margin-bottom: 6px; border-bottom: 1px solid var(--borda); padding-bottom: 4px; }
+.estoque-bloco .item-estq { display: flex; justify-content: space-between; font-size: 11.5px; padding: 3px 0; border-bottom: 1px solid #f0eef0; }
+.estoque-bloco .item-estq:last-child { border-bottom: none; }
+.estoque-bloco .item-estq .nome { color: var(--texto); }
+.estoque-bloco .item-estq .qtd { font-weight: 700; color: var(--bordo); }
+
+.aviso-obrig { background: #fff5f5; border: 1px solid var(--vermelho); border-left: 4px solid var(--vermelho); padding: 8px 10px; border-radius: var(--r); margin-bottom: 10px; font-size: 12px; color: #721c24; }
+.aviso-obrig strong { display: block; margin-bottom: 2px; }
 </style>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
@@ -292,8 +380,6 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="acoes-rapidas">
     <button class="btn-bloco" onclick="abrirNovaNF()">+ Cadastrar NF</button>
   </div>
-  <h2 class="subtitulo">🕒 Últimas movimentações</h2>
-  <div id="ultimasMovs" class="lista-historico"></div>
 </section>
 
 <!-- NFs -->
@@ -321,7 +407,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
       <option value="oc">🧾 OC / Encomenda</option>
     </select>
   </div>
-  <div id="listaNFs" class="lista-cards"></div>
+  <div id="listaNFs"></div>
 </section>
 
 <!-- DESTINOS -->
@@ -349,7 +435,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
       <option value="vendido">💰 Vendido</option>
     </select>
   </div>
-  <div id="gridPecas" class="grid-pecas"></div>
+  <div id="gridPecas"></div>
 </section>
 
 <!-- RESERVAS -->
@@ -358,7 +444,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="filtros">
     <input type="text" id="buscaReserva" placeholder="🔍 Buscar por cliente, peça, OC..." oninput="renderReservas()">
   </div>
-  <div id="listaReservas" class="lista-cards"></div>
+  <div id="listaReservas"></div>
 </section>
 
 <!-- RELATÓRIOS -->
@@ -381,60 +467,62 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
     </div>
   </div>
   <div class="rel-resumo" id="relResumo"></div>
+  <h3 class="subtitulo">📦 Estoque</h3>
+  <div class="estoque-grid" id="relEstoque"></div>
   <div id="relConteudo"></div>
 </section>
 
 <!-- CADASTROS -->
 <section id="tab-cadastros" class="tab-conteudo">
   <h2>🏢 Cadastros Base</h2>
-  <p style="color:var(--cinza-esc);font-size:13px;margin:10px 0 20px;">💡 Cadastre uma vez e use sempre. O CNPJ evita duplicados.</p>
+  <p style="color:var(--cinza-esc);font-size:12px;margin:6px 0 12px;">💡 Cadastre uma vez e use sempre. O CNPJ evita duplicados.</p>
   <h3 class="subtitulo">📦 Fornecedores</h3>
-  <form id="formFornecedor" style="margin-bottom:14px">
+  <form id="formFornecedor" style="margin-bottom:10px">
     <div class="grid-3">
       <label>CNPJ *<input type="text" id="fornCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
       <label>Nome *<input type="text" id="fornNome" required></label>
       <label>Contato<input type="text" id="fornContato"></label>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button type="submit" id="btnForn">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditForn()" id="btnCancelForn" style="display:none">Cancelar</button>
     </div>
   </form>
-  <div id="listaFornecedores" class="lista-mini"></div>
+  <div id="listaFornecedores"></div>
   <div class="divisor"></div>
   <h3 class="subtitulo">🚚 Transportadoras</h3>
-  <form id="formTransportadora" style="margin-bottom:14px">
+  <form id="formTransportadora" style="margin-bottom:10px">
     <div class="grid-3">
       <label>CNPJ *<input type="text" id="transpCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
       <label>Nome *<input type="text" id="transpNome" required></label>
       <label>Contato<input type="text" id="transpContato"></label>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button type="submit" id="btnTransp">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditTransp()" id="btnCancelTransp" style="display:none">Cancelar</button>
     </div>
   </form>
-  <div id="listaTransportadoras" class="lista-mini"></div>
+  <div id="listaTransportadoras"></div>
   <div class="divisor"></div>
   <h3 class="subtitulo">👤 Clientes</h3>
-  <form id="formCliente" style="margin-bottom:14px">
+  <form id="formCliente" style="margin-bottom:10px">
     <div class="grid-3">
       <label>Nome *<input type="text" id="cliNome" required></label>
       <label>Telefone<input type="text" id="cliTelefone" inputmode="tel"></label>
       <label>Endereço<input type="text" id="cliEndereco"></label>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button type="submit" id="btnCli">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditCli()" id="btnCancelCli" style="display:none">Cancelar</button>
     </div>
   </form>
-  <div id="listaClientes" class="lista-mini"></div>
+  <div id="listaClientes"></div>
 </section>
 
 <!-- CONFIG -->
 <section id="tab-config" class="tab-conteudo">
   <h2>⚙️ Backup</h2>
-  <p style="margin:14px 0;color:var(--cinza-esc);font-size:13px;">Os dados são sincronizados com a nuvem (Firebase). Faça backup manual periodicamente.</p>
+  <p style="margin:10px 0;color:var(--cinza-esc);font-size:12px;">Os dados são sincronizados com a nuvem (Firebase). Faça backup manual periodicamente.</p>
   <div class="acoes-rapidas">
     <button class="btn-bloco" onclick="exportarBackup()">⬇️ Exportar Backup</button>
     <button class="btn-bloco btn-secundario" onclick="$('inputImport').click()">⬆️ Importar Backup</button>
@@ -444,7 +532,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <h3 class="subtitulo">📊 Estatísticas</h3>
   <div id="estatisticas"></div>
   <h3 class="subtitulo">☁️ Sincronização</h3>
-  <div id="infoSync" style="font-size:13px;color:var(--cinza-esc)"></div>
+  <div id="infoSync" style="font-size:12px;color:var(--cinza-esc)"></div>
 </section>
 
 <!-- MODAL NF -->
@@ -461,11 +549,15 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
     </div>
     <div class="info-destino-futuro" id="avisoRecebimento">
       <strong>ℹ️ Etapa de conferência</strong>
-      Registre aqui o que chegou. O <strong>destino de cada peça</strong> (Showroom ou OC/Encomenda) será definido depois pelo <strong>Coordenador Logístico</strong> na aba 🎯 Destinos.
+      Registre o que chegou. Cada item precisa ter foto. O destino de cada peça será definido depois pelo Coordenador Logístico.
     </div>
     <div class="info-destino-futuro" id="avisoEdicao" style="display:none;background:#fff8e1;border-left-color:var(--amarelo);color:#856404">
       <strong>✏️ Modo edição</strong>
-      Você está editando os dados da NF. Os <strong>itens já cadastrados não são alterados por aqui</strong>. Para mudar itens, exclua a NF e recadastre.
+      Editando os dados da NF. Os <strong>itens já cadastrados não são alterados</strong>.
+    </div>
+    <div class="info-destino-futuro" id="avisoDuplicacao" style="display:none;background:#e8f5e9;border-left-color:var(--verde);color:#1b5e20">
+      <strong>📋 Modo duplicação</strong>
+      Campos únicos (nº NF, pedido/OC, chave) foram <strong>limpos</strong>. Fotos também <strong>não são copiadas</strong> — recapture cada item.
     </div>
     <form id="formNF" novalidate>
       <div class="campo-pedido">
@@ -498,7 +590,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
         <label>Data de Emissão<input type="date" id="nfEmissao"></label>
         <label>Data de Recebimento<input type="date" id="nfRecebimento"></label>
         <label>Data de Conferência<input type="date" id="nfConferencia"></label>
-        <label>Conferido por<input type="text" id="nfConferidoPor"></label>
+        <label>Conferido por <span class="req">*</span><input type="text" id="nfConferidoPor" placeholder="Nome do operador que conferiu" required></label>
         <label>Status da NF
           <select id="nfStatus">
             <option value="conferida">✅ Conferida</option>
@@ -514,15 +606,60 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
       <label>Observações da NF<textarea id="nfObservacoes" rows="2" placeholder="Ex: chegou 1 peça trincada, conferir com fornecedor..."></textarea></label>
 
       <div id="blocoItens">
-        <h3 class="subtitulo">📦 Itens da NF</h3>
+        <h3 class="subtitulo">📦 Itens da NF <span style="font-size:11px;color:var(--vermelho);font-weight:400">(foto obrigatória em cada item)</span></h3>
         <div id="itensNF"></div>
         <button type="button" class="btn-secundario btn-bloco" onclick="addItemNF()">+ Adicionar item</button>
       </div>
 
-      <div class="botoes" style="margin-top:20px">
+      <div class="botoes" style="margin-top:16px">
         <button type="button" class="btn-secundario" onclick="salvarRascunhoManual()" id="btnRascunho">💾 Rascunho</button>
         <button type="button" class="btn-secundario" onclick="tentarFecharNF()">Cancelar</button>
         <button type="submit" class="btn-sucesso" id="btnSalvarNF">✅ Salvar NF</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PEÇA -->
+<div id="modalEditarPeca" class="modal oculto">
+  <div class="modal-conteudo" onclick="event.stopPropagation()">
+    <button class="fechar-x" onclick="fecharModal('modalEditarPeca')">✕</button>
+    <h2>✏️ Editar Peça</h2>
+    <form id="formEditarPeca">
+      <input type="hidden" id="edPecaId">
+      <label>Nome da Peça *<input type="text" id="edNome" required></label>
+      <div class="grid-3">
+        <label>Categoria
+          <select id="edCategoria">
+            <option value="">— Selecione —</option>
+          </select>
+        </label>
+        <label>Marca<input type="text" id="edMarca"></label>
+        <label>Cor / Detalhes<input type="text" id="edCor"></label>
+      </div>
+      <label>Nº do Pedido / OC<input type="text" id="edPedido"></label>
+      <div class="grid-3">
+        <label>Condição
+          <select id="edCondicao">
+            <option value="ok">✅ Normal</option>
+            <option value="avaria">🔴 Com avaria</option>
+            <option value="observacao">🔍 Em observação</option>
+          </select>
+        </label>
+        <label>Localização
+          <select id="edLocal">
+            <option value="showroom">🪑 Showroom</option>
+            <option value="deposito">📦 Depósito</option>
+            <option value="transito">🚚 Em trânsito</option>
+          </select>
+        </label>
+        <label>Custo Unitário (rateio)<input type="number" id="edCusto" step="0.01" min="0"></label>
+      </div>
+      <label>Características<textarea id="edCarac" rows="2" placeholder="Cor, material, medidas..."></textarea></label>
+      <label>Observações internas<textarea id="edObs" rows="2"></textarea></label>
+      <div class="botoes">
+        <button type="button" class="btn-secundario" onclick="fecharModal('modalEditarPeca')">Cancelar</button>
+        <button type="submit" class="btn-sucesso">💾 Salvar Alterações</button>
       </div>
     </form>
   </div>
@@ -533,7 +670,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalDefinirOC')">✕</button>
     <h2>🧾 Definir como OC / Encomenda</h2>
-    <p id="ocPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <p id="ocPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
     <form id="formDefinirOC">
       <input type="hidden" id="ocPecaId">
       <label>Nº da OC *<input type="text" id="ocNumero" required></label>
@@ -583,15 +720,18 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharLeitor()">✕</button>
     <h2>📷 Ler código da DANFE</h2>
-    <p style="color:var(--cinza-esc);font-size:13px;margin-bottom:12px">Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou <strong>QR Code</strong> da nota.</p>
-    <div style="background:#f0f7ff;border-left:4px solid var(--azul);padding:10px 12px;border-radius:6px;margin-bottom:12px;font-size:12px;color:#0d47a1">
-      ℹ️ <strong>Leitura 100% local.</strong> O app lê a chave, valida o dígito e cruza o CNPJ com a <strong>sua base de fornecedores</strong>. Não consulta SEFAZ nem API fiscal.
+    <p style="color:var(--cinza-esc);font-size:12px;margin-bottom:8px">Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou o <strong>QR Code</strong> da nota.</p>
+    <div style="background:#f0f7ff;border-left:4px solid var(--azul);padding:8px 10px;border-radius:5px;margin-bottom:10px;font-size:11.5px;color:#0d47a1">
+      ℹ️ <strong>Leitura 100% local.</strong> O app lê a chave, valida o dígito e cruza o CNPJ com a sua base de fornecedores. Não consulta SEFAZ nem API fiscal.
     </div>
-    <div id="leitorQR" style="width:100%;border-radius:10px;overflow:hidden;background:#000;min-height:220px"></div>
-    <div id="leitorStatus" style="font-size:13px;color:var(--cinza-esc);text-align:center;margin:10px 0 0"></div>
-    <details style="margin-top:14px">
-      <summary style="cursor:pointer;font-size:13px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
-      <div style="margin-top:10px">
+    <div style="background:#e8f5e9;border-left:4px solid var(--verde);padding:8px 10px;border-radius:5px;margin-bottom:10px;font-size:11.5px;color:#1b5e20">
+      🔌 <strong>Leitor USB/Bluetooth:</strong> com o modal de NF aberto, basta apontar o leitor e bipar — o sistema detecta e preenche automaticamente.
+    </div>
+    <div id="leitorQR" style="width:100%;border-radius:var(--r);overflow:hidden;background:#000;min-height:200px"></div>
+    <div id="leitorStatus" style="font-size:12px;color:var(--cinza-esc);text-align:center;margin:8px 0 0"></div>
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-size:12px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
+      <div style="margin-top:8px">
         <label>Chave de acesso (44 dígitos)<input type="text" id="chaveManual" inputmode="numeric" maxlength="60" placeholder="00000000000000000000000000000000000000000000"></label>
         <button type="button" class="btn-sucesso btn-bloco" onclick="usarChaveManual()">Usar esta chave</button>
       </div>
@@ -607,11 +747,11 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   </div>
 </div>
 
-<!-- MODAL GALERIA (ampliar foto) -->
+<!-- MODAL GALERIA -->
 <div id="modalGaleria" class="modal oculto">
-  <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()" style="background:#000;padding:10px">
+  <div class="modal-conteudo modal-grande" onclick="event.stopPropagation()" style="background:#000;padding:8px">
     <button class="fechar-x" onclick="fecharModal('modalGaleria')">✕</button>
-    <img id="imgGaleria" style="width:100%;height:auto;border-radius:8px;display:block">
+    <img id="imgGaleria" style="width:100%;height:auto;border-radius:var(--r-sm);display:block">
   </div>
 </div>
 
@@ -620,7 +760,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalReservar')">✕</button>
     <h2>📌 Reservar Peça</h2>
-    <p id="reservaPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <p id="reservaPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
     <form id="formReservar">
       <input type="hidden" id="reservaPecaId">
       <label>Cliente *
@@ -650,7 +790,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalMover')">✕</button>
     <h2>📍 Mover peça</h2>
-    <p id="moverPecaInfo" style="font-size:14px;margin-bottom:14px;color:var(--cinza-esc)"></p>
+    <p id="moverPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
     <form id="formMover">
       <input type="hidden" id="moverPecaId">
       <label>Nova localização
@@ -679,7 +819,7 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
     <div class="botoes">
       <button type="button" class="btn-secundario" onclick="fecharCamera()">Cancelar</button>
       <button type="button" class="btn-secundario" onclick="escolherArquivoCamera()">📁 Galeria</button>
-      <button type="button" class="btn-sucesso" onclick="capturarFoto()">📸 Capturar e continuar</button>
+      <button type="button" class="btn-sucesso" onclick="capturarFoto()">📸 Capturar</button>
     </div>
   </div>
 </div>
@@ -690,9 +830,10 @@ label .opc { font-weight: 400; color: var(--cinza-esc); font-size: 11px; }
   <button class="nav-btn ativo" data-tab="dashboard"><span class="ico">📊</span>Início</button>
   <button class="nav-btn" data-tab="nfs"><span class="ico">📄</span>NFs</button>
   <button class="nav-btn" data-tab="destinos" style="display:none"><span class="ico">🎯</span>Destinos</button>
-  <button class="nav-btn" data-tab="showroom"><span class="ico">🪑</span>Showroom</button>
-  <button class="nav-btn" data-tab="relatorios"><span class="ico">📈</span>Relatórios</button>
-  <button class="nav-btn" data-tab="cadastros"><span class="ico">🏢</span>Cadastros</button>
+  <button class="nav-btn" data-tab="showroom"><span class="ico">🪑</span>Show</button>
+  <button class="nav-btn" data-tab="reservas"><span class="ico">📌</span>Reservas</button>
+  <button class="nav-btn" data-tab="relatorios"><span class="ico">📈</span>Relat.</button>
+  <button class="nav-btn" data-tab="cadastros"><span class="ico">🏢</span>Cadast.</button>
 </nav>
 
 <script type="module">
@@ -722,12 +863,16 @@ const CONDICOES = { ok: 'Normal', avaria: 'Avaria', observacao: 'Em observação
 const STORAGE_KEY = 'estoqueMoveisV4';
 const RASCUNHO_KEY = 'rascunhoNF';
 const BACKUP_KEY = 'estoqueMoveisV4_backup';
+const BACKUP_MIGRACAO_KEY = 'estoqueMoveisV4_backupFase1';
 const PERFIL_KEY = 'perfilUsuario';
-const MAX_FOTO_KB = 200;
-const MAX_FOTOS_ITEM = 6;
+const DATA_SCHEMA_KEY = 'schemaVersion';
+const SCHEMA_ATUAL = 3;
+const MAX_FOTO_KB = 180;
+const ULTIMO_CONFERENTE_KEY = 'ultimoConferente';
 
 const DB = {
   nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [],
+  auditoria: [],  // preservado no storage mas não usado na UI
   contadores: { peca: 0 },
   editandoFornId: null, editandoTranspId: null, editandoCliId: null
 };
@@ -739,6 +884,7 @@ let ultimaSyncRemota = 0;
 let salvandoRemoto = false;
 let perfilAtual = 'recebedor';
 let nfEditandoId = null;
+let nfDuplicandoId = null;
 
 const $ = id => document.getElementById(id);
 const brl = v => (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -786,10 +932,11 @@ function toast(msg, tipo = 'ok') {
 }
 function fecharModal(id) { $(id).classList.add('oculto'); }
 function abrirModal(id) { $(id).classList.remove('oculto'); }
-function pecaFotos(peca) {
-  if (Array.isArray(peca.fotos) && peca.fotos.length) return peca.fotos.map(urlImagemSegura).filter(Boolean);
-  const f = urlImagemSegura(peca.foto);
-  return f ? [f] : [];
+function pecaFotoUnica(peca) {
+  if (!peca) return '';
+  if (peca.foto) return urlImagemSegura(peca.foto);
+  if (Array.isArray(peca.fotos) && peca.fotos.length) return urlImagemSegura(peca.fotos[0]);
+  return '';
 }
 
 async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
@@ -798,16 +945,16 @@ async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
     img.onload = () => {
       const canvas = document.createElement('canvas');
       let { width, height } = img;
-      const MAX_DIM = 1000;
+      const MAX_DIM = 900;
       if (width > MAX_DIM || height > MAX_DIM) {
         if (width > height) { height = Math.round(height * MAX_DIM / width); width = MAX_DIM; }
         else { width = Math.round(width * MAX_DIM / height); height = MAX_DIM; }
       }
       canvas.width = width; canvas.height = height;
       canvas.getContext('2d').drawImage(img, 0, 0, width, height);
-      let quality = 0.8;
+      let quality = 0.78;
       let dataUrl = canvas.toDataURL('image/jpeg', quality);
-      while (dataUrl.length > maxKB * 1024 * 1.37 && quality > 0.3) {
+      while (dataUrl.length > maxKB * 1024 * 1.37 && quality > 0.25) {
         quality -= 0.1;
         dataUrl = canvas.toDataURL('image/jpeg', quality);
       }
@@ -825,6 +972,33 @@ async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
 }
 
 // ============================================================
+// MIGRAÇÃO
+// ============================================================
+function migrarParaSchema3() {
+  let jaEra = false;
+  try { jaEra = Number(localStorage.getItem(DATA_SCHEMA_KEY) || 0) >= SCHEMA_ATUAL; } catch {}
+  if (jaEra) return false;
+  try {
+    const atual = localStorage.getItem(STORAGE_KEY);
+    if (atual) localStorage.setItem(BACKUP_MIGRACAO_KEY, atual);
+  } catch (e) { console.error('Falha ao criar backup de migração:', e); }
+  DB.pecas.forEach(p => {
+    const antigas = [];
+    if (Array.isArray(p.fotos) && p.fotos.length) antigas.push(...p.fotos);
+    if (p.foto && !antigas.includes(p.foto)) antigas.unshift(p.foto);
+    const limpas = antigas.map(urlImagemSegura).filter(Boolean);
+    if (limpas.length > 1) {
+      p.fotosArquivo = p.fotosArquivo || [];
+      p.fotosArquivo.push(...limpas.slice(1));
+    }
+    p.foto = limpas[0] || '';
+    delete p.fotos;
+  });
+  try { localStorage.setItem(DATA_SCHEMA_KEY, String(SCHEMA_ATUAL)); } catch {}
+  return true;
+}
+
+// ============================================================
 // PERSISTÊNCIA
 // ============================================================
 function carregarLocal() {
@@ -838,6 +1012,7 @@ function carregarLocal() {
     if (Array.isArray(dados.fornecedores)) DB.fornecedores = dados.fornecedores;
     if (Array.isArray(dados.transportadoras)) DB.transportadoras = dados.transportadoras;
     if (Array.isArray(dados.clientes)) DB.clientes = dados.clientes;
+    if (Array.isArray(dados.auditoria)) DB.auditoria = dados.auditoria;
     if (dados.contadores && typeof dados.contadores === 'object') DB.contadores = dados.contadores;
     return true;
   } catch (e) { console.error('Erro load local:', e); return false; }
@@ -847,12 +1022,13 @@ function salvarLocal(silencioso = false) {
     const payload = {
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
+      auditoria: DB.auditoria,
       contadores: DB.contadores, _ts: Date.now()
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     return true;
   } catch (e) {
-    if (e.name === 'QuotaExceededError') { if (!silencioso) toast('⚠️ Armazenamento cheio! Faça backup.', 'erro'); }
+    if (e.name === 'QuotaExceededError') { if (!silencioso) toast('⚠️ Armazenamento cheio! Exporte backup.', 'erro'); }
     else if (!silencioso) toast('Erro ao salvar localmente.', 'erro');
     return false;
   }
@@ -880,6 +1056,7 @@ async function salvarRemoto() {
     await setDoc(DOC_REF, {
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
+      auditoria: DB.auditoria,
       contadores: DB.contadores,
       _atualizadoEm: serverTimestamp(),
       _atualizadoPor: firebaseUser.uid
@@ -909,11 +1086,9 @@ function alternarPerfil() {
 function aplicarPerfil() {
   const btn = $('btnPerfil');
   if (btn) btn.textContent = perfilAtual === 'coordenador' ? '🎯 Coordenador' : '👤 Recebedor';
-  const mostrarDestino = perfilAtual === 'coordenador';
-  document.querySelectorAll('[data-tab="destinos"]').forEach(el => { el.style.display = mostrarDestino ? '' : 'none'; });
-  if (!mostrarDestino && $('tab-destinos')?.classList.contains('ativo')) {
-    document.querySelector('[data-tab="dashboard"]')?.click();
-  }
+  const c = perfilAtual === 'coordenador';
+  document.querySelectorAll('[data-tab="destinos"]').forEach(el => { el.style.display = c ? '' : 'none'; });
+  if (!c && $('tab-destinos')?.classList.contains('ativo')) document.querySelector('[data-tab="dashboard"]')?.click();
   renderTudo();
 }
 
@@ -923,7 +1098,7 @@ function aplicarPerfil() {
 function validarBackup(dados) {
   const erros = [];
   if (!dados || typeof dados !== 'object') return ['Arquivo não é um objeto JSON.'];
-  const lists = ['nfs', 'pecas', 'fornecedores', 'transportadoras', 'clientes'];
+  const lists = ['nfs', 'pecas', 'fornecedores', 'transportadoras', 'clientes', 'auditoria'];
   for (const k of lists) { if (k in dados && !Array.isArray(dados[k])) erros.push(`Campo "${k}" deve ser uma lista.`); }
   if (dados.contadores && typeof dados.contadores !== 'object') erros.push('"contadores" inválido.');
   const pecasIds = new Set((dados.pecas || []).map(p => p && p.id).filter(Boolean));
@@ -940,10 +1115,11 @@ function validarBackup(dados) {
 function exportarBackup() {
   try {
     const dados = {
-      _app: 'estoque-hong-possas', _versao: 6,
+      _app: 'estoque-hong-possas', _versao: 8,
       _exportadoEm: new Date().toISOString(),
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
+      auditoria: DB.auditoria,
       contadores: DB.contadores
     };
     const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
@@ -969,7 +1145,8 @@ function importarBackup(event) {
     try {
       DB.nfs = dados.nfs || []; DB.pecas = dados.pecas || [];
       DB.fornecedores = dados.fornecedores || []; DB.transportadoras = dados.transportadoras || [];
-      DB.clientes = dados.clientes || []; DB.contadores = dados.contadores || { peca: 0 };
+      DB.clientes = dados.clientes || []; DB.auditoria = dados.auditoria || [];
+      DB.contadores = dados.contadores || { peca: 0 };
       salvar(); renderTudo(); atualizarSelectsCadastros();
       toast('✅ Backup restaurado.');
     } catch {
@@ -983,11 +1160,12 @@ function importarBackup(event) {
 async function limparTudo() {
   if (!confirm('⚠️ Apagar TODOS os dados?')) return;
   if (!confirm('Tem certeza? Faça backup antes.')) return;
+  if (!confirm('ÚLTIMA CHANCE. Confirmar exclusão total?')) return;
   try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(RASCUNHO_KEY); } catch {}
-  DB.nfs = []; DB.pecas = []; DB.fornecedores = []; DB.transportadoras = []; DB.clientes = [];
+  DB.nfs = []; DB.pecas = []; DB.fornecedores = []; DB.transportadoras = []; DB.clientes = []; DB.auditoria = [];
   DB.contadores = { peca: 0 };
   if (firebaseReady && firebaseUser) {
-    try { await setDoc(DOC_REF, { nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [], contadores: { peca: 0 } }); } catch {}
+    try { await setDoc(DOC_REF, { nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [], auditoria: [], contadores: { peca: 0 } }); } catch {}
   }
   renderTudo(); toast('Dados apagados.');
 }
@@ -998,7 +1176,7 @@ async function limparTudo() {
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.onclick = () => {
     const tab = btn.dataset.tab;
-    if (tab === 'destinos' && perfilAtual !== 'coordenador') { toast('Apenas o Coordenador Logístico acessa esta aba.', 'aviso'); return; }
+    if (tab === 'destinos' && perfilAtual !== 'coordenador') { toast('Apenas o Coordenador acessa esta aba.', 'aviso'); return; }
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('ativo', b.dataset.tab === tab));
     document.querySelectorAll('.tab-conteudo').forEach(s => s.classList.remove('ativo'));
     $('tab-' + tab).classList.add('ativo');
@@ -1042,7 +1220,7 @@ function renderDashboard() {
   if (aguardando.length && perfilAtual === 'coordenador') {
     elD.innerHTML = `<div class="alerta-destino"><div>
       <h4>🎯 ${aguardando.length} peça(s) aguardando definição de destino</h4>
-      <p>Você é o Coordenador. Defina Showroom ou OC para liberar as peças.</p>
+      <p>Defina Showroom ou OC para liberar as peças.</p>
     </div>
     <button class="btn-aviso" onclick="document.querySelector('[data-tab=destinos]').click()">Ir para Destinos →</button></div>`;
   } else { elD.innerHTML = ''; }
@@ -1058,21 +1236,10 @@ function renderDashboard() {
   else {
     const linhas = paradas.slice(0, 5).map(p =>
       `<div class="peca-parada">• <strong>${escapeHtml(p.nome)}</strong> (${escapeHtml(p.codigo)}) — ${p.diasParada} dias</div>`).join('');
-    const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:6px">...e mais ${paradas.length - 5}</div>` : '';
+    const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:4px">...e mais ${paradas.length - 5}</div>` : '';
     elP.innerHTML = `<div class="alerta-parada"><h4>⚠️ ${paradas.length} peça(s) parada(s) +90 dias</h4>${linhas}${extra}</div>`;
   }
-
-  const movs = [];
-  DB.pecas.forEach(p => (p.historico || []).forEach(h => movs.push({ ...h, peca: p.nome, codigo: p.codigo })));
-  movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
-  const elM = $('ultimasMovs');
-  if (!movs.length) { elM.innerHTML = '<p class="vazio">Nenhuma movimentação ainda.</p>'; return; }
-  elM.innerHTML = movs.slice(0, 10).map(m => `
-    <div class="historico-item">
-      <div class="data">${escapeHtml(formatarDataHora(m.data))}</div>
-      <strong>${escapeHtml(m.peca)}</strong> <span style="color:#95a5a6">(${escapeHtml(m.codigo)})</span> — ${escapeHtml(m.acao)}
-      ${m.detalhe ? `<div style="color:var(--cinza-esc);font-size:12px;margin-top:2px">${escapeHtml(m.detalhe)}</div>` : ''}
-    </div>`).join('');
+  // SEM ÚLTIMAS MOVIMENTAÇÕES
 }
 
 // ============================================================
@@ -1084,10 +1251,10 @@ function abrirCadastroRapido(tipo) {
   $('tipoCadastroRapido').value = tipo;
   $('labelCNPJ').style.display = tipo === 'cliente' ? 'none' : 'block';
   $('labelEndereco').style.display = tipo === 'cliente' ? 'block' : 'none';
-  const titulos = { fornecedor: '📦 Novo Fornecedor', transportadora: '🚚 Nova Transportadora', cliente: '👤 Novo Cliente' };
-  $('tituloCadastroRapido').textContent = titulos[tipo] || 'Novo Cadastro';
+  const t = { fornecedor: '📦 Novo Fornecedor', transportadora: '🚚 Nova Transportadora', cliente: '👤 Novo Cliente' };
+  $('tituloCadastroRapido').textContent = t[tipo] || 'Novo Cadastro';
   abrirModal('modalCadastroRapido');
-  setTimeout(() => $('crNome').focus(), 100);
+  setTimeout(() => $('crNome').focus(), 80);
 }
 ['crCNPJ','fornCNPJ','transpCNPJ'].forEach(id => {
   const el = $(id);
@@ -1095,7 +1262,6 @@ function abrirCadastroRapido(tipo) {
 });
 $('crCNPJ').addEventListener('blur', verificarDuplicidade);
 $('crNome').addEventListener('blur', verificarDuplicidade);
-
 function verificarDuplicidade() {
   const tipo = $('tipoCadastroRapido').value;
   const cnpj = soDigitos($('crCNPJ').value);
@@ -1192,7 +1358,7 @@ $('formCadastroRapido').onsubmit = e => {
 };
 
 // ============================================================
-// LEITURA DE CÓDIGO DA DANFE — 100% LOCAL
+// LEITOR DE CÓDIGO — CÂMERA + LEITOR FÍSICO USB
 // ============================================================
 const UF_POR_CODIGO = {
   11:'RO',12:'AC',13:'AM',14:'RR',15:'PA',16:'AP',17:'TO',
@@ -1230,17 +1396,17 @@ function parsearChaveNFe(chaveBruta) {
 function aplicarChaveNFe(info) {
   if (info.numero) $('nfNumero').value = info.numero;
   if (!$('nfEmissao').value && info.dataEmissao) $('nfEmissao').value = info.dataEmissao;
-  // NÃO sobrescreve o campo Nº do Pedido/OC — esse vem da nota física, não da chave
   const forn = DB.fornecedores.find(f => soDigitos(f.cnpj) === info.cnpjDigitos);
   if (forn) {
     $('nfFornecedor').value = forn.id;
     $('nfCNPJ').value = forn.cnpj || info.cnpj;
-    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${forn.nome} selecionado.`);
+    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${forn.nome}.`);
   } else {
     $('nfCNPJ').value = info.cnpj;
-    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor ${info.cnpj} não está no cadastro.`, 'aviso');
+    toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor não cadastrado.`, 'aviso');
   }
 }
+
 let html5QrCode = null;
 function abrirLeitor() {
   abrirModal('modalScanner');
@@ -1254,7 +1420,7 @@ async function iniciarScanner() {
   if (html5QrCode) { try { await html5QrCode.stop(); } catch {} try { html5QrCode.clear(); } catch {} }
   html5QrCode = new Html5Qrcode('leitorQR', { verbose: false });
   const config = {
-    fps: 10, qrbox: { width: 280, height: 200 }, aspectRatio: 1.5,
+    fps: 10, qrbox: { width: 260, height: 180 }, aspectRatio: 1.5,
     formatsToSupport: [
       Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.QR_CODE,
       Html5QrcodeSupportedFormats.CODE_39, Html5QrcodeSupportedFormats.ITF,
@@ -1273,13 +1439,19 @@ async function iniciarScanner() {
     $('leitorStatus').textContent = '⚠️ ' + msg;
   }
 }
+let ultimaChaveLida = '';
+let ultimaChaveTs = 0;
 function onScanSucesso(texto) {
+  const agora = Date.now();
+  if (texto === ultimaChaveLida && agora - ultimaChaveTs < 3000) return;
+  ultimaChaveLida = texto;
+  ultimaChaveTs = agora;
   const info = parsearChaveNFe(texto);
   if (!info.ok) { $('leitorStatus').textContent = '⚠️ ' + info.erro; return; }
   $('leitorStatus').textContent = `✅ ${info.tipo} lida! NF ${info.numero} · ${info.uf}`;
-  if (navigator.vibrate) navigator.vibrate(150);
+  if (navigator.vibrate) navigator.vibrate(120);
   aplicarChaveNFe(info);
-  setTimeout(() => fecharLeitor(), 700);
+  setTimeout(() => fecharLeitor(), 600);
 }
 function usarChaveManual() {
   const info = parsearChaveNFe($('chaveManual').value);
@@ -1293,8 +1465,42 @@ async function fecharLeitor() {
   fecharModal('modalScanner');
 }
 
+// -- Leitor físico USB --
+let bufferLeitorFisico = '';
+let ultimaTeclaLeitorTs = 0;
+let processandoLeitorFisico = false;
+document.addEventListener('keydown', (e) => {
+  if ($('modalNF').classList.contains('oculto')) { bufferLeitorFisico = ''; return; }
+  const alvo = e.target;
+  if (alvo && alvo.tagName === 'TEXTAREA') { bufferLeitorFisico = ''; return; }
+  const agora = Date.now();
+  const delta = agora - ultimaTeclaLeitorTs;
+  ultimaTeclaLeitorTs = agora;
+  if (delta > 120 && bufferLeitorFisico.length > 0) bufferLeitorFisico = '';
+  if (e.key === 'Enter') {
+    const buf = bufferLeitorFisico.trim();
+    bufferLeitorFisico = '';
+    if (buf.length >= 44 && !processandoLeitorFisico) {
+      const digitos = soDigitos(buf);
+      if (digitos.length === 44) {
+        e.preventDefault();
+        processandoLeitorFisico = true;
+        const info = parsearChaveNFe(digitos);
+        if (info.ok) { aplicarChaveNFe(info); toast('✅ Chave lida pelo leitor.'); if (navigator.vibrate) navigator.vibrate(120); }
+        else { toast('⚠️ ' + info.erro, 'erro'); }
+        setTimeout(() => { processandoLeitorFisico = false; }, 500);
+      }
+    }
+    return;
+  }
+  if (/^\d$/.test(e.key)) {
+    bufferLeitorFisico += e.key;
+    if (bufferLeitorFisico.length > 60) bufferLeitorFisico = bufferLeitorFisico.slice(-60);
+  }
+});
+
 // ============================================================
-// NF — RECEBIMENTO / EDIÇÃO
+// NF — RECEBIMENTO / EDIÇÃO / DUPLICAÇÃO
 // ============================================================
 let contadorItemNF = 0;
 let itemAtualFoto = null;
@@ -1302,13 +1508,11 @@ let streamCamera = null;
 let autoSaveInterval = null;
 
 function atualizarSelectsCadastros() {
-  const popular = (sel, lista, placeholder) => {
+  const popular = (sel, lista, ph) => {
     if (!sel) return;
     const v = sel.value;
     sel.innerHTML = '';
-    const opt0 = document.createElement('option');
-    opt0.value = ''; opt0.textContent = placeholder;
-    sel.appendChild(opt0);
+    const o0 = document.createElement('option'); o0.value = ''; o0.textContent = ph; sel.appendChild(o0);
     for (const x of lista) {
       const o = document.createElement('option');
       o.value = x.id;
@@ -1335,19 +1539,29 @@ $('reservaClienteSelect').onchange = () => {
   if (c) { $('reservaClienteManual').value = c.nome; $('reservaTelefone').value = c.telefone || ''; }
 };
 
-function abrirNovaNF() {
+function resetarModoNF() {
   nfEditandoId = null;
+  nfDuplicandoId = null;
+  $('avisoEdicao').style.display = 'none';
+  $('avisoDuplicacao').style.display = 'none';
+  $('avisoRecebimento').style.display = 'block';
+  $('blocoItens').style.display = 'block';
+  $('btnRascunho').style.display = '';
+  $('btnSalvarNF').textContent = '✅ Salvar NF';
+  $('tituloModalNF').textContent = 'Nova Nota Fiscal — Recebimento';
+}
+function abrirNovaNF() {
+  resetarModoNF();
   $('formNF').reset();
   $('itensNF').innerHTML = '';
   contadorItemNF = 0;
   $('nfConferencia').value = hoje();
   $('nfRecebimento').value = hoje();
-  $('tituloModalNF').textContent = 'Nova Nota Fiscal — Recebimento';
-  $('avisoEdicao').style.display = 'none';
-  $('avisoRecebimento').style.display = 'block';
-  $('blocoItens').style.display = 'block';
-  $('btnRascunho').style.display = '';
-  $('btnSalvarNF').textContent = '✅ Salvar NF';
+  // Preenche o conferente com o último usado (agilidade no dia a dia)
+  try {
+    const ultimo = localStorage.getItem(ULTIMO_CONFERENTE_KEY);
+    if (ultimo) $('nfConferidoPor').value = ultimo;
+  } catch {}
   atualizarSelectsCadastros();
   addItemNF();
   const rasc = localStorage.getItem(RASCUNHO_KEY);
@@ -1355,15 +1569,14 @@ function abrirNovaNF() {
   abrirModal('modalNF');
   iniciarAutoSave();
 }
-
 function abrirEditarNF(nfId) {
   const nf = DB.nfs.find(n => n.id === nfId);
   if (!nf) { toast('NF não encontrada.', 'erro'); return; }
   if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode editar NFs.', 'aviso'); return; }
+  resetarModoNF();
   nfEditandoId = nfId;
   $('formNF').reset();
   atualizarSelectsCadastros();
-
   $('nfPedido').value = nf.pedido || '';
   $('nfNumero').value = nf.numero || '';
   $('nfFornecedor').value = nf.fornecedorId || '';
@@ -1376,8 +1589,6 @@ function abrirEditarNF(nfId) {
   $('nfConferidoPor').value = nf.conferidoPor || '';
   $('nfStatus').value = nf.status || 'conferida';
   $('nfObservacoes').value = nf.observacoes || '';
-
-  // Bloqueia a edição dos itens no modo edição
   $('tituloModalNF').textContent = `✏️ Editar NF ${nf.numero}`;
   $('avisoEdicao').style.display = 'block';
   $('avisoRecebimento').style.display = 'none';
@@ -1388,22 +1599,74 @@ function abrirEditarNF(nfId) {
   $('avisoRascunho').style.display = 'none';
   abrirModal('modalNF');
 }
+function abrirDuplicarNF(nfId) {
+  const nf = DB.nfs.find(n => n.id === nfId);
+  if (!nf) { toast('NF não encontrada.', 'erro'); return; }
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode duplicar NFs.', 'aviso'); return; }
+  resetarModoNF();
+  nfDuplicandoId = nfId;
+  $('formNF').reset();
+  atualizarSelectsCadastros();
+  $('nfPedido').value = '';
+  $('nfNumero').value = '';
+  $('nfFornecedor').value = nf.fornecedorId || '';
+  $('nfCNPJ').value = nf.fornecedorCNPJ || '';
+  $('nfTransportadora').value = nf.transportadoraId || '';
+  $('nfValorTotal').value = nf.valorTotalNF || '';
+  $('nfEmissao').value = '';
+  $('nfRecebimento').value = hoje();
+  $('nfConferencia').value = hoje();
+  $('nfConferidoPor').value = '';
+  $('nfStatus').value = nf.status || 'conferida';
+  $('nfObservacoes').value = '';
+  $('itensNF').innerHTML = '';
+  contadorItemNF = 0;
+  const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+  if (pecasNF.length) {
+    pecasNF.forEach(p => {
+      contadorItemNF++;
+      const div = document.createElement('div');
+      div.className = 'item-nf';
+      div.innerHTML = templateItemNF(contadorItemNF);
+      $('itensNF').appendChild(div);
+      div.querySelector('.item-numero').value = p.itemNF || contadorItemNF;
+      div.querySelector('.item-nome').value = p.nome || '';
+      if (p.categoria) div.querySelector('.item-categoria').value = p.categoria;
+      div.querySelector('.item-marca').value = p.marca || '';
+      div.querySelector('.item-qtd').value = 1;
+      div.querySelector('.item-carac').value = p.caracteristicas || '';
+      div.querySelector('.item-condicao').value = 'ok';
+      // Sem foto (obrigatório recapturar)
+      const sel = div.querySelector('.item-condicao');
+      sel.dispatchEvent(new Event('change'));
+    });
+  } else {
+    addItemNF();
+  }
+  $('tituloModalNF').textContent = `📋 Duplicar NF ${nf.numero}`;
+  $('avisoDuplicacao').style.display = 'block';
+  $('avisoRecebimento').style.display = 'none';
+  $('blocoItens').style.display = 'block';
+  $('btnSalvarNF').textContent = '✅ Salvar Nova NF';
+  $('avisoRascunho').style.display = 'none';
+  abrirModal('modalNF');
+}
 function iniciarAutoSave() {
   if (autoSaveInterval) clearInterval(autoSaveInterval);
   autoSaveInterval = setInterval(() => {
-    if (nfEditandoId) return;
+    if (nfEditandoId || nfDuplicandoId) return;
     if (!$('modalNF').classList.contains('oculto')) {
       const algum = $('nfNumero').value || $('nfFornecedor').value ||
         [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
       if (algum) salvarRascunhoAuto();
     }
-  }, 3000);
+  }, 4000);
 }
 function pararAutoSave() { if (autoSaveInterval) clearInterval(autoSaveInterval); autoSaveInterval = null; }
 
 window.addEventListener('beforeunload', (e) => {
   if ($('modalNF').classList.contains('oculto')) return;
-  if (nfEditandoId) return;
+  if (nfEditandoId || nfDuplicandoId) return;
   const algum = $('nfNumero').value || $('nfFornecedor').value ||
     [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
   if (algum) { e.preventDefault(); e.returnValue = ''; }
@@ -1411,9 +1674,7 @@ window.addEventListener('beforeunload', (e) => {
 
 function coletarDadosNF() {
   const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => {
-    let fotos = [];
-    try { fotos = JSON.parse(div.querySelector('.item-fotos').value || '[]'); } catch { fotos = []; }
-    fotos = fotos.map(urlImagemSegura).filter(Boolean);
+    const foto = urlImagemSegura(div.querySelector('.item-foto').value);
     return {
       numero: div.querySelector('.item-numero').value,
       nome: div.querySelector('.item-nome').value,
@@ -1422,7 +1683,7 @@ function coletarDadosNF() {
       qtd: div.querySelector('.item-qtd').value,
       condicao: div.querySelector('.item-condicao')?.value || 'ok',
       carac: div.querySelector('.item-carac').value,
-      fotos
+      foto
     };
   });
   return {
@@ -1441,12 +1702,12 @@ function coletarDadosNF() {
   };
 }
 function salvarRascunhoAuto() {
-  if (nfEditandoId) return;
+  if (nfEditandoId || nfDuplicandoId) return;
   try { localStorage.setItem(RASCUNHO_KEY, JSON.stringify(coletarDadosNF())); }
   catch (e) { if (e.name === 'QuotaExceededError') toast('⚠️ Sem espaço p/ rascunho.', 'erro'); }
 }
 function salvarRascunhoManual() {
-  if (nfEditandoId) { toast('Rascunho não se aplica à edição.', 'aviso'); return; }
+  if (nfEditandoId || nfDuplicandoId) { toast('Rascunho não se aplica.', 'aviso'); return; }
   salvarRascunhoAuto(); toast('💾 Rascunho salvo.', 'aviso');
 }
 function recuperarRascunho() {
@@ -1481,9 +1742,14 @@ function recuperarRascunho() {
       div.querySelector('.item-qtd').value = it.qtd || 1;
       if (it.condicao) div.querySelector('.item-condicao').value = it.condicao;
       div.querySelector('.item-carac').value = it.carac || '';
-      const fotos = (it.fotos || (it.foto ? [it.foto] : [])).map(urlImagemSegura).filter(Boolean);
-      div.querySelector('.item-fotos').value = JSON.stringify(fotos);
-      renderizarFotos(div.querySelector('.foto-upload'));
+      const foto = urlImagemSegura(it.foto || '');
+      if (foto) {
+        div.querySelector('.item-foto').value = foto;
+        const prev = div.querySelector('.foto-preview');
+        prev.innerHTML = `<div class="foto-thumb" style="background-image:url('${escapeHtml(foto)}')"><button type="button" class="rm" onclick="removerFoto(this)">✕</button></div>`;
+      }
+      const sel = div.querySelector('.item-condicao');
+      sel.dispatchEvent(new Event('change'));
     });
     if (!d.itens || !d.itens.length) addItemNF();
     $('avisoRascunho').style.display = 'none';
@@ -1498,7 +1764,13 @@ function descartarRascunho() {
 function tentarFecharNF() {
   if (nfEditandoId) {
     if (!confirm('Descartar alterações desta NF?')) return;
-    nfEditandoId = null;
+    resetarModoNF();
+    fecharModal('modalNF');
+    return;
+  }
+  if (nfDuplicandoId) {
+    if (!confirm('Descartar a duplicação em andamento?')) return;
+    resetarModoNF();
     fecharModal('modalNF');
     return;
   }
@@ -1517,6 +1789,7 @@ function templateItemNF(num) {
   return `
     <button type="button" class="remover" onclick="this.parentElement.remove()">✕</button>
     <h4>Item ${escapeHtml(num)}</h4>
+    <div class="aviso-foto">📸 Falta a foto deste item. É obrigatório.</div>
     <label>Nome da Peça <input type="text" class="item-nome" placeholder="Ex: Sofá 3 lugares"></label>
     <div class="grid-3">
       <label>Categoria
@@ -1537,13 +1810,13 @@ function templateItemNF(num) {
     </div>
     <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas, detalhes de avaria..."></textarea></label>
     <div class="foto-upload">
-      <div class="foto-grid"></div>
+      <div class="foto-preview"></div>
       <div class="botoes-foto">
         <button type="button" class="btn-secundario" onclick="abrirCameraPara(this)">📷 Câmera</button>
         <button type="button" class="btn-secundario" onclick="escolherArquivo(this)">🖼️ Galeria</button>
       </div>
-      <input type="file" accept="image/*" multiple style="display:none" onchange="carregarFotos(this)">
-      <input type="hidden" class="item-fotos" value="[]">
+      <input type="file" accept="image/*" style="display:none" onchange="carregarFoto(this)">
+      <input type="hidden" class="item-foto" value="">
     </div>`;
 }
 function addItemNF() {
@@ -1552,7 +1825,6 @@ function addItemNF() {
   div.className = 'item-nf';
   div.innerHTML = templateItemNF(contadorItemNF);
   $('itensNF').appendChild(div);
-  // Atualiza borda conforme condição
   const sel = div.querySelector('.item-condicao');
   sel.addEventListener('change', () => {
     div.classList.toggle('cond-avaria', sel.value === 'avaria');
@@ -1564,49 +1836,35 @@ function escolherArquivo(btn) {
   input.click();
 }
 
-// -------- MÚLTIPLAS FOTOS --------
-function obterFotosWrap(wrap) {
-  try { return JSON.parse(wrap.querySelector('.item-fotos').value || '[]').map(urlImagemSegura).filter(Boolean); }
-  catch { return []; }
-}
-function setFotosWrap(wrap, fotos) {
-  wrap.querySelector('.item-fotos').value = JSON.stringify(fotos);
-  renderizarFotos(wrap);
-}
-function renderizarFotos(wrap) {
-  const grid = wrap.querySelector('.foto-grid');
-  const fotos = obterFotosWrap(wrap);
-  grid.innerHTML = fotos.map((f, i) => `
-    <div class="foto-thumb" style="background-image:url('${escapeHtml(f)}')">
-      <button type="button" class="rm" onclick="removerFotoIndex(this, ${i})">✕</button>
-    </div>`).join('');
-}
-function adicionarFotoWrap(wrap, dataUrl) {
+// -------- FOTO ÚNICA --------
+function obterFotoWrap(wrap) { return urlImagemSegura(wrap.querySelector('.item-foto').value); }
+function setFotoWrap(wrap, dataUrl) {
   const segura = urlImagemSegura(dataUrl);
-  if (!segura) return;
-  const fotos = obterFotosWrap(wrap);
-  if (fotos.length >= MAX_FOTOS_ITEM) { toast(`Máximo ${MAX_FOTOS_ITEM} fotos por item.`, 'aviso'); return; }
-  fotos.push(segura);
-  setFotosWrap(wrap, fotos);
-}
-function removerFotoIndex(btn, index) {
-  const wrap = btn.closest('.foto-upload');
-  const fotos = obterFotosWrap(wrap);
-  fotos.splice(index, 1);
-  setFotosWrap(wrap, fotos);
-}
-async function carregarFotos(input) {
-  const files = [...input.files];
-  if (!files.length) return;
-  const wrap = input.closest('.foto-upload');
-  for (const f of files) {
-    if (!f.type.startsWith('image/')) { toast(`${f.name}: não é imagem.`, 'aviso'); continue; }
-    try {
-      const comprimida = await comprimirImagem(f);
-      adicionarFotoWrap(wrap, comprimida);
-    } catch { toast(`Erro ao processar ${f.name}.`, 'erro'); }
+  wrap.querySelector('.item-foto').value = segura;
+  const prev = wrap.querySelector('.foto-preview');
+  if (segura) {
+    prev.innerHTML = `<div class="foto-thumb" style="background-image:url('${escapeHtml(segura)}')"><button type="button" class="rm" onclick="removerFoto(this)">✕</button></div>`;
+    const item = wrap.closest('.item-nf');
+    if (item) item.classList.remove('falta-foto');
+  } else {
+    prev.innerHTML = '';
   }
+}
+async function carregarFoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) { toast('Arquivo não é imagem.', 'erro'); return; }
+  try {
+    const comprimida = await comprimirImagem(file);
+    setFotoWrap(input.closest('.foto-upload'), comprimida);
+  } catch { toast('Erro ao processar imagem.', 'erro'); }
   input.value = '';
+}
+function removerFoto(btn) {
+  const wrap = btn.closest('.foto-upload');
+  setFotoWrap(wrap, '');
+  const item = wrap.closest('.item-nf');
+  if (item) item.classList.add('falta-foto');
 }
 
 // ============================================================
@@ -1651,13 +1909,9 @@ async function capturarFoto() {
   const bruta = canvas.toDataURL('image/jpeg', 0.8);
   try {
     const comprimida = await comprimirImagem(bruta);
-    if (itemAtualFoto) {
-      adicionarFotoWrap(itemAtualFoto, comprimida);
-      const qtd = obterFotosWrap(itemAtualFoto).length;
-      toast(`📸 Foto ${qtd} adicionada.` + (qtd < MAX_FOTOS_ITEM ? ' Pode tirar mais.' : ''));
-      if (qtd >= MAX_FOTOS_ITEM) fecharCamera();
-    }
+    if (itemAtualFoto) { setFotoWrap(itemAtualFoto, comprimida); toast('📸 Foto adicionada.'); }
   } catch { toast('Erro ao capturar.', 'erro'); }
+  fecharCamera();
 }
 function fecharCamera() {
   if (streamCamera) { streamCamera.getTracks().forEach(t => t.stop()); streamCamera = null; }
@@ -1672,28 +1926,33 @@ function escolherArquivoCamera() {
   itemAtualFoto = null;
   fecharCamera();
   if (input) {
-    input.addEventListener('change', function handler() { input.removeEventListener('change', handler); }, { once: true });
+    input.addEventListener('change', function h() { input.removeEventListener('change', h); }, { once: true });
     input.click();
   }
 }
 
 // ============================================================
-// SUBMIT NF (novo + edição)
+// SUBMIT NF — com validações obrigatórias
 // ============================================================
 $('formNF').onsubmit = e => {
   e.preventDefault();
-  if (nfEditandoId) { return submeterEdicaoNF(); }
+  if (nfEditandoId) return submeterEdicaoNF();
   return submeterNovaNF();
 };
 
 function submeterEdicaoNF() {
   const nf = DB.nfs.find(n => n.id === nfEditandoId);
-  if (!nf) { toast('NF não encontrada.', 'erro'); nfEditandoId = null; return; }
+  if (!nf) { toast('NF não encontrada.', 'erro'); resetarModoNF(); return; }
+  const conferente = $('nfConferidoPor').value.trim();
+  if (!conferente) { toast('Informe o nome do conferente.', 'erro'); $('nfConferidoPor').focus(); return; }
   const fornecedor = DB.fornecedores.find(f => f.id === $('nfFornecedor').value);
   const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
-
+  const novoNumero = $('nfNumero').value.trim() || nf.numero;
+  if (novoNumero !== nf.numero && DB.nfs.some(n => n.id !== nf.id && String(n.numero).toLowerCase() === novoNumero.toLowerCase())) {
+    toast('Já existe outra NF com esse número.', 'erro'); return;
+  }
   nf.pedido = $('nfPedido').value.trim();
-  nf.numero = $('nfNumero').value.trim() || nf.numero;
+  nf.numero = novoNumero;
   nf.fornecedorId = fornecedor ? fornecedor.id : nf.fornecedorId;
   nf.fornecedorNome = fornecedor ? fornecedor.nome : nf.fornecedorNome;
   nf.fornecedorCNPJ = fornecedor ? (fornecedor.cnpj || '') : nf.fornecedorCNPJ;
@@ -1702,13 +1961,14 @@ function submeterEdicaoNF() {
   nf.dataEmissao = $('nfEmissao').value;
   nf.dataRecebimento = $('nfRecebimento').value;
   nf.dataConferencia = $('nfConferencia').value;
-  nf.conferidoPor = $('nfConferidoPor').value.trim();
+  nf.conferidoPor = conferente;
   nf.status = $('nfStatus').value;
   nf.valorTotalNF = Number($('nfValorTotal').value) || 0;
   nf.observacoes = $('nfObservacoes').value.trim();
   nf.dataEdicao = new Date().toISOString();
 
-  // Propaga campos atualizados para as peças vinculadas
+  try { localStorage.setItem(ULTIMO_CONFERENTE_KEY, conferente); } catch {}
+
   const valorUnit = (nf.pecasIds && nf.pecasIds.length) ? (nf.valorTotalNF / nf.pecasIds.length) : 0;
   DB.pecas.forEach(p => {
     if ((nf.pecasIds || []).includes(p.id)) {
@@ -1718,29 +1978,49 @@ function submeterEdicaoNF() {
       p.fornecedorId = nf.fornecedorId;
       p.transportadora = nf.transportadoraNome;
       p.dataConferencia = nf.dataConferencia;
+      p.conferidoPor = conferente;
       p.precoCusto = valorUnit;
-      registrarHistorico(p, 'NF editada', `Coord. atualizou NF ${nf.numero}`);
+      registrarHistorico(p, 'NF editada', `NF ${nf.numero} · conf. ${conferente}`);
     }
   });
 
   const ok = salvar();
   if (!ok && !firebaseUser) { toast('Erro ao salvar alterações.', 'erro'); return; }
-  nfEditandoId = null;
+  resetarModoNF();
   fecharModal('modalNF'); renderTudo();
   toast('✅ NF atualizada.');
 }
 
 function submeterNovaNF() {
+  // ==== VALIDAÇÃO 1: Conferente obrigatório ====
+  const conferente = $('nfConferidoPor').value.trim();
+  if (!conferente) {
+    toast('Informe o nome de quem conferiu a NF.', 'erro');
+    $('nfConferidoPor').classList.add('obrigatorio-vazio');
+    $('nfConferidoPor').focus();
+    $('nfConferidoPor').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  $('nfConferidoPor').classList.remove('obrigatorio-vazio');
+
   const numNF = $('nfNumero').value.trim();
   const pedido = $('nfPedido').value.trim();
   const fornecedorId = $('nfFornecedor').value;
   const fornecedor = DB.fornecedores.find(f => f.id === fornecedorId);
 
-  // Validação mínima: precisa ter itens com nome. O resto é opcional.
+  if (numNF && fornecedor) {
+    const dup = DB.nfs.find(n => String(n.numero).toLowerCase() === numNF.toLowerCase() && n.fornecedorId === fornecedor.id);
+    if (dup) {
+      if (!confirm(`⚠️ Já existe NF ${dup.numero} deste fornecedor (${dup.fornecedorNome}).\n\nDeseja realmente cadastrar outra igual?`)) return;
+    }
+  }
+
   const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
   if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
 
   const itensValidados = [];
+  let primeiroItemSemFoto = null;
+
   for (let i = 0; i < itensDOM.length; i++) {
     const div = itensDOM[i];
     const nome = div.querySelector('.item-nome').value.trim();
@@ -1750,16 +2030,30 @@ function submeterNovaNF() {
     const condicao = div.querySelector('.item-condicao')?.value || 'ok';
     const carac = div.querySelector('.item-carac').value.trim();
     const numItem = div.querySelector('.item-numero').value.trim();
-    let fotos = [];
-    try { fotos = JSON.parse(div.querySelector('.item-fotos').value || '[]'); } catch { fotos = []; }
-    fotos = fotos.map(urlImagemSegura).filter(Boolean);
+    const foto = urlImagemSegura(div.querySelector('.item-foto').value);
 
     if (!nome) { toast(`Item ${i+1}: informe o nome da peça.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
     if (!CATEGORIAS_FIXAS.includes(categoria)) { toast(`Item ${i+1}: categoria inválida.`, 'erro'); return; }
     const qtd = Number(qtdRaw);
     if (!Number.isInteger(qtd) || qtd <= 0) { toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro'); div.querySelector('.item-qtd').focus(); return; }
     if (!(condicao in CONDICOES)) { toast(`Item ${i+1}: condição inválida.`, 'erro'); return; }
-    itensValidados.push({ nome, categoria, marca, qtd, condicao, carac, fotos, numItem });
+
+    // ==== VALIDAÇÃO 2: Foto obrigatória em cada item ====
+    if (!foto) {
+      div.classList.add('falta-foto');
+      if (primeiroItemSemFoto === null) primeiroItemSemFoto = div;
+      continue; // não adiciona aos validados, mas continua verificando os demais
+    }
+    div.classList.remove('falta-foto');
+
+    itensValidados.push({ nome, categoria, marca, qtd, condicao, carac, foto, numItem });
+  }
+
+  if (primeiroItemSemFoto) {
+    const totalSemFoto = itensDOM.filter(d => d.classList.contains('falta-foto')).length;
+    toast(`📸 ${totalSemFoto} item(ns) sem foto. A foto é obrigatória em cada item.`, 'erro');
+    primeiroItemSemFoto.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
 
   const totalPecas = itensValidados.reduce((s, it) => s + it.qtd, 0);
@@ -1780,7 +2074,7 @@ function submeterNovaNF() {
     dataEmissao: $('nfEmissao').value,
     dataRecebimento: $('nfRecebimento').value || hoje(),
     dataConferencia: $('nfConferencia').value || hoje(),
-    conferidoPor: $('nfConferidoPor').value.trim(),
+    conferidoPor: conferente,
     status: $('nfStatus').value || 'conferida',
     valorTotalNF: valorNF,
     observacoes: $('nfObservacoes').value.trim(),
@@ -1799,6 +2093,7 @@ function submeterNovaNF() {
         transportadora: nf.transportadoraNome,
         numeroNF: nf.numero, numeroPedido: nf.pedido,
         itemNF: item.numItem, dataConferencia: nf.dataConferencia,
+        conferidoPor: conferente,
         caracteristicas: item.carac,
         condicao: item.condicao,
         precoCusto: valorUnit, precoVenda: 0,
@@ -1807,14 +2102,13 @@ function submeterNovaNF() {
         numeroOC: null, cliente: null, clienteTelefone: null,
         dataEntrega: null, valorCombinado: null, obsReserva: '',
         dataVenda: null,
-        foto: item.fotos[0] || '',
-        fotos: item.fotos,
+        foto: item.foto || '',
         sequencia: item.qtd > 1 ? `${i}/${item.qtd}` : null,
         dataCadastro: new Date().toISOString(),
         historico: []
       };
       const obs = item.condicao !== 'ok' ? ` · ${CONDICOES[item.condicao]}` : '';
-      registrarHistorico(peca, 'recebida (conferência)', `NF ${nf.numero}${nf.pedido ? ' · Pedido/OC ' + nf.pedido : ''} · item ${item.numItem}${obs}`);
+      registrarHistorico(peca, 'recebida (conferência)', `NF ${nf.numero}${nf.pedido ? ' · Pedido/OC ' + nf.pedido : ''} · conf. ${conferente} · item ${item.numItem}${obs}`);
       novasPecas.push(peca);
       nf.pecasIds.push(peca.id);
     }
@@ -1823,7 +2117,9 @@ function submeterNovaNF() {
   DB.pecas.push(...novasPecas);
   DB.nfs.push(nf);
   try { localStorage.removeItem(RASCUNHO_KEY); } catch {}
+  try { localStorage.setItem(ULTIMO_CONFERENTE_KEY, conferente); } catch {}
   pararAutoSave();
+  resetarModoNF();
 
   const ok = salvar();
   if (!ok && !firebaseUser) {
@@ -1867,21 +2163,27 @@ function renderDestinos() {
     const pecas = grupos[nfNum];
     const forn = pecas[0]?.fornecedor || '';
     const pedido = pecas[0]?.numeroPedido || '';
+    const conferente = pecas[0]?.conferidoPor || '';
     const dataConf = pecas[0]?.dataConferencia ? formatarData(pecas[0].dataConferencia) : '';
     const itens = pecas.map(p => {
-      const fotos = pecaFotos(p);
-      const thumb = fotos[0] ? `<span style="display:inline-block;width:32px;height:32px;border-radius:6px;background:url('${escapeHtml(fotos[0])}') center/cover;vertical-align:middle;margin-right:6px"></span>` : '';
-      const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge ${p.condicao}" style="font-size:9px;margin-left:6px">${CONDICOES[p.condicao]}</span>` : '';
+      const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge ${p.condicao}" style="font-size:9px">${CONDICOES[p.condicao]}</span>` : '';
       const cls = p.condicao === 'avaria' ? 'cond-avaria' : p.condicao === 'observacao' ? 'cond-observacao' : '';
       return `
-      <div class="destino-item ${cls}">
-        <div class="info-peca">
-          <strong>${thumb}${escapeHtml(p.nome)} <span style="color:#b0a0a5;font-weight:400;font-size:11px">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>${condBadge}</strong>
-          <small>${escapeHtml(p.marca || '—')} · item NF ${escapeHtml(p.itemNF || '—')}</small>
-        </div>
-        <div class="btns-destino">
-          <button class="btn-sucesso" data-showroom="${escapeHtml(p.id)}">🪑 Showroom</button>
-          <button class="btn-aviso" data-oc="${escapeHtml(p.id)}">🧾 OC / Encomenda</button>
+      <div class="lista-linhas" style="--cols: 1fr 1.5fr 90px 180px">
+        <div class="item ${cls}">
+          <div class="l1">
+            <span class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>
+            <span class="nome-principal">${escapeHtml(p.nome)}</span>
+          </div>
+          <div class="l2">
+            <span>${escapeHtml(p.marca || '—')}</span>
+            <span>item NF ${escapeHtml(p.itemNF || '—')}</span>
+            ${condBadge}
+          </div>
+          <div class="l3">
+            <button class="btn-sucesso" data-showroom="${escapeHtml(p.id)}">🪑 Showroom</button>
+            <button class="btn-aviso" data-oc="${escapeHtml(p.id)}">🧾 OC</button>
+          </div>
         </div>
       </div>`;
     }).join('');
@@ -1890,14 +2192,14 @@ function renderDestinos() {
         <header>
           <div>
             <h3>NF ${escapeHtml(nfNum)} · ${escapeHtml(forn || '—')}</h3>
-            ${pedido ? `<div class="pedido-destaque inline">📋 Pedido/OC: <strong>${escapeHtml(pedido)}</strong></div>` : ''}
-            <small>${pecas.length} peça(s) pendente(s)${dataConf ? ' · conferida em ' + escapeHtml(dataConf) : ''}</small>
+            ${pedido ? `<div class="pedido-destaque inline">📋 ${escapeHtml(pedido)}</div>` : ''}
+            <small>${pecas.length} peça(s) pendente(s)${dataConf ? ' · conferida em ' + escapeHtml(dataConf) : ''}${conferente ? ' por ' + escapeHtml(conferente) : ''}</small>
           </div>
           <div class="acoes-grupo">
             <button class="btn-sucesso" data-showroom-todas="${escapeHtml(nfNum)}">🪑 Todas Showroom</button>
           </div>
         </header>
-        <div class="destino-lista">${itens}</div>
+        ${itens}
       </div>`;
   }).join('');
 
@@ -1905,7 +2207,6 @@ function renderDestinos() {
   el.querySelectorAll('[data-oc]').forEach(b => b.addEventListener('click', () => abrirDefinirOC(b.dataset.oc)));
   el.querySelectorAll('[data-showroom-todas]').forEach(b => b.addEventListener('click', () => confirmarShowroomLote(b.dataset.showroomTodas)));
 }
-
 function confirmarDestinoShowroom(pecaId) {
   const p = DB.pecas.find(x => x.id === pecaId);
   if (!p || p.status !== 'aguardando_destino') { toast('Peça já classificada.', 'erro'); return; }
@@ -1936,7 +2237,7 @@ function abrirDefinirOC(pecaId) {
   $('ocValor').value = p.precoCusto || '';
   atualizarSelectsCadastros();
   abrirModal('modalDefinirOC');
-  setTimeout(() => $('ocNumero').focus(), 100);
+  setTimeout(() => $('ocNumero').focus(), 80);
 }
 $('formDefinirOC').onsubmit = e => {
   e.preventDefault();
@@ -1952,7 +2253,6 @@ $('formDefinirOC').onsubmit = e => {
   if (!cliente) { toast('Informe o cliente.', 'erro'); return; }
   const valor = Number($('ocValor').value);
   if ($('ocValor').value && (!Number.isFinite(valor) || valor < 0)) { toast('Valor inválido.', 'erro'); return; }
-
   p.status = 'reservado';
   p.localizacao = 'deposito';
   p.numeroOC = numOC;
@@ -1967,59 +2267,73 @@ $('formDefinirOC').onsubmit = e => {
 };
 
 // ============================================================
-// LISTAGENS
+// LISTAGENS EM LINHA
 // ============================================================
 function renderNFs() {
   const busca = ($('buscaNF').value || '').toLowerCase();
   const status = $('filtroStatusNF').value;
   const tipo = $('filtroTipoNF').value;
   const lista = DB.nfs.filter(nf => {
-    const mB = !busca ||
-      String(nf.numero || '').toLowerCase().includes(busca) ||
-      String(nf.pedido || '').toLowerCase().includes(busca) ||
-      String(nf.fornecedorNome || '').toLowerCase().includes(busca) ||
-      String(nf.transportadoraNome || '').toLowerCase().includes(busca) ||
-      String(nf.cliente || '').toLowerCase().includes(busca) ||
-      String(nf.numeroOC || '').toLowerCase().includes(busca);
+    const mB = !busca || [nf.numero, nf.pedido, nf.fornecedorNome, nf.transportadoraNome, nf.cliente, nf.numeroOC, nf.conferidoPor].some(v => String(v || '').toLowerCase().includes(busca));
     return mB && (!status || nf.status === status) && (!tipo || nf.tipoEntrada === tipo);
   }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
 
   const el = $('listaNFs');
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma NF encontrada.</p>'; return; }
-  el.innerHTML = lista.map(nf => {
-    const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-    const pendentes = pecasNF.filter(p => p.status === 'aguardando_destino').length;
-    const comProblema = pecasNF.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
-    const tipo = nf.tipoEntrada || 'aguardando';
-    const badgeTipo = tipo === 'oc' ? '<span class="badge oc">🧾 OC</span>'
-                   : tipo === 'showroom' ? '<span class="badge showroom">🪑 Showroom</span>'
-                   : '<span class="badge aguardando_destino">⏳ Aguardando destino</span>';
-    const statusBadge = nf.status === 'avaria' ? '<span class="badge avaria">🔴 Avaria</span>'
-                     : nf.status === 'observacao' ? '<span class="badge observacao">🔍 Observação</span>'
-                     : `<span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>`;
-    return `
-      <div class="card-item">
-        <div class="info">
-          <h3>NF ${escapeHtml(nf.numero)} ${badgeTipo} ${statusBadge}</h3>
-          ${nf.pedido ? `<div class="pedido-destaque">📋 Pedido/OC: <strong>${escapeHtml(nf.pedido)}</strong></div>` : ''}
-          <p>🏢 ${escapeHtml(nf.fornecedorNome)}${nf.fornecedorCNPJ ? ' · ' + escapeHtml(nf.fornecedorCNPJ) : ''}</p>
-          <p>📅 ${escapeHtml(formatarData(nf.dataRecebimento))}${nf.conferidoPor ? ' · conf. ' + escapeHtml(nf.conferidoPor) : ''}</p>
-          ${nf.transportadoraNome ? `<p>🚚 ${escapeHtml(nf.transportadoraNome)}</p>` : ''}
-          <p>📦 ${pecasNF.length} peça(s)${nf.valorTotalNF ? ' · ' + escapeHtml(brl(nf.valorTotalNF)) : ''}${pendentes ? ` · <strong style="color:var(--amarelo)">${pendentes} aguardando</strong>` : ''}${comProblema ? ` · <strong style="color:var(--vermelho)">${comProblema} c/ problema</strong>` : ''}</p>
-          ${nf.observacoes ? `<p style="color:#b0a0a5;font-style:italic">📝 ${escapeHtml(nf.observacoes)}</p>` : ''}
-        </div>
-        <div class="acoes">
-          ${perfilAtual === 'coordenador' ? `<button class="btn-azul btn-pequeno" data-editar-nf="${escapeHtml(nf.id)}">✏️ Editar</button>` : ''}
-          <button class="btn-perigo btn-pequeno" data-excluir-nf="${escapeHtml(nf.id)}">Excluir</button>
-        </div>
-      </div>`;
-  }).join('');
+
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 90px 1fr 150px 90px 60px 100px 170px">
+      <div class="cabecalho">
+        <span>NF</span><span>Fornecedor</span><span>Pedido/OC</span><span>Receb.</span><span>Peças</span><span>Status</span><span style="text-align:right">Ações</span>
+      </div>
+      ${lista.map(nf => {
+        const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
+        const pendentes = pecasNF.filter(p => p.status === 'aguardando_destino').length;
+        const comProblema = pecasNF.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao').length;
+        const tipo = nf.tipoEntrada || 'aguardando';
+        const tipoLbl = tipo === 'oc' ? 'OC' : tipo === 'showroom' ? 'Showroom' : 'Aguard.';
+        const statusBadge = nf.status === 'avaria' ? '<span class="badge avaria">Avaria</span>'
+                       : nf.status === 'observacao' ? '<span class="badge observacao">Obs</span>'
+                       : `<span class="badge ${escapeHtml(nf.status)}">${escapeHtml(nf.status)}</span>`;
+        return `
+        <div class="item">
+          <div class="l1">
+            <span class="nome-principal"><strong>${escapeHtml(nf.numero)}</strong></span>
+            <span class="cod">${escapeHtml(formatarData(nf.dataRecebimento))}</span>
+          </div>
+          <div class="l2">
+            <span>${escapeHtml(nf.fornecedorNome)}</span>
+            ${nf.fornecedorCNPJ ? `<span class="sep">·</span><span>${escapeHtml(nf.fornecedorCNPJ)}</span>` : ''}
+          </div>
+          <div class="l2">
+            ${nf.pedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(nf.pedido)}</span>` : '<span style="color:#b0a0a5">—</span>'}
+          </div>
+          <div class="l2">
+            <span>${escapeHtml(formatarData(nf.dataRecebimento))}</span>
+          </div>
+          <div class="l2">
+            <span>${pecasNF.length}${pendentes ? ` <strong style="color:var(--amarelo)">(${pendentes}⏳)</strong>` : ''}${comProblema ? ` <strong style="color:var(--vermelho)">(${comProblema}⚠)</strong>` : ''}</span>
+          </div>
+          <div class="l2">
+            ${statusBadge} <span class="badge ${tipo === 'oc' ? 'oc' : tipo === 'showroom' ? 'showroom' : 'aguardando_destino'}">${tipoLbl}</span>
+          </div>
+          <div class="l3">
+            ${perfilAtual === 'coordenador' ? `<button class="btn-azul" data-editar-nf="${escapeHtml(nf.id)}" title="Editar">✏️</button>` : ''}
+            ${perfilAtual === 'coordenador' ? `<button class="btn-secundario" data-duplicar-nf="${escapeHtml(nf.id)}" title="Duplicar">📋</button>` : ''}
+            <button class="btn-perigo" data-excluir-nf="${escapeHtml(nf.id)}" title="Excluir">🗑️</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
   el.querySelectorAll('[data-excluir-nf]').forEach(btn => btn.addEventListener('click', () => excluirNF(btn.dataset.excluirNf)));
   el.querySelectorAll('[data-editar-nf]').forEach(btn => btn.addEventListener('click', () => abrirEditarNF(btn.dataset.editarNf)));
+  el.querySelectorAll('[data-duplicar-nf]').forEach(btn => btn.addEventListener('click', () => abrirDuplicarNF(btn.dataset.duplicarNf)));
 }
 function excluirNF(id) {
   const nf = DB.nfs.find(n => n.id === id);
   if (!nf) return;
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode excluir NFs.', 'aviso'); return; }
   const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
   const vendidas = pecasNF.filter(p => p.status === 'vendido');
   const reservadas = pecasNF.filter(p => p.status === 'reservado');
@@ -2047,38 +2361,56 @@ function renderPecas() {
   const busca = ($('buscaPeca').value || '').toLowerCase();
   const cat = catSel.value, forn = fornSel.value, status = $('filtroStatusPeca').value;
   const lista = DB.pecas.filter(p => {
-    const mB = !busca ||
-      String(p.nome || '').toLowerCase().includes(busca) ||
-      String(p.codigo || '').toLowerCase().includes(busca) ||
-      String(p.marca || '').toLowerCase().includes(busca) ||
-      String(p.numeroPedido || '').toLowerCase().includes(busca) ||
-      String(p.numeroNF || '').toLowerCase().includes(busca) ||
-      String(p.caracteristicas || '').toLowerCase().includes(busca);
+    const mB = !busca || [p.nome, p.codigo, p.marca, p.numeroPedido, p.numeroNF, p.caracteristicas, p.conferidoPor].some(v => String(v || '').toLowerCase().includes(busca));
     return mB && (!cat || p.categoria === cat) && (!forn || p.fornecedor === forn) && (!status || p.status === status);
   }).sort((a, b) => String(b.dataCadastro || '').localeCompare(String(a.dataCadastro || '')));
 
   const el = $('gridPecas');
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma peça encontrada.</p>'; return; }
-  el.innerHTML = lista.map(p => {
-    const fotos = pecaFotos(p);
-    const bg = fotos[0] ? `style="background-image:url('${escapeHtml(fotos[0])}')"` : '';
-    const count = fotos.length > 1 ? `<span class="foto-count">📷 ${fotos.length}</span>` : '';
-    const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge-cond ${p.condicao}">${p.condicao === 'avaria' ? '🔴 AVARIA' : '🔍 OBS'}</span>` : '';
-    return `
-    <div class="peca-card" data-peca-id="${escapeHtml(p.id)}">
-      ${condBadge}
-      <div class="foto" ${bg}>${fotos[0] ? '' : '🪑'}${count}</div>
-      <div class="corpo">
-        <div class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</div>
-        <h3>${escapeHtml(p.nome)}</h3>
-        ${p.numeroPedido ? `<div class="pedido-destaque inline" style="font-size:10px;padding:3px 6px">📋 ${escapeHtml(p.numeroPedido)}</div>` : ''}
-        <div class="carac">${escapeHtml(p.caracteristicas || p.marca || '—')}</div>
-        <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>
-        ${p.cliente ? `<div class="cliente-badge">👤 ${escapeHtml(p.cliente)}</div>` : ''}
+
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 80px 1fr 110px 110px 100px 90px 150px">
+      <div class="cabecalho">
+        <span>Código</span><span>Nome / Marca</span><span>Pedido/OC</span><span>Fornecedor</span><span>Cliente</span><span>Status</span><span style="text-align:right">Ações</span>
       </div>
+      ${lista.map(p => {
+        const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge-cond ${p.condicao}" style="position:static;display:inline-block;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:800">${p.condicao === 'avaria' ? '🔴 AVARIA' : '🔍 OBS'}</span>` : '';
+        const cls = p.condicao === 'avaria' ? 'cond-avaria' : p.condicao === 'observacao' ? 'cond-observacao' : '';
+        return `
+        <div class="item clicavel ${cls}" data-peca-id="${escapeHtml(p.id)}">
+          <div class="l1">
+            <span class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>
+          </div>
+          <div class="l1">
+            <span class="nome-principal">${escapeHtml(p.nome)} ${condBadge}</span>
+          </div>
+          <div class="l2">
+            ${p.numeroPedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(p.numeroPedido)}</span>` : '<span style="color:#b0a0a5">—</span>'}
+          </div>
+          <div class="l2">
+            <span>${escapeHtml(p.fornecedor || '—')}</span>
+          </div>
+          <div class="l2">
+            <span>${p.cliente ? '👤 ' + escapeHtml(p.cliente) : '<span style="color:#b0a0a5">—</span>'}</span>
+          </div>
+          <div class="l2">
+            <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>
+          </div>
+          <div class="l3">
+            <button class="btn-secundario" data-ver="${escapeHtml(p.id)}" title="Ver">👁️</button>
+          </div>
+        </div>`;
+      }).join('')}
     </div>`;
-  }).join('');
-  el.querySelectorAll('[data-peca-id]').forEach(card => card.addEventListener('click', () => abrirFichaPeca(card.dataset.pecaId)));
+
+  el.querySelectorAll('[data-peca-id]').forEach(card => card.addEventListener('click', (ev) => {
+    if (ev.target.closest('button')) return;
+    abrirFichaPeca(card.dataset.pecaId);
+  }));
+  el.querySelectorAll('[data-ver]').forEach(b => b.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    abrirFichaPeca(b.dataset.ver);
+  }));
 }
 
 function renderReservas() {
@@ -2088,28 +2420,48 @@ function renderReservas() {
     .sort((a, b) => String(a.dataEntrega || '').localeCompare(String(b.dataEntrega || '')));
   const el = $('listaReservas');
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma reserva.</p>'; return; }
-  el.innerHTML = lista.map(p => `
-    <div class="card-item">
-      <div class="info">
-        <h3>${escapeHtml(p.nome)} <span style="color:#95a5a6;font-size:12px">${escapeHtml(p.codigo)}</span></h3>
-        ${p.numeroPedido ? `<div class="pedido-destaque">📋 Pedido/OC: <strong>${escapeHtml(p.numeroPedido)}</strong></div>` : ''}
-        <p>👤 <strong>${escapeHtml(p.cliente || '—')}</strong>${p.clienteTelefone ? ' · 📞 ' + escapeHtml(p.clienteTelefone) : ''}</p>
-        ${p.numeroOC ? `<p>🧾 OC: ${escapeHtml(p.numeroOC)}</p>` : ''}
-        <p>📅 Entrega: ${escapeHtml(formatarData(p.dataEntrega))}${p.valorCombinado ? ' · 💰 ' + escapeHtml(brl(p.valorCombinado)) : ''}</p>
-        ${p.obsReserva ? `<p>📝 ${escapeHtml(p.obsReserva)}</p>` : ''}
+
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 90px 1fr 1fr 110px 90px 100px 160px">
+      <div class="cabecalho">
+        <span>Código</span><span>Peça</span><span>Cliente</span><span>OC</span><span>Entrega</span><span>Valor</span><span style="text-align:right">Ações</span>
       </div>
-      <div class="acoes">
-        <button class="btn-sucesso btn-pequeno" data-entregar="${escapeHtml(p.id)}">✅ Entregar</button>
-        <button class="btn-aviso btn-pequeno" data-cancelar-res="${escapeHtml(p.id)}">↩️ Cancelar</button>
-      </div>
-    </div>`).join('');
+      ${lista.map(p => `
+        <div class="item">
+          <div class="l1">
+            <span class="cod">${escapeHtml(p.codigo)}</span>
+          </div>
+          <div class="l1">
+            <span class="nome-principal">${escapeHtml(p.nome)}</span>
+          </div>
+          <div class="l2">
+            <span>👤 ${escapeHtml(p.cliente || '—')}</span>
+            ${p.clienteTelefone ? `<span>📞 ${escapeHtml(p.clienteTelefone)}</span>` : ''}
+          </div>
+          <div class="l2">
+            ${p.numeroOC ? `<span>🧾 ${escapeHtml(p.numeroOC)}</span>` : '<span style="color:#b0a0a5">—</span>'}
+            ${p.numeroPedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(p.numeroPedido)}</span>` : ''}
+          </div>
+          <div class="l2">
+            <span>📅 ${escapeHtml(formatarData(p.dataEntrega))}</span>
+          </div>
+          <div class="l2">
+            <span><strong>${escapeHtml(brl(p.valorCombinado || 0))}</strong></span>
+          </div>
+          <div class="l3">
+            <button class="btn-sucesso" data-entregar="${escapeHtml(p.id)}">✅ Entregar</button>
+            <button class="btn-aviso" data-cancelar-res="${escapeHtml(p.id)}">↩️</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+
   el.querySelectorAll('[data-entregar]').forEach(b => b.addEventListener('click', () => entregarReserva(b.dataset.entregar)));
   el.querySelectorAll('[data-cancelar-res]').forEach(b => b.addEventListener('click', () => cancelarReserva(b.dataset.cancelarRes)));
 }
 function entregarReserva(id) {
   const p = DB.pecas.find(x => x.id === id);
-  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
-  if (p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
+  if (!p || p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
   if (!confirm(`Entregar "${p.nome}" para ${p.cliente}?`)) return;
   p.status = 'vendido';
   p.dataVenda = hoje();
@@ -2119,8 +2471,7 @@ function entregarReserva(id) {
 }
 function cancelarReserva(id) {
   const p = DB.pecas.find(x => x.id === id);
-  if (!p) { toast('Peça não encontrada.', 'erro'); return; }
-  if (p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
+  if (!p || p.status !== 'reservado') { toast('Peça não está reservada.', 'erro'); return; }
   if (!confirm(`Cancelar reserva de "${p.nome}"?`)) return;
   registrarHistorico(p, 'reserva cancelada', `Era cliente: ${p.cliente || '—'}`);
   p.status = 'disponivel';
@@ -2136,9 +2487,8 @@ function cancelarReserva(id) {
 function abrirFichaPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) { fecharModal('modalFichaPeca'); toast('Peça não encontrada.', 'aviso'); return; }
-  const fotos = pecaFotos(p);
-  const bg = fotos[0] ? `style="background-image:url('${escapeHtml(fotos[0])}')"` : '';
-  const galeria = fotos.length > 1 ? `<div class="ficha-galeria">${fotos.map(f => `<img src="${escapeHtml(f)}" onclick="ampliarFoto('${escapeHtml(f)}')" alt="">`).join('')}</div>` : '';
+  const foto = pecaFotoUnica(p);
+  const bg = foto ? `style="background-image:url('${escapeHtml(foto)}')"` : '';
   const hist = (p.historico || []).map(h => `
     <div class="historico-item">
       <div class="data">${escapeHtml(formatarDataHora(h.data))}</div>
@@ -2148,8 +2498,11 @@ function abrirFichaPeca(id) {
   const condBadge = p.condicao && p.condicao !== 'ok' ? ` <span class="badge ${p.condicao}">${CONDICOES[p.condicao]}</span>` : '';
   $('fichaPeca').innerHTML = `
     <div class="ficha-grid">
-      <div class="full"><div class="ficha-foto" ${bg}>${fotos[0] ? '' : '🪑'}</div></div>
-      ${galeria ? `<div class="full">${galeria}</div>` : ''}
+      <div class="full">
+        <div class="ficha-foto" ${bg} onclick="${foto ? `ampliarFoto('${escapeHtml(foto)}')` : ''}">
+          ${foto ? '' : '🪑 Sem foto'}
+        </div>
+      </div>
       <div class="ficha-info">
         <h2>${escapeHtml(p.nome)}</h2>
         <p><strong>Código:</strong> ${escapeHtml(p.codigo)}${p.sequencia ? ' (' + escapeHtml(p.sequencia) + ')' : ''}</p>
@@ -2158,7 +2511,7 @@ function abrirFichaPeca(id) {
         <p><strong>Fornecedor:</strong> ${escapeHtml(p.fornecedor || '—')}</p>
         <p><strong>Transportadora:</strong> ${escapeHtml(p.transportadora || '—')}</p>
         <p><strong>NF:</strong> ${escapeHtml(p.numeroNF || '—')} · Item ${escapeHtml(p.itemNF || '—')}</p>
-        <p><strong>Data conferência:</strong> ${escapeHtml(formatarData(p.dataConferencia))}</p>
+        <p><strong>Conferido por:</strong> ${escapeHtml(p.conferidoPor || '—')} em ${escapeHtml(formatarData(p.dataConferencia))}</p>
       </div>
       <div class="ficha-info">
         <p><strong>Status:</strong> ${badge}${condBadge}</p>
@@ -2180,9 +2533,10 @@ function abrirFichaPeca(id) {
         ${p.status === 'disponivel' ? `<button class="btn-aviso btn-pequeno" data-acao="reservar">📌 Reservar</button>` : ''}
         ${p.status === 'reservado' ? `<button class="btn-sucesso btn-pequeno" data-acao="entregar">✅ Entregar</button>` : ''}
         ${p.status === 'reservado' ? `<button class="btn-aviso btn-pequeno" data-acao="cancelar-res">↩️ Cancelar</button>` : ''}
+        <button class="btn-azul btn-pequeno" data-acao="editar">✏️ Editar</button>
         <button class="btn-secundario btn-pequeno" data-acao="mover">📍 Mover</button>
         <button class="btn-secundario btn-pequeno" data-acao="condicao">🏷️ Condição</button>
-        <button class="btn-secundario btn-pequeno" data-acao="foto">📷 Fotos</button>
+        <button class="btn-secundario btn-pequeno" data-acao="foto">📷 Foto</button>
         <button class="btn-perigo btn-pequeno" data-acao="excluir">🗑️ Excluir</button>
       </div>
     </div>`;
@@ -2195,6 +2549,7 @@ function abrirFichaPeca(id) {
       else if (a === 'reservar') abrirReservar(id);
       else if (a === 'entregar') entregarReserva(id);
       else if (a === 'cancelar-res') cancelarReserva(id);
+      else if (a === 'editar') abrirEditarPeca(id);
       else if (a === 'mover') moverPeca(id);
       else if (a === 'condicao') trocarCondicao(id);
       else if (a === 'foto') trocarFotoPeca(id);
@@ -2203,10 +2558,64 @@ function abrirFichaPeca(id) {
   });
   abrirModal('modalFichaPeca');
 }
-function ampliarFoto(url) {
-  $('imgGaleria').src = url;
-  abrirModal('modalGaleria');
+function ampliarFoto(url) { $('imgGaleria').src = url; abrirModal('modalGaleria'); }
+
+// ============================================================
+// EDITAR PEÇA
+// ============================================================
+function abrirEditarPeca(id) {
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) return;
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode editar peças.', 'aviso'); return; }
+  if (p.status === 'vendido') { toast('Peça vendida não pode ser editada.', 'erro'); return; }
+  $('formEditarPeca').reset();
+  $('edPecaId').value = id;
+  $('edNome').value = p.nome || '';
+  $('edMarca').value = p.marca || '';
+  $('edCor').value = p.cor || '';
+  $('edPedido').value = p.numeroPedido || '';
+  $('edCondicao').value = p.condicao || 'ok';
+  $('edLocal').value = LOCAIS_VALIDOS.includes(p.localizacao) ? p.localizacao : 'showroom';
+  $('edCusto').value = p.precoCusto || '';
+  $('edCarac').value = p.caracteristicas || '';
+  $('edObs').value = p.obsReserva || '';
+  const selCat = $('edCategoria');
+  selCat.innerHTML = '<option value="">— Selecione —</option>' + CATEGORIAS_FIXAS.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  selCat.value = p.categoria || '';
+  fecharModal('modalFichaPeca');
+  abrirModal('modalEditarPeca');
+  setTimeout(() => $('edNome').focus(), 80);
 }
+$('formEditarPeca').onsubmit = e => {
+  e.preventDefault();
+  const id = $('edPecaId').value;
+  const p = DB.pecas.find(x => x.id === id);
+  if (!p) { fecharModal('modalEditarPeca'); return; }
+  const nome = $('edNome').value.trim();
+  if (!nome) { toast('Informe o nome.', 'erro'); return; }
+  const categoria = $('edCategoria').value;
+  if (categoria && !CATEGORIAS_FIXAS.includes(categoria)) { toast('Categoria inválida.', 'erro'); return; }
+  const custo = Number($('edCusto').value);
+  if ($('edCusto').value && (!Number.isFinite(custo) || custo < 0)) { toast('Custo inválido.', 'erro'); return; }
+  const local = $('edLocal').value;
+  if (!LOCAIS_VALIDOS.includes(local)) { toast('Local inválido.', 'erro'); return; }
+  const condicao = $('edCondicao').value;
+  if (!(condicao in CONDICOES)) { toast('Condição inválida.', 'erro'); return; }
+  p.nome = nome;
+  p.categoria = categoria || p.categoria;
+  p.marca = $('edMarca').value.trim();
+  p.cor = $('edCor').value.trim();
+  p.numeroPedido = $('edPedido').value.trim();
+  p.condicao = condicao;
+  p.localizacao = local;
+  p.precoCusto = Number.isFinite(custo) ? custo : p.precoCusto;
+  p.caracteristicas = $('edCarac').value.trim();
+  p.obsReserva = $('edObs').value.trim();
+  registrarHistorico(p, 'editada', 'Coord. alterou dados da peça');
+  salvar(); fecharModal('modalEditarPeca'); renderTudo();
+  toast('✅ Peça atualizada.');
+};
+
 function trocarCondicao(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
@@ -2246,30 +2655,28 @@ $('formMover').onsubmit = e => {
 function trocarFotoPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
-  const fotos = pecaFotos(p);
-  const acao = prompt(`Fotos atuais: ${fotos.length}.\n\n1) Adicionar novas fotos\n2) Substituir todas\n3) Cancelar`, '1');
-  if (!acao) return;
+  if (pecaFotoUnica(p) && !confirm('Já existe uma foto. Substituir?')) return;
   const input = document.createElement('input');
-  input.type = 'file'; input.accept = 'image/*'; input.multiple = true; input.capture = 'environment';
+  input.type = 'file'; input.accept = 'image/*'; input.capture = 'environment';
   input.onchange = async e => {
-    const files = [...e.target.files];
-    if (!files.length) return;
-    const novas = acao.trim() === '2' ? [] : [...fotos];
-    for (const f of files) {
-      if (!f.type.startsWith('image/')) continue;
-      try { novas.push(await comprimirImagem(f)); } catch {}
-    }
-    if (!novas.length) return;
-    p.fotos = novas;
-    p.foto = novas[0];
-    registrarHistorico(p, 'fotos atualizadas', `${novas.length} foto(s)`);
-    salvar(); abrirFichaPeca(id); renderTudo(); toast('Fotos atualizadas.');
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { toast('Não é imagem.', 'erro'); return; }
+    try {
+      const nova = await comprimirImagem(file);
+      const antes = p.foto;
+      p.foto = nova;
+      if (!salvar()) { p.foto = antes; toast('Erro ao salvar foto.', 'erro'); return; }
+      registrarHistorico(p, 'foto atualizada', '');
+      salvar(); abrirFichaPeca(id); renderTudo(); toast('Foto atualizada.');
+    } catch { toast('Erro ao processar imagem.', 'erro'); }
   };
   input.click();
 }
 function excluirPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador pode excluir peças.', 'aviso'); return; }
   if (p.status === 'vendido') { toast('Vendida não pode excluir.', 'erro'); return; }
   if (p.status === 'reservado') { toast('Cancele a reserva antes.', 'erro'); return; }
   const emNF = DB.nfs.find(n => (n.pecasIds || []).includes(id));
@@ -2352,22 +2759,32 @@ function cancelarEditForn() {
   $('btnForn').textContent = '+ Adicionar'; $('btnCancelForn').style.display = 'none';
 }
 function excluirForn(id) {
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   if (DB.nfs.some(n => n.fornecedorId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
   if (!confirm('Excluir?')) return;
-  DB.fornecedores = DB.fornecedores.filter(f => f.id !== id);
+  DB.fornecedores = DB.fornecedores.filter(x => x.id !== id);
   salvar(); renderTudo(); atualizarSelectsCadastros(); toast('Excluído.');
 }
 function renderFornecedores() {
   const el = $('listaFornecedores');
   if (!DB.fornecedores.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
-  el.innerHTML = DB.fornecedores.map(f => `
-    <div class="mini-card">
-      <div><h4>${escapeHtml(f.nome)}</h4><p>${escapeHtml(f.cnpj || '')}${f.contato ? ' · ' + escapeHtml(f.contato) : ''}</p></div>
-      <div class="acoes-mini">
-        <button class="btn-secundario btn-pequeno" data-edit-f="${escapeHtml(f.id)}">✏️</button>
-        <button class="btn-perigo btn-pequeno" data-del-f="${escapeHtml(f.id)}">🗑️</button>
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 1fr 180px 160px 100px">
+      <div class="cabecalho">
+        <span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span>
       </div>
-    </div>`).join('');
+      ${DB.fornecedores.map(f => `
+        <div class="item">
+          <div class="l1"><span class="nome-principal">${escapeHtml(f.nome)}</span></div>
+          <div class="l2"><span>${escapeHtml(f.cnpj || '—')}</span></div>
+          <div class="l2"><span>${escapeHtml(f.contato || '—')}</span></div>
+          <div class="l3">
+            <button class="btn-secundario" data-edit-f="${escapeHtml(f.id)}">✏️</button>
+            <button class="btn-perigo" data-del-f="${escapeHtml(f.id)}">🗑️</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
   el.querySelectorAll('[data-edit-f]').forEach(b => b.addEventListener('click', () => editarForn(b.dataset.editF)));
   el.querySelectorAll('[data-del-f]').forEach(b => b.addEventListener('click', () => excluirForn(b.dataset.delF)));
 }
@@ -2404,6 +2821,7 @@ function cancelarEditTransp() {
   $('btnTransp').textContent = '+ Adicionar'; $('btnCancelTransp').style.display = 'none';
 }
 function excluirTransp(id) {
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   if (DB.nfs.some(n => n.transportadoraId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
   if (!confirm('Excluir?')) return;
   DB.transportadoras = DB.transportadoras.filter(t => t.id !== id);
@@ -2412,14 +2830,23 @@ function excluirTransp(id) {
 function renderTransportadoras() {
   const el = $('listaTransportadoras');
   if (!DB.transportadoras.length) { el.innerHTML = '<p class="vazio">Nenhuma cadastrada.</p>'; return; }
-  el.innerHTML = DB.transportadoras.map(t => `
-    <div class="mini-card">
-      <div><h4>${escapeHtml(t.nome)}</h4><p>${escapeHtml(t.cnpj || '')}${t.contato ? ' · ' + escapeHtml(t.contato) : ''}</p></div>
-      <div class="acoes-mini">
-        <button class="btn-secundario btn-pequeno" data-edit-t="${escapeHtml(t.id)}">✏️</button>
-        <button class="btn-perigo btn-pequeno" data-del-t="${escapeHtml(t.id)}">🗑️</button>
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 1fr 180px 160px 100px">
+      <div class="cabecalho">
+        <span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span>
       </div>
-    </div>`).join('');
+      ${DB.transportadoras.map(t => `
+        <div class="item">
+          <div class="l1"><span class="nome-principal">${escapeHtml(t.nome)}</span></div>
+          <div class="l2"><span>${escapeHtml(t.cnpj || '—')}</span></div>
+          <div class="l2"><span>${escapeHtml(t.contato || '—')}</span></div>
+          <div class="l3">
+            <button class="btn-secundario" data-edit-t="${escapeHtml(t.id)}">✏️</button>
+            <button class="btn-perigo" data-del-t="${escapeHtml(t.id)}">🗑️</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
   el.querySelectorAll('[data-edit-t]').forEach(b => b.addEventListener('click', () => editarTransp(b.dataset.editT)));
   el.querySelectorAll('[data-del-t]').forEach(b => b.addEventListener('click', () => excluirTransp(b.dataset.delT)));
 }
@@ -2452,6 +2879,7 @@ function cancelarEditCli() {
   $('btnCli').textContent = '+ Adicionar'; $('btnCancelCli').style.display = 'none';
 }
 function excluirCli(id) {
+  if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   const c = DB.clientes.find(x => x.id === id); if (!c) return;
   if (DB.pecas.some(p => p.cliente === c.nome)) { toast('Tem peças vinculadas.', 'erro'); return; }
   if (!confirm('Excluir?')) return;
@@ -2461,14 +2889,23 @@ function excluirCli(id) {
 function renderClientes() {
   const el = $('listaClientes');
   if (!DB.clientes.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
-  el.innerHTML = DB.clientes.map(c => `
-    <div class="mini-card">
-      <div><h4>${escapeHtml(c.nome)}</h4><p>${c.telefone ? '📞 ' + escapeHtml(c.telefone) : ''}${c.endereco ? ' · 📍 ' + escapeHtml(c.endereco) : ''}</p></div>
-      <div class="acoes-mini">
-        <button class="btn-secundario btn-pequeno" data-edit-c="${escapeHtml(c.id)}">✏️</button>
-        <button class="btn-perigo btn-pequeno" data-del-c="${escapeHtml(c.id)}">🗑️</button>
+  el.innerHTML = `
+    <div class="lista-linhas" style="--cols: 1fr 180px 1fr 100px">
+      <div class="cabecalho">
+        <span>Nome</span><span>Telefone</span><span>Endereço</span><span style="text-align:right">Ações</span>
       </div>
-    </div>`).join('');
+      ${DB.clientes.map(c => `
+        <div class="item">
+          <div class="l1"><span class="nome-principal">${escapeHtml(c.nome)}</span></div>
+          <div class="l2"><span>${escapeHtml(c.telefone || '—')}</span></div>
+          <div class="l2"><span>${escapeHtml(c.endereco || '—')}</span></div>
+          <div class="l3">
+            <button class="btn-secundario" data-edit-c="${escapeHtml(c.id)}">✏️</button>
+            <button class="btn-perigo" data-del-c="${escapeHtml(c.id)}">🗑️</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
   el.querySelectorAll('[data-edit-c]').forEach(b => b.addEventListener('click', () => editarCli(b.dataset.editC)));
   el.querySelectorAll('[data-del-c]').forEach(b => b.addEventListener('click', () => excluirCli(b.dataset.delC)));
 }
@@ -2503,16 +2940,14 @@ function renderRelatorio() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
   const nfsFiltradas = DB.nfs.filter(nf => (!inicio && !fim) ? true : dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim));
+
+  // Estoque: peças cadastradas no período (ou todas se sem filtro)
+  const pecasPeriodo = DB.pecas.filter(p => (!inicio && !fim) ? true : dentroPeriodo(p.dataCadastro, inicio, fim));
+
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
   const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
-
-  const movs = [];
-  DB.pecas.forEach(p => (p.historico || []).forEach(h => {
-    if (dentroPeriodo(h.data, inicio, fim)) movs.push({ ...h, peca: p.nome, codigo: p.codigo });
-  }));
-  movs.sort((a, b) => String(b.data || '').localeCompare(String(a.data || '')));
 
   const valorNFsTotal = nfsFiltradas.reduce((s, nf) => s + (Number(nf.valorTotalNF) || 0), 0);
   const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || 0), 0);
@@ -2534,10 +2969,48 @@ function renderRelatorio() {
     <div class="item"><span>Valor reservado</span><strong>${escapeHtml(brl(valorReservas))}</strong></div>
   `;
 
+  // ==== ESTOQUE POR STATUS / CATEGORIA / FORNECEDOR ====
+  const porStatus = {
+    'aguardando_destino': pecasPeriodo.filter(p => p.status === 'aguardando_destino').length,
+    'disponivel': pecasPeriodo.filter(p => p.status === 'disponivel').length,
+    'reservado': pecasPeriodo.filter(p => p.status === 'reservado').length,
+    'vendido': pecasPeriodo.filter(p => p.status === 'vendido').length
+  };
+  const porCategoria = {};
+  pecasPeriodo.forEach(p => { const k = p.categoria || 'Outros'; porCategoria[k] = (porCategoria[k] || 0) + 1; });
+  const porFornecedor = {};
+  pecasPeriodo.forEach(p => { const k = p.fornecedor || 'Não informado'; porFornecedor[k] = (porFornecedor[k] || 0) + 1; });
+
+  const renderBloco = (titulo, obj, ordenarPorQtd = true) => {
+    const entries = Object.entries(obj);
+    if (ordenarPorQtd) entries.sort((a, b) => b[1] - a[1]);
+    else entries.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+    if (!entries.length) return `<div class="estoque-bloco"><h4>${titulo}</h4><p class="vazio" style="padding:10px;font-size:11px">Sem dados.</p></div>`;
+    return `<div class="estoque-bloco">
+      <h4>${titulo}</h4>
+      ${entries.map(([k, v]) => `<div class="item-estq"><span class="nome">${escapeHtml(k)}</span><span class="qtd">${v}</span></div>`).join('')}
+    </div>`;
+  };
+
+  const rotStatus = {
+    'aguardando_destino': '⏳ Aguardando destino',
+    'disponivel': '✅ Disponível',
+    'reservado': '📌 Reservado',
+    'vendido': '💰 Vendido'
+  };
+  const statusRotulado = {};
+  Object.keys(porStatus).forEach(k => { if (porStatus[k]) statusRotulado[rotStatus[k]] = porStatus[k]; });
+
+  $('relEstoque').innerHTML =
+    renderBloco('📊 Por status', statusRotulado, false) +
+    renderBloco('🛋️ Por categoria', porCategoria) +
+    renderBloco('🏢 Por fornecedor', porFornecedor);
+
   let html = '';
 
+  // NF com conferente destacado
   html += `<div class="rel-secao"><h3>📄 Notas Fiscais (${nfsFiltradas.length})</h3>`;
-  if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:20px">Nenhuma NF no período.</p>';
+  if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:16px">Nenhuma NF no período.</p>';
   else {
     html += nfsFiltradas.map(nf => {
       const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
@@ -2547,8 +3020,8 @@ function renderRelatorio() {
         <div class="rel-linha">
           <div class="esq">
             <strong>NF ${escapeHtml(nf.numero)} · ${escapeHtml(nf.fornecedorNome)}</strong>
-            ${nf.pedido ? `<small class="pedido-destaque inline" style="font-size:11px;padding:2px 6px">📋 ${escapeHtml(nf.pedido)}</small>` : ''}
-            <small>${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s)${pend ? ' · ' + pend + ' pendente(s)' : ''}${prob ? ' · ' + prob + ' c/ problema' : ''}</small>
+            ${nf.pedido ? `<small class="pedido-destaque mini">📋 Pedido/OC: ${escapeHtml(nf.pedido)}</small>` : ''}
+            <small>👤 <strong>Conferido por: ${escapeHtml(nf.conferidoPor || 'não registrado')}</strong> · ${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s)${pend ? ' · ' + pend + ' pendente(s)' : ''}${prob ? ' · ' + prob + ' c/ problema' : ''}</small>
           </div>
           <div class="dir"><strong>${escapeHtml(brl(nf.valorTotalNF || 0))}</strong></div>
         </div>`;
@@ -2556,8 +3029,8 @@ function renderRelatorio() {
   }
   html += '</div>';
 
-  html += `<div class="rel-secao"><h3>✅ Peças Entregues / Baixadas (${entregues.length})</h3>`;
-  if (!entregues.length) html += '<p class="vazio" style="padding:20px">Nenhuma entrega no período.</p>';
+  html += `<div class="rel-secao"><h3>✅ Peças Entregues (${entregues.length})</h3>`;
+  if (!entregues.length) html += '<p class="vazio" style="padding:16px">Nenhuma entrega no período.</p>';
   else {
     html += entregues.map(p => {
       const receita = Number(p.valorCombinado) || 0;
@@ -2579,7 +3052,7 @@ function renderRelatorio() {
   html += '</div>';
 
   if (comProblema.length) {
-    html += `<div class="rel-secao"><h3>⚠️ Peças com Avaria / Observação (${comProblema.length})</h3>`;
+    html += `<div class="rel-secao"><h3>⚠️ Avaria / Observação (${comProblema.length})</h3>`;
     html += comProblema.map(p => `
       <div class="rel-linha">
         <div class="esq">
@@ -2592,7 +3065,7 @@ function renderRelatorio() {
   }
 
   html += `<div class="rel-secao"><h3>📌 Reservas Ativas (${reservasAtivas.length})</h3>`;
-  if (!reservasAtivas.length) html += '<p class="vazio" style="padding:20px">Nenhuma reserva ativa.</p>';
+  if (!reservasAtivas.length) html += '<p class="vazio" style="padding:16px">Nenhuma reserva ativa.</p>';
   else {
     html += reservasAtivas.map(p => `
       <div class="rel-linha">
@@ -2602,20 +3075,6 @@ function renderRelatorio() {
         </div>
         <div class="dir"><strong>${escapeHtml(brl(p.valorCombinado || 0))}</strong></div>
       </div>`).join('');
-  }
-  html += '</div>';
-
-  html += `<div class="rel-secao"><h3>🕒 Movimentações (${movs.length})</h3>`;
-  if (!movs.length) html += '<p class="vazio" style="padding:20px">Nenhuma movimentação no período.</p>';
-  else {
-    html += movs.slice(0, 100).map(m => `
-      <div class="rel-linha">
-        <div class="esq">
-          <strong>${escapeHtml(m.peca)} (${escapeHtml(m.codigo)})</strong>
-          <small>${escapeHtml(formatarDataHora(m.data))} · ${escapeHtml(m.acao)} ${m.detalhe ? '— ' + escapeHtml(m.detalhe) : ''}</small>
-        </div>
-      </div>`).join('');
-    if (movs.length > 100) html += `<p style="text-align:center;padding:10px;color:var(--cinza-esc);font-size:12px">Mostrando 100 de ${movs.length}. Exporte o CSV para ver tudo.</p>`;
   }
   html += '</div>';
 
@@ -2631,10 +3090,10 @@ function exportarRelatorioCSV() {
   const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
 
   const linhas = [];
-  linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','OBS']);
+  linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','CONFERENTE/OBS']);
   nfsFiltradas.forEach(nf => {
     const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
-    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', 'Entrada', nf.fornecedorNome || '', (Number(nf.valorTotalNF) || 0).toFixed(2), `pedido/OC ${nf.pedido || '-'} | ${pecas.length} peça(s) | status ${nf.status}`]);
+    linhas.push(['NF', nf.dataRecebimento || '', nf.numero || '', 'Entrada', nf.fornecedorNome || '', (Number(nf.valorTotalNF) || 0).toFixed(2), `pedido/OC ${nf.pedido || '-'} | ${pecas.length} peça(s) | conf. ${nf.conferidoPor || 'não registrado'}`]);
   });
   entregues.forEach(p => {
     const receita = Number(p.valorCombinado) || 0;
@@ -2646,12 +3105,11 @@ function exportarRelatorioCSV() {
     linhas.push(['RESERVA', p.dataEntrega || '', p.codigo || '', p.nome || '', p.cliente || '', (Number(p.valorCombinado) || 0).toFixed(2), `OC ${p.numeroOC || '-'}${p.numeroPedido ? ' | pedido/OC ' + p.numeroPedido : ''}`]);
   });
   aguardando.forEach(p => {
-    linhas.push(['AGUARDANDO_DESTINO', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', (Number(p.precoCusto) || 0).toFixed(2), `NF ${p.numeroNF || ''} | pedido/OC ${p.numeroPedido || '-'} | cond ${CONDICOES[p.condicao] || 'Normal'}`]);
+    linhas.push(['AGUARDANDO_DESTINO', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', (Number(p.precoCusto) || 0).toFixed(2), `NF ${p.numeroNF || ''} | pedido/OC ${p.numeroPedido || '-'} | conf. ${p.conferidoPor || '-'} | cond ${CONDICOES[p.condicao] || 'Normal'}`]);
   });
   comProblema.forEach(p => {
-    linhas.push(['AVARIA/OBS', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', '', `NF ${p.numeroNF || ''} | ${CONDICOES[p.condicao]} | status ${p.status}`]);
+    linhas.push(['AVARIA/OBS', p.dataConferencia || '', p.codigo || '', p.nome || '', p.fornecedor || '', '', `NF ${p.numeroNF || ''} | ${CONDICOES[p.condicao]} | conf. ${p.conferidoPor || '-'} | status ${p.status}`]);
   });
-
   const csv = linhas.map(l => l.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';')).join('\n');
   const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
@@ -2706,6 +3164,7 @@ async function iniciarFirebase() {
   atualizarStatusSync('iniciando');
   carregarPerfil();
   carregarLocal();
+  migrarParaSchema3();
   aplicarPerfil();
   renderTudo();
   atualizarSelectsCadastros();
@@ -2728,6 +3187,7 @@ async function iniciarFirebase() {
         if (Array.isArray(remoto.fornecedores)) DB.fornecedores = remoto.fornecedores;
         if (Array.isArray(remoto.transportadoras)) DB.transportadoras = remoto.transportadoras;
         if (Array.isArray(remoto.clientes)) DB.clientes = remoto.clientes;
+        if (Array.isArray(remoto.auditoria)) DB.auditoria = remoto.auditoria;
         if (remoto.contadores && typeof remoto.contadores === 'object') DB.contadores = remoto.contadores;
         salvarLocal(true);
         atualizarStatusSync('online');
@@ -2741,14 +3201,16 @@ async function iniciarFirebase() {
 }
 iniciarFirebase();
 
-// Expor funções
+// Expor funções globais
 window.abrirNovaNF = abrirNovaNF;
 window.abrirEditarNF = abrirEditarNF;
+window.abrirDuplicarNF = abrirDuplicarNF;
+window.abrirEditarPeca = abrirEditarPeca;
 window.abrirCadastroRapido = abrirCadastroRapido;
 window.addItemNF = addItemNF;
 window.escolherArquivo = escolherArquivo;
-window.carregarFotos = carregarFotos;
-window.removerFotoIndex = removerFotoIndex;
+window.carregarFoto = carregarFoto;
+window.removerFoto = removerFoto;
 window.abrirCameraPara = abrirCameraPara;
 window.capturarFoto = capturarFoto;
 window.fecharCamera = fecharCamera;
