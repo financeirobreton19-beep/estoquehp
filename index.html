@@ -6,40 +6,86 @@
 <meta name="theme-color" content="#8B2E3C">
 <title>Controle de Estoque Hong Possas</title>
 <style>
+/* ============================================================
+   RESET + VARIÁVEIS
+============================================================ */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
 :root {
-  --bordo: #8B2E3C; --bordo-esc: #6E2430; --bordo-claro: #F5E9EB; --bordo-hover: #A1384A;
+  --bordo: #8B2E3C; --bordo-esc: #6E2430; --bordo-claro: #F5E9EB;
   --verde: #27ae60; --vermelho: #c0392b; --amarelo: #d68910; --azul: #1565c0;
   --cinza: #f0eef0; --cinza-esc: #7d8b98; --texto: #2c2c2c; --borda: #ddd6d8;
+  /* padronização */
   --r: 8px; --r-sm: 6px;
+  --h-ctrl: 34px;        /* altura padrão de inputs e botões */
+  --h-ctrl-sm: 26px;     /* botões pequenos */
+  --pad-y: 10px;         /* padding vertical do main */
+  --pad-x: 12px;         /* padding horizontal do main */
+  --gap: 6px;            /* gap padrão entre elementos */
+  --font-sm: 11px;
+  --font: 13px;
+  --font-lg: 15px;
 }
 html, body { height: 100%; }
-body { background: #faf7f8; color: var(--texto); padding-bottom: 68px; font-size: 14px; -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
+body { background: #faf7f8; color: var(--texto); padding-bottom: 60px; font-size: var(--font); -webkit-text-size-adjust: 100%; overscroll-behavior-y: contain; }
 
-header { background: #fff; padding: 8px 12px; border-bottom: 2px solid var(--bordo-claro); position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-header h1 { font-size: 15px; font-weight: 700; color: var(--bordo); }
-header .status-sync { font-size: 10px; padding: 3px 7px; border-radius: 10px; font-weight: 600; }
+/* ============================================================
+   CABEÇALHO COMPACTO
+============================================================ */
+header {
+  background: #fff; padding: 6px 12px;
+  border-bottom: 2px solid var(--bordo-claro);
+  position: sticky; top: 0; z-index: 40;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+header h1 { font-size: 14px; font-weight: 700; color: var(--bordo); white-space: nowrap; line-height: 1.1; }
+header .status-sync { font-size: 10px; padding: 3px 7px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
 header .status-sync.online { background: #d4edda; color: #155724; }
 header .status-sync.offline { background: #fff3cd; color: #856404; }
 header .status-sync.erro { background: #f8d7da; color: #721c24; }
-.perfil-btn { font-size: 11px; padding: 5px 10px; min-height: 30px; border-radius: 14px; font-weight: 600; }
+.perfil-btn { font-size: 11px; padding: 4px 10px; min-height: 26px; border-radius: 13px; font-weight: 600; }
+.desktop-nav { display: none; gap: 3px; flex-wrap: wrap; margin-left: auto; }
+.desktop-nav .nav-btn {
+  background: transparent; color: #555; border: 1px solid var(--borda);
+  padding: 4px 9px; border-radius: 5px; font-size: 11.5px;
+  min-height: 26px; cursor: pointer; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;
+}
+.desktop-nav .nav-btn:hover { background: var(--cinza); }
+.desktop-nav .nav-btn.ativo { background: var(--bordo); color: #fff; border-color: var(--bordo); }
+@media (min-width: 800px) { .desktop-nav { display: flex; } header { padding: 6px 14px; } }
 
-.tab-conteudo { display: none; padding: 10px; max-width: 1400px; margin: 0 auto; }
+/* ============================================================
+   CONTEÚDO / TABS
+============================================================ */
+.tab-conteudo { display: none; padding: var(--pad-y) var(--pad-x); max-width: 1600px; margin: 0 auto; }
 .tab-conteudo.ativo { display: block; }
-h2 { font-size: 15px; margin-bottom: 8px; color: var(--bordo); }
-.subtitulo { font-size: 13px; margin: 10px 0 6px; color: var(--texto); font-weight: 600; }
+h2 { font-size: 14px; margin-bottom: 6px; color: var(--bordo); }
+.subtitulo { font-size: 12.5px; margin: 8px 0 4px; color: var(--texto); font-weight: 600; }
+.divisor { height: 1px; background: var(--borda); margin: 10px 0; }
 
-.dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
+/* ============================================================
+   DASHBOARD
+============================================================ */
+.dashboard { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap); margin-bottom: 8px; }
 @media (min-width: 700px) { .dashboard { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1000px) { .dashboard { grid-template-columns: repeat(6, 1fr); } }
-.card { background: #fff; padding: 8px 10px; border-radius: var(--r); box-shadow: 0 1px 3px rgba(139,46,60,.07); display: flex; flex-direction: column; gap: 2px; border-left: 3px solid var(--bordo-claro); }
-.card span { color: var(--cinza-esc); font-size: 10px; line-height: 1.15; }
-.card strong { font-size: 16px; color: var(--bordo); }
+.card { background: #fff; padding: 6px 9px; border-radius: var(--r); box-shadow: 0 1px 3px rgba(139,46,60,.07); display: flex; flex-direction: column; gap: 1px; border-left: 3px solid var(--bordo-claro); }
+.card span { color: var(--cinza-esc); font-size: 9.5px; line-height: 1.1; }
+.card strong { font-size: 15px; color: var(--bordo); line-height: 1.1; }
 .card.alerta strong { color: var(--vermelho); }
 .card.destino { border-left-color: var(--amarelo); }
 .card.destino strong { color: var(--amarelo); }
 
-button { background: var(--bordo); color: #fff; border: none; padding: 8px 12px; border-radius: var(--r-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: .15s; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+/* ============================================================
+   BOTÕES
+============================================================ */
+button {
+  background: var(--bordo); color: #fff; border: none;
+  padding: 6px 11px; border-radius: var(--r-sm);
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: .15s; min-height: var(--h-ctrl);
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+}
 button:active { transform: scale(.97); background: var(--bordo-esc); }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-secundario { background: var(--cinza); color: var(--texto); }
@@ -48,43 +94,39 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .btn-sucesso { background: var(--verde); }
 .btn-aviso { background: var(--amarelo); }
 .btn-azul { background: var(--azul); }
-.btn-pequeno { padding: 5px 9px; font-size: 11px; min-height: 28px; }
+.btn-pequeno { padding: 3px 8px; font-size: 11px; min-height: var(--h-ctrl-sm); }
 .btn-bloco { width: 100%; }
-.acoes-rapidas { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.acoes-rapidas { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
 @media (min-width: 600px) { .acoes-rapidas { flex-direction: row; flex-wrap: wrap; } }
 
-.topo-secao { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
-.topo-secao h2 { font-size: 15px; }
-
-.filtros { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; }
-@media (min-width: 700px) { .filtros { flex-direction: row; flex-wrap: wrap; } }
-.filtros input, .filtros select { padding: 8px 10px; border: 1px solid var(--borda); border-radius: var(--r-sm); font-size: 13px; background: #fff; width: 100%; min-height: 36px; }
+/* ============================================================
+   TOPO SEÇÃO + FILTROS
+============================================================ */
+.topo-secao { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; }
+.topo-secao h2 { font-size: 14px; margin-bottom: 0; }
+.filtros { display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px; }
+@media (min-width: 700px) { .filtros { flex-direction: row; flex-wrap: wrap; align-items: center; } }
+.filtros input, .filtros select {
+  padding: 6px 9px; border: 1px solid var(--borda);
+  border-radius: var(--r-sm); font-size: 12px;
+  background: #fff; width: 100%; min-height: var(--h-ctrl);
+}
 @media (min-width: 700px) { .filtros input { flex: 1; min-width: 200px; } }
 
-/* ===== LAYOUT EM LINHAS (B) ===== */
-.lista-linhas { display: flex; flex-direction: column; gap: 4px; }
-
+/* ============================================================
+   TABELAS EM LINHA (NFs, Showroom, Reservas, Cadastros)
+============================================================ */
+.lista-linhas { display: flex; flex-direction: column; gap: 3px; }
 .lista-linhas .cabecalho {
-  display: none;
-  padding: 6px 10px;
-  background: var(--bordo-claro);
-  border-radius: var(--r);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--bordo);
-  letter-spacing: .3px;
-  gap: 8px;
+  display: none; padding: 5px 9px;
+  background: var(--bordo-claro); border-radius: var(--r);
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  color: var(--bordo); letter-spacing: .3px; gap: 8px;
 }
-
 .lista-linhas .item {
-  background: #fff;
-  border-radius: var(--r);
-  padding: 8px 10px;
-  box-shadow: 0 1px 3px rgba(139,46,60,.06);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+  background: #fff; border-radius: var(--r); padding: 6px 9px;
+  box-shadow: 0 1px 2px rgba(139,46,60,.06);
+  display: flex; flex-direction: column; gap: 2px;
   border-left: 3px solid transparent;
 }
 .lista-linhas .item.clicavel { cursor: pointer; }
@@ -92,121 +134,180 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .lista-linhas .item.cond-avaria { border-left-color: var(--vermelho); }
 .lista-linhas .item.cond-observacao { border-left-color: var(--azul); }
 
-.lista-linhas .item .l1 {
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
-  word-break: break-word;
-}
+.lista-linhas .item .l1 { font-size: 12.5px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; gap: 6px; word-break: break-word; }
 .lista-linhas .item .l1 .nome-principal { flex: 1; min-width: 0; }
-.lista-linhas .item .l1 .cod { font-family: monospace; color: var(--cinza-esc); font-size: 11px; font-weight: 400; }
-
-.lista-linhas .item .l2 {
-  font-size: 11.5px;
-  color: var(--cinza-esc);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
-  align-items: center;
-  word-break: break-word;
-}
+.lista-linhas .item .l1 .cod { font-family: monospace; color: var(--cinza-esc); font-size: 10.5px; font-weight: 400; }
+.lista-linhas .item .l2 { font-size: 11px; color: var(--cinza-esc); display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; word-break: break-word; }
 .lista-linhas .item .l2 .sep { color: #d6d6d6; }
-
-.lista-linhas .item .l3 {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin-top: 2px;
-}
-.lista-linhas .item .l3 button {
-  flex: 1;
-  padding: 5px 8px;
-  font-size: 11px;
-  min-height: 28px;
-}
-
-.lista-linhas .item .foto-indicador {
-  font-size: 11px;
-  color: var(--cinza-esc);
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.lista-linhas .item .foto-indicador.tem { color: var(--verde); font-weight: 600; }
+.lista-linhas .item .l3 { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 2px; }
+.lista-linhas .item .l3 button { flex: 1; padding: 3px 6px; font-size: 10.5px; min-height: var(--h-ctrl-sm); }
 
 @media (min-width: 700px) {
-  .lista-linhas .cabecalho {
-    display: grid;
-    grid-template-columns: var(--cols);
-    align-items: center;
-  }
+  .lista-linhas .cabecalho { display: grid; grid-template-columns: var(--cols); align-items: center; }
   .lista-linhas .item {
-    display: grid;
-    grid-template-columns: var(--cols);
-    gap: 8px;
-    align-items: center;
-    padding: 6px 10px;
+    display: grid; grid-template-columns: var(--cols); gap: 8px;
+    align-items: center; padding: 5px 9px;
   }
   .lista-linhas .item .l1,
   .lista-linhas .item .l2,
-  .lista-linhas .item .l3 {
-    display: contents;
-  }
-  .lista-linhas .item .l1 > * {
-    font-size: 12.5px;
-  }
-  .lista-linhas .item .l2 > * {
-    font-size: 11.5px;
-  }
-  .lista-linhas .item .l3 {
-    display: flex;
-    justify-content: flex-end;
-    gap: 3px;
-    margin-top: 0;
-  }
-  .lista-linhas .item .l3 button {
-    flex: none;
-    padding: 3px 8px;
-    font-size: 11px;
-    min-height: 24px;
-  }
+  .lista-linhas .item .l3 { display: contents; }
+  .lista-linhas .item .l1 > * { font-size: 12px; }
+  .lista-linhas .item .l2 > * { font-size: 11px; }
+  .lista-linhas .item .l3 { display: flex; justify-content: flex-end; gap: 3px; margin-top: 0; }
+  .lista-linhas .item .l3 button { flex: none; padding: 3px 7px; font-size: 10.5px; min-height: 22px; }
 }
 
-.pedido-destaque { display: inline-flex; align-items: center; gap: 4px; background: #fff8e1; border: 1px solid var(--amarelo); border-left: 3px solid var(--amarelo); padding: 3px 7px; border-radius: 5px; font-size: 11.5px; color: #856404; margin: 2px 0; font-weight: 600; }
-.pedido-destaque strong { font-size: 13px; font-weight: 800; color: #5c3c00; }
-.pedido-destaque.inline { display: inline-flex; margin: 0; }
-.pedido-destaque.mini { font-size: 10.5px; padding: 2px 5px; }
-
-.badge { display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+/* ============================================================
+   BADGES E DESTAQUES
+============================================================ */
+.badge { display: inline-block; padding: 2px 6px; border-radius: 9px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .2px; white-space: nowrap; }
 .badge.conferida, .badge.disponivel { background: #d4edda; color: #155724; }
 .badge.pendente, .badge.reservado, .badge.aguardando_destino { background: #fff3cd; color: #856404; }
-.badge.divergencia, .badge.cancelada { background: #f8d7da; color: #721c24; }
-.badge.avaria { background: #f8d7da; color: #721c24; }
+.badge.divergencia, .badge.cancelada, .badge.avaria { background: #f8d7da; color: #721c24; }
 .badge.observacao { background: #cce5ff; color: #004085; }
 .badge.devolvida { background: #ffe0b2; color: #7a4a00; }
 .badge.vendido, .badge.entregue { background: #cce5ff; color: #004085; }
 .badge.showroom { background: #e3f2fd; color: #1565c0; }
 .badge.oc { background: #f3e5f5; color: #6a1b9a; }
 
+.pedido-destaque { display: inline-flex; align-items: center; gap: 3px; background: #fff8e1; border: 1px solid var(--amarelo); border-left: 3px solid var(--amarelo); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #856404; margin: 1px 0; font-weight: 600; }
+.pedido-destaque strong { font-size: 12px; font-weight: 800; color: #5c3c00; }
+.pedido-destaque.inline { display: inline-flex; margin: 0; }
+.pedido-destaque.mini { font-size: 10px; padding: 1px 5px; }
+
+/* ============================================================
+   DESTINOS — GRUPOS RECOLHÍVEIS
+============================================================ */
+.grupo-nf {
+  background: #fff; border-radius: var(--r);
+  box-shadow: 0 1px 3px rgba(139,46,60,.06);
+  margin-bottom: 6px; overflow: hidden;
+}
+.grupo-nf > header {
+  background: #fdf7f8;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--borda);
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; position: static;
+  cursor: pointer;
+  transition: background .12s;
+}
+.grupo-nf > header:hover { background: var(--bordo-claro); }
+.grupo-nf > header .toggle {
+  background: transparent; color: var(--bordo);
+  border: none; padding: 2px 4px; font-size: 14px;
+  min-height: 20px; cursor: pointer; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: transform .15s;
+}
+.grupo-nf.recolhido > header .toggle { transform: rotate(-90deg); }
+.grupo-nf > header .resumo-nf {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 12px;
+}
+.grupo-nf > header .resumo-nf .num-nf {
+  font-weight: 800; color: var(--bordo); font-size: 13px;
+  white-space: nowrap;
+}
+.grupo-nf > header .resumo-nf .forn-nm {
+  color: var(--texto); font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 200px;
+}
+.grupo-nf > header .resumo-nf .meta {
+  color: var(--cinza-esc); font-size: 11px;
+  display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.grupo-nf > header .resumo-nf .meta .pend {
+  color: var(--amarelo); font-weight: 700;
+}
+.grupo-nf > header .acoes-grupo {
+  display: flex; gap: 4px; flex-wrap: wrap; flex-shrink: 0;
+}
+.grupo-nf > header .acoes-grupo button {
+  padding: 3px 8px; font-size: 10.5px; min-height: var(--h-ctrl-sm);
+}
+
+.grupo-nf .corpo { padding: 6px 8px 8px; }
+.grupo-nf.recolhido .corpo { display: none; }
+
+/* Linhas das peças nos destinos — versão compacta */
+.destino-linhas { display: flex; flex-direction: column; gap: 3px; }
+.destino-linhas .cabecalho {
+  display: none;
+  padding: 4px 8px;
+  background: var(--bordo-claro);
+  border-radius: var(--r-sm);
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  color: var(--bordo); letter-spacing: .3px;
+}
+.destino-linhas .item {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 5px 8px; background: #faf7f8;
+  border-radius: var(--r-sm);
+  border-left: 3px solid transparent;
+}
+.destino-linhas .item.cond-avaria { border-left-color: var(--vermelho); background: #fff5f5; }
+.destino-linhas .item.cond-observacao { border-left-color: var(--azul); background: #f0f7ff; }
+.destino-linhas .item .l1 { display: flex; gap: 6px; align-items: baseline; font-size: 12px; }
+.destino-linhas .item .l1 .cod { font-family: monospace; color: var(--cinza-esc); font-size: 10.5px; white-space: nowrap; }
+.destino-linhas .item .l1 .nm { font-weight: 700; flex: 1; word-break: break-word; }
+.destino-linhas .item .l2 { display: flex; gap: 6px; flex-wrap: wrap; font-size: 10.5px; color: var(--cinza-esc); align-items: center; }
+.destino-linhas .item .l3 { display: flex; gap: 4px; margin-top: 3px; }
+.destino-linhas .item .l3 button { flex: 1; padding: 4px 8px; font-size: 11px; min-height: var(--h-ctrl-sm); }
+
+@media (min-width: 700px) {
+  .destino-linhas .cabecalho {
+    display: grid;
+    grid-template-columns: 90px 1fr 220px 220px;
+    align-items: center;
+    gap: 8px;
+  }
+  .destino-linhas .item {
+    display: grid;
+    grid-template-columns: 90px 1fr 220px 220px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+  }
+  .destino-linhas .item .l1,
+  .destino-linhas .item .l2,
+  .destino-linhas .item .l3 { display: contents; }
+  .destino-linhas .item .l1 .cod { font-size: 11px; }
+  .destino-linhas .item .l1 .nm { font-size: 12.5px; }
+  .destino-linhas .item .l2 > * { font-size: 11px; }
+  .destino-linhas .item .l3 { display: flex; justify-content: flex-end; gap: 3px; margin-top: 0; }
+  .destino-linhas .item .l3 button { flex: none; padding: 3px 8px; font-size: 11px; min-height: 24px; }
+}
+
+/* ============================================================
+   MODAIS
+============================================================ */
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.6); display: flex; align-items: flex-end; justify-content: center; z-index: 100; }
 @media (min-width: 700px) { .modal { align-items: center; padding: 12px; } }
 .modal.oculto { display: none; }
-.modal-conteudo { background: #fff; padding: 14px; border-radius: 16px 16px 0 0; width: 100%; max-height: 95vh; overflow-y: auto; position: relative; animation: slideUp .22s ease-out; }
-@media (min-width: 700px) { .modal-conteudo { border-radius: var(--r); max-width: 560px; max-height: 90vh; animation: fadeIn .18s ease-out; } .modal-conteudo.modal-grande { max-width: 860px; } }
+.modal-conteudo { background: #fff; padding: 12px; border-radius: 16px 16px 0 0; width: 100%; max-height: 95vh; overflow-y: auto; position: relative; animation: slideUp .22s ease-out; }
+@media (min-width: 700px) { .modal-conteudo { border-radius: var(--r); max-width: 560px; max-height: 90vh; animation: fadeIn .18s ease-out; } .modal-conteudo.modal-grande { max-width: 880px; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: scale(1); } }
-.modal-conteudo::before { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 36px; height: 3px; background: var(--borda); border-radius: 2px; }
+.modal-conteudo::before { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 34px; height: 3px; background: var(--borda); border-radius: 2px; }
 @media (min-width: 700px) { .modal-conteudo::before { display: none; } }
-.modal-conteudo h2 { margin: 4px 26px 10px 0; font-size: 15px; color: var(--bordo); }
-.modal-conteudo h3 { margin: 10px 0 6px; font-size: 13px; color: var(--texto); }
-.fechar-x { position: absolute; top: 10px; right: 10px; background: var(--cinza); color: var(--texto); border-radius: 50%; width: 30px; height: 30px; padding: 0; font-size: 14px; min-height: 30px; }
+.modal-conteudo h2 { margin: 4px 26px 8px 0; font-size: 14px; color: var(--bordo); }
+.modal-conteudo h3 { margin: 8px 0 4px; font-size: 12.5px; color: var(--texto); }
+.fechar-x { position: absolute; top: 8px; right: 8px; background: var(--cinza); color: var(--texto); border-radius: 50%; width: 28px; height: 28px; padding: 0; font-size: 13px; min-height: 28px; }
 .fechar-x:active { background: var(--vermelho); color: #fff; }
 
-label { display: block; margin-bottom: 8px; font-size: 12px; color: #555; font-weight: 600; }
-label input, label select, label textarea { width: 100%; padding: 8px 10px; margin-top: 3px; border: 1px solid var(--borda); border-radius: var(--r-sm); font-size: 13px; font-family: inherit; background: #fff; min-height: 36px; -webkit-appearance: none; }
+/* ============================================================
+   FORMULÁRIOS
+============================================================ */
+label { display: block; margin-bottom: 6px; font-size: 11.5px; color: #555; font-weight: 600; }
+label input, label select, label textarea {
+  width: 100%; padding: 6px 9px; margin-top: 3px;
+  border: 1px solid var(--borda); border-radius: var(--r-sm);
+  font-size: 12.5px; font-family: inherit; background: #fff;
+  min-height: var(--h-ctrl); -webkit-appearance: none;
+}
 label textarea { min-height: auto; }
 label input:focus, label select:focus, label textarea:focus { outline: none; border-color: var(--bordo); box-shadow: 0 0 0 2px rgba(139,46,60,.15); }
 label input[readonly] { background: #f7f4f5; color: var(--cinza-esc); }
@@ -216,132 +317,136 @@ label .req { color: var(--vermelho); font-weight: 700; }
 
 .grid-2, .grid-3 { display: grid; grid-template-columns: 1fr; gap: 0; }
 @media (min-width: 700px) { .grid-2 { grid-template-columns: 1fr 1fr; gap: 0 8px; } .grid-3 { grid-template-columns: 1fr 1fr 1fr; gap: 0 8px; } }
-.botoes { display: flex; flex-direction: column-reverse; gap: 6px; margin-top: 12px; }
+.botoes { display: flex; flex-direction: column-reverse; gap: 5px; margin-top: 10px; }
 @media (min-width: 600px) { .botoes { flex-direction: row; justify-content: flex-end; } }
 .botoes button { width: 100%; }
 @media (min-width: 600px) { .botoes button { width: auto; } }
 
-.item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: var(--r); padding: 10px; margin-bottom: 8px; position: relative; }
+.campo-com-botao { display: flex; gap: 5px; align-items: stretch; margin-top: 3px; }
+.campo-com-botao select, .campo-com-botao input { flex: 1; margin-top: 0; }
+.campo-com-botao button { padding: 0 9px; min-height: var(--h-ctrl); white-space: nowrap; font-size: 11.5px; }
+
+.campo-pedido { background: #fff8e1; padding: 7px 9px; border-radius: var(--r); border-left: 4px solid var(--amarelo); margin-bottom: 8px; }
+.campo-pedido label { color: #856404; font-weight: 700; margin-bottom: 3px; }
+.campo-pedido input { background: #fff; font-size: 13px; font-weight: 700; color: #5c3c00; border-color: var(--amarelo); }
+
+/* ============================================================
+   ITENS DE NF
+============================================================ */
+.item-nf { background: #faf7f8; border: 1px solid var(--borda); border-radius: var(--r); padding: 8px; margin-bottom: 6px; position: relative; }
 .item-nf.falta-foto { border-color: var(--vermelho); background: #fff5f5; }
-.item-nf h4 { font-size: 12px; margin-bottom: 6px; color: var(--texto); font-weight: 700; }
-.item-nf .remover { position: absolute; top: 8px; right: 8px; background: var(--vermelho); padding: 4px 8px; font-size: 11px; min-height: 26px; }
+.item-nf h4 { font-size: 11.5px; margin-bottom: 5px; color: var(--texto); font-weight: 700; }
+.item-nf .remover { position: absolute; top: 6px; right: 6px; background: var(--vermelho); padding: 3px 7px; font-size: 10.5px; min-height: 22px; }
 .item-nf.cond-avaria { border-left: 4px solid var(--vermelho); }
 .item-nf.cond-observacao { border-left: 4px solid var(--azul); }
-.item-nf .aviso-foto { background: #f8d7da; color: #721c24; padding: 6px 8px; border-radius: 5px; font-size: 11px; margin-bottom: 6px; display: none; }
+.item-nf .aviso-foto { background: #f8d7da; color: #721c24; padding: 5px 7px; border-radius: 4px; font-size: 10.5px; margin-bottom: 5px; display: none; }
 .item-nf.falta-foto .aviso-foto { display: block; }
 
-.info-destino-futuro { background: #e3f2fd; border-left: 4px solid var(--azul); padding: 8px 10px; border-radius: var(--r-sm); margin-bottom: 10px; font-size: 12px; color: #0d47a1; }
-.info-destino-futuro strong { display: block; margin-bottom: 2px; }
-
-.foto-upload { border: 2px dashed var(--borda); border-radius: var(--r); padding: 10px; background: #faf7f8; margin-top: 3px; }
+.foto-upload { border: 2px dashed var(--borda); border-radius: var(--r); padding: 8px; background: #faf7f8; margin-top: 3px; }
 .item-nf.falta-foto .foto-upload { border-color: var(--vermelho); }
-.foto-preview { display: flex; justify-content: center; margin-bottom: 8px; }
+.foto-preview { display: flex; justify-content: center; margin-bottom: 6px; }
 .foto-preview:empty { display: none; }
-.foto-thumb { width: 100px; height: 100px; border-radius: var(--r-sm); background-size: cover; background-position: center; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-.foto-thumb .rm { position: absolute; top: -6px; right: -6px; background: var(--vermelho); color: #fff; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; min-height: 0; padding: 0; line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,.3); }
-.foto-upload .botoes-foto { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-.foto-upload button { padding: 8px 10px; font-size: 12px; flex: 1; min-width: 90px; }
+.foto-thumb { width: 90px; height: 90px; border-radius: var(--r-sm); background-size: cover; background-position: center; position: relative; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.foto-thumb .rm { position: absolute; top: -6px; right: -6px; background: var(--vermelho); color: #fff; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; min-height: 0; padding: 0; line-height: 1; }
+.foto-upload .botoes-foto { display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; }
+.foto-upload button { padding: 6px 9px; font-size: 11px; flex: 1; min-width: 80px; }
 
-.camera-modal video { width: 100%; border-radius: var(--r); background: #000; }
-.camera-modal canvas { display: none; }
-.camera-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r-sm); margin-bottom: 8px; font-size: 12px; color: #856404; }
-
-.aviso-rascunho { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r); margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+/* ============================================================
+   AVISOS / ALERTAS
+============================================================ */
+.info-destino-futuro { background: #e3f2fd; border-left: 4px solid var(--azul); padding: 7px 9px; border-radius: var(--r-sm); margin-bottom: 8px; font-size: 11.5px; color: #0d47a1; }
+.info-destino-futuro strong { display: block; margin-bottom: 1px; }
+.aviso-rascunho { background: #fff3cd; border: 1px solid #ffc107; padding: 7px 9px; border-radius: var(--r); margin-bottom: 8px; display: flex; flex-direction: column; gap: 5px; font-size: 11.5px; }
 @media (min-width: 600px) { .aviso-rascunho { flex-direction: row; justify-content: space-between; align-items: center; } }
-.aviso-rascunho .botoes-aviso { display: flex; gap: 6px; flex-wrap: wrap; }
-.aviso-rascunho button { padding: 6px 10px; font-size: 12px; min-height: 30px; }
+.aviso-rascunho .botoes-aviso { display: flex; gap: 5px; flex-wrap: wrap; }
+.aviso-rascunho button { padding: 4px 9px; font-size: 11px; min-height: 26px; }
 
-.alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--r); padding: 8px 10px; margin-bottom: 10px; }
-.alerta-parada h4 { color: #856404; margin-bottom: 4px; font-size: 12px; }
+.alerta-parada { background: #fff3cd; border: 1px solid #ffc107; border-radius: var(--r); padding: 7px 9px; margin-bottom: 8px; }
+.alerta-parada h4 { color: #856404; margin-bottom: 3px; font-size: 11.5px; }
 .alerta-parada .peca-parada { font-size: 11px; color: #856404; padding: 2px 0; }
 
-.alerta-destino { background: #fff8e1; border: 1px solid var(--amarelo); border-left: 5px solid var(--amarelo); border-radius: var(--r); padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+.alerta-destino { background: #fff8e1; border: 1px solid var(--amarelo); border-left: 5px solid var(--amarelo); border-radius: var(--r); padding: 8px 10px; margin-bottom: 8px; display: flex; flex-direction: column; gap: 5px; }
 @media (min-width: 600px) { .alerta-destino { flex-direction: row; justify-content: space-between; align-items: center; } }
-.alerta-destino h4 { color: #856404; font-size: 12px; margin-bottom: 2px; }
-.alerta-destino p { font-size: 11.5px; color: #856404; }
+.alerta-destino h4 { color: #856404; font-size: 11.5px; margin-bottom: 1px; }
+.alerta-destino p { font-size: 11px; color: #856404; }
 
-.ficha-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.duplicado-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 7px 9px; border-radius: var(--r-sm); margin: 5px 0; font-size: 11.5px; }
+.duplicado-aviso strong { color: #856404; }
+.duplicado-aviso .btn-usar { margin-top: 5px; width: 100%; }
+.banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 5px 10px; font-size: 11.5px; color: #856404; text-align: center; font-weight: 600; }
+
+/* ============================================================
+   FICHA DA PEÇA
+============================================================ */
+.ficha-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
 @media (min-width: 700px) { .ficha-grid { grid-template-columns: 1fr 1fr; } }
 .ficha-grid .full { grid-column: 1/-1; }
-.ficha-foto { width: 100%; height: 200px; background: var(--bordo-claro); border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 48px; background-size: cover; background-position: center; cursor: pointer; }
-@media (min-width: 700px) { .ficha-foto { height: 260px; } }
-.ficha-foto:hover { opacity: .92; }
-.ficha-info p { font-size: 12.5px; margin-bottom: 4px; word-break: break-word; }
+.ficha-foto { width: 100%; height: 180px; background: var(--bordo-claro); border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: #b0a0a5; font-size: 40px; background-size: cover; background-position: center; cursor: pointer; }
+@media (min-width: 700px) { .ficha-foto { height: 240px; } }
+.ficha-info p { font-size: 12px; margin-bottom: 3px; word-break: break-word; }
 .ficha-info strong { color: var(--texto); }
 
-.historico-item { padding: 6px 8px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 4px; border-radius: 5px; font-size: 12px; }
-.historico-item .data { color: #b0a0a5; font-size: 10px; margin-bottom: 1px; }
+.historico-item { padding: 5px 7px; border-left: 3px solid var(--bordo); background: #faf7f8; margin-bottom: 3px; border-radius: 4px; font-size: 11.5px; }
+.historico-item .data { color: #b0a0a5; font-size: 9.5px; margin-bottom: 1px; }
 
-.vazio { text-align: center; padding: 26px 14px; color: #b0a0a5; font-size: 13px; }
-
-.toast { position: fixed; bottom: 78px; left: 12px; right: 12px; background: var(--verde); color: #fff; padding: 10px 14px; border-radius: var(--r); box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transition: .3s; pointer-events: none; z-index: 200; font-size: 13px; font-weight: 500; text-align: center; }
-@media (min-width: 600px) { .toast { left: auto; right: 20px; bottom: 20px; max-width: 340px; text-align: left; } }
-.toast.visivel { opacity: 1; transform: translateY(-4px); }
-.toast.erro { background: var(--vermelho); }
-.toast.aviso { background: var(--amarelo); }
-
-.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--bordo-claro); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 8px rgba(139,46,60,.06); }
-.bottom-nav .nav-btn { flex: 1; background: transparent; color: #a89898; border: none; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 9.5px; font-weight: 600; min-height: 52px; border-radius: 0; cursor: pointer; }
-.bottom-nav .nav-btn .ico { font-size: 17px; }
-.bottom-nav .nav-btn.ativo { color: var(--bordo); background: transparent; }
-@media (min-width: 800px) { body { padding-bottom: 16px; } .bottom-nav { display: none; } header { padding: 10px 18px; } header h1 { font-size: 18px; } .tab-conteudo { padding: 16px; } .desktop-nav { display: flex !important; } }
-.desktop-nav { display: none; gap: 4px; flex-wrap: wrap; }
-.desktop-nav .nav-btn { background: transparent; color: #555; border: 1px solid var(--borda); padding: 5px 10px; border-radius: 5px; font-size: 12px; min-height: auto; flex-direction: row; }
-.desktop-nav .nav-btn.ativo { background: var(--bordo); color: #fff; border-color: var(--bordo); }
-
-.duplicado-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 8px 10px; border-radius: var(--r-sm); margin: 6px 0; font-size: 12px; }
-.duplicado-aviso strong { color: #856404; }
-.duplicado-aviso .btn-usar { margin-top: 6px; width: 100%; }
-.divisor { height: 1px; background: var(--borda); margin: 12px 0; }
-.campo-com-botao { display: flex; gap: 6px; align-items: stretch; margin-top: 3px; }
-.campo-com-botao select, .campo-com-botao input { flex: 1; margin-top: 0; }
-.campo-com-botao button { padding: 0 10px; min-height: 36px; white-space: nowrap; }
-.banner-offline { background: #fff3cd; border-bottom: 1px solid #ffc107; padding: 6px 12px; font-size: 12px; color: #856404; text-align: center; font-weight: 600; }
-
-.campo-pedido { background: #fff8e1; padding: 8px 10px; border-radius: var(--r); border-left: 4px solid var(--amarelo); margin-bottom: 10px; }
-.campo-pedido label { color: #856404; font-weight: 700; margin-bottom: 4px; }
-.campo-pedido input { background: #fff; font-size: 14px; font-weight: 700; color: #5c3c00; border-color: var(--amarelo); }
-
-.grupo-nf { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); margin-bottom: 10px; }
-.grupo-nf > header { background: transparent; border: none; padding: 0 0 6px; border-bottom: 1px solid var(--borda); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; position: static; flex-wrap: wrap; }
-.grupo-nf > header h3 { font-size: 12.5px; color: var(--bordo); }
-.grupo-nf > header small { font-size: 10.5px; color: var(--cinza-esc); display: block; margin-top: 2px; }
-.grupo-nf .acoes-grupo { display: flex; gap: 4px; flex-wrap: wrap; }
-.grupo-nf .acoes-grupo button { padding: 5px 9px; font-size: 11px; min-height: 28px; }
-
-.rel-periodo { background: #fff; border-radius: var(--r); padding: 10px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
-.rel-periodo .linha { display: flex; gap: 6px; flex-wrap: wrap; }
+/* ============================================================
+   RELATÓRIOS
+============================================================ */
+.rel-periodo { background: #fff; border-radius: var(--r); padding: 8px 10px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
+.rel-periodo .linha { display: flex; gap: 5px; flex-wrap: wrap; }
 .rel-periodo .linha > label { flex: 1; min-width: 120px; margin-bottom: 0; }
-.rel-atalhos { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
-.rel-atalhos button { padding: 5px 9px; font-size: 11px; min-height: 28px; flex: 1; }
+.rel-atalhos { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.rel-atalhos button { padding: 3px 8px; font-size: 11px; min-height: 26px; flex: 1; }
 
-.rel-resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+.rel-resumo { display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-bottom: 8px; }
 @media (min-width: 700px) { .rel-resumo { grid-template-columns: repeat(4, 1fr); } }
-.rel-resumo .item { background: #fff; border-radius: var(--r); padding: 8px 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); border-left: 3px solid var(--bordo); }
-.rel-resumo .item span { font-size: 10px; color: var(--cinza-esc); display: block; margin-bottom: 2px; }
-.rel-resumo .item strong { font-size: 15px; color: var(--bordo); }
+.rel-resumo .item { background: #fff; border-radius: var(--r); padding: 6px 9px; box-shadow: 0 1px 3px rgba(139,46,60,.06); border-left: 3px solid var(--bordo); }
+.rel-resumo .item span { font-size: 9.5px; color: var(--cinza-esc); display: block; margin-bottom: 1px; }
+.rel-resumo .item strong { font-size: 14px; color: var(--bordo); }
 
-.rel-secao { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); margin-bottom: 10px; }
-.rel-secao h3 { font-size: 12.5px; color: var(--bordo); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
-.rel-linha { display: flex; justify-content: space-between; gap: 8px; padding: 5px 0; border-bottom: 1px solid #f0eef0; font-size: 12px; }
+.rel-secao { background: #fff; border-radius: var(--r); padding: 8px 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); margin-bottom: 8px; }
+.rel-secao h3 { font-size: 12px; color: var(--bordo); margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+.rel-linha { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid #f0eef0; font-size: 11.5px; }
 .rel-linha:last-child { border-bottom: none; }
 .rel-linha .esq { flex: 1; min-width: 0; }
-.rel-linha .esq strong { display: block; font-size: 12px; margin-bottom: 1px; }
-.rel-linha .esq small { color: var(--cinza-esc); font-size: 10.5px; display: block; }
+.rel-linha .esq strong { display: block; font-size: 11.5px; margin-bottom: 1px; }
+.rel-linha .esq small { color: var(--cinza-esc); font-size: 10px; display: block; }
 .rel-linha .dir { text-align: right; flex-shrink: 0; }
-.rel-linha .dir strong { color: var(--bordo); font-size: 12px; }
+.rel-linha .dir strong { color: var(--bordo); font-size: 11.5px; }
 
-.estoque-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.estoque-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
 @media (min-width: 700px) { .estoque-grid { grid-template-columns: repeat(3, 1fr); } }
-.estoque-bloco { background: #fff; border-radius: var(--r); padding: 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
-.estoque-bloco h4 { font-size: 12px; color: var(--bordo); margin-bottom: 6px; border-bottom: 1px solid var(--borda); padding-bottom: 4px; }
-.estoque-bloco .item-estq { display: flex; justify-content: space-between; font-size: 11.5px; padding: 3px 0; border-bottom: 1px solid #f0eef0; }
+.estoque-bloco { background: #fff; border-radius: var(--r); padding: 8px 10px; box-shadow: 0 1px 3px rgba(139,46,60,.06); }
+.estoque-bloco h4 { font-size: 11.5px; color: var(--bordo); margin-bottom: 5px; border-bottom: 1px solid var(--borda); padding-bottom: 3px; }
+.estoque-bloco .item-estq { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; border-bottom: 1px solid #f0eef0; }
 .estoque-bloco .item-estq:last-child { border-bottom: none; }
 .estoque-bloco .item-estq .nome { color: var(--texto); }
 .estoque-bloco .item-estq .qtd { font-weight: 700; color: var(--bordo); }
 
-.aviso-obrig { background: #fff5f5; border: 1px solid var(--vermelho); border-left: 4px solid var(--vermelho); padding: 8px 10px; border-radius: var(--r); margin-bottom: 10px; font-size: 12px; color: #721c24; }
-.aviso-obrig strong { display: block; margin-bottom: 2px; }
+/* ============================================================
+   NAV INFERIOR (mobile)
+============================================================ */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--bordo-claro); display: flex; z-index: 50; padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -2px 8px rgba(139,46,60,.06); }
+.bottom-nav .nav-btn { flex: 1; background: transparent; color: #a89898; border: none; padding: 5px 3px; display: flex; flex-direction: column; align-items: center; gap: 1px; font-size: 9.5px; font-weight: 600; min-height: 48px; border-radius: 0; cursor: pointer; }
+.bottom-nav .nav-btn .ico { font-size: 16px; }
+.bottom-nav .nav-btn.ativo { color: var(--bordo); background: transparent; }
+@media (min-width: 800px) { body { padding-bottom: 14px; } .bottom-nav { display: none; } }
+
+/* ============================================================
+   TOAST / ESTADOS VAZIOS
+============================================================ */
+.toast { position: fixed; bottom: 70px; left: 12px; right: 12px; background: var(--verde); color: #fff; padding: 9px 13px; border-radius: var(--r); box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; transition: .3s; pointer-events: none; z-index: 200; font-size: 12.5px; font-weight: 500; text-align: center; }
+@media (min-width: 600px) { .toast { left: auto; right: 20px; bottom: 20px; max-width: 320px; text-align: left; } }
+.toast.visivel { opacity: 1; transform: translateY(-4px); }
+.toast.erro { background: var(--vermelho); }
+.toast.aviso { background: var(--amarelo); }
+
+.vazio { text-align: center; padding: 22px 12px; color: #b0a0a5; font-size: 12.5px; }
+
+/* Camera modal */
+.camera-modal video { width: 100%; border-radius: var(--r); background: #000; }
+.camera-modal canvas { display: none; }
+.camera-aviso { background: #fff3cd; border: 1px solid #ffc107; padding: 7px 9px; border-radius: var(--r-sm); margin-bottom: 6px; font-size: 11.5px; color: #856404; }
 </style>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
@@ -475,15 +580,15 @@ label .req { color: var(--vermelho); font-weight: 700; }
 <!-- CADASTROS -->
 <section id="tab-cadastros" class="tab-conteudo">
   <h2>🏢 Cadastros Base</h2>
-  <p style="color:var(--cinza-esc);font-size:12px;margin:6px 0 12px;">💡 Cadastre uma vez e use sempre. O CNPJ evita duplicados.</p>
+  <p style="color:var(--cinza-esc);font-size:11.5px;margin:4px 0 8px;">💡 Cadastre uma vez e use sempre. O CNPJ evita duplicados.</p>
   <h3 class="subtitulo">📦 Fornecedores</h3>
-  <form id="formFornecedor" style="margin-bottom:10px">
+  <form id="formFornecedor" style="margin-bottom:8px">
     <div class="grid-3">
       <label>CNPJ *<input type="text" id="fornCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
       <label>Nome *<input type="text" id="fornNome" required></label>
       <label>Contato<input type="text" id="fornContato"></label>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
       <button type="submit" id="btnForn">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditForn()" id="btnCancelForn" style="display:none">Cancelar</button>
     </div>
@@ -491,13 +596,13 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div id="listaFornecedores"></div>
   <div class="divisor"></div>
   <h3 class="subtitulo">🚚 Transportadoras</h3>
-  <form id="formTransportadora" style="margin-bottom:10px">
+  <form id="formTransportadora" style="margin-bottom:8px">
     <div class="grid-3">
       <label>CNPJ *<input type="text" id="transpCNPJ" placeholder="00.000.000/0000-00" inputmode="numeric"></label>
       <label>Nome *<input type="text" id="transpNome" required></label>
       <label>Contato<input type="text" id="transpContato"></label>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
       <button type="submit" id="btnTransp">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditTransp()" id="btnCancelTransp" style="display:none">Cancelar</button>
     </div>
@@ -505,13 +610,13 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div id="listaTransportadoras"></div>
   <div class="divisor"></div>
   <h3 class="subtitulo">👤 Clientes</h3>
-  <form id="formCliente" style="margin-bottom:10px">
+  <form id="formCliente" style="margin-bottom:8px">
     <div class="grid-3">
       <label>Nome *<input type="text" id="cliNome" required></label>
       <label>Telefone<input type="text" id="cliTelefone" inputmode="tel"></label>
       <label>Endereço<input type="text" id="cliEndereco"></label>
     </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
       <button type="submit" id="btnCli">+ Adicionar</button>
       <button type="button" class="btn-secundario" onclick="cancelarEditCli()" id="btnCancelCli" style="display:none">Cancelar</button>
     </div>
@@ -522,7 +627,7 @@ label .req { color: var(--vermelho); font-weight: 700; }
 <!-- CONFIG -->
 <section id="tab-config" class="tab-conteudo">
   <h2>⚙️ Backup</h2>
-  <p style="margin:10px 0;color:var(--cinza-esc);font-size:12px;">Os dados são sincronizados com a nuvem (Firebase). Faça backup manual periodicamente.</p>
+  <p style="margin:8px 0;color:var(--cinza-esc);font-size:11.5px;">Os dados são sincronizados com a nuvem (Firebase). Faça backup manual periodicamente.</p>
   <div class="acoes-rapidas">
     <button class="btn-bloco" onclick="exportarBackup()">⬇️ Exportar Backup</button>
     <button class="btn-bloco btn-secundario" onclick="$('inputImport').click()">⬆️ Importar Backup</button>
@@ -532,7 +637,7 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <h3 class="subtitulo">📊 Estatísticas</h3>
   <div id="estatisticas"></div>
   <h3 class="subtitulo">☁️ Sincronização</h3>
-  <div id="infoSync" style="font-size:12px;color:var(--cinza-esc)"></div>
+  <div id="infoSync" style="font-size:11.5px;color:var(--cinza-esc)"></div>
 </section>
 
 <!-- MODAL NF -->
@@ -570,27 +675,27 @@ label .req { color: var(--vermelho); font-weight: 700; }
         <label>Nº da NF
           <div class="campo-com-botao">
             <input type="text" id="nfNumero">
-            <button type="button" class="btn-sucesso" onclick="abrirLeitor()" title="Ler código de barras da DANFE">📷 Ler</button>
+            <button type="button" class="btn-sucesso" onclick="abrirLeitor()" title="Ler código de barras da DANFE">📷</button>
           </div>
         </label>
         <label>Fornecedor
           <div class="campo-com-botao">
             <select id="nfFornecedor"><option value="">— Selecione —</option></select>
-            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('fornecedor')">+ Novo</button>
+            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('fornecedor')">+</button>
           </div>
         </label>
         <label>CNPJ Fornecedor <span class="opc">(auto)</span><input type="text" id="nfCNPJ" readonly></label>
         <label>Transportadora
           <div class="campo-com-botao">
             <select id="nfTransportadora"><option value="">— Selecione —</option></select>
-            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('transportadora')">+ Novo</button>
+            <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('transportadora')">+</button>
           </div>
         </label>
         <label>Valor Total da NF (R$)<input type="number" id="nfValorTotal" step="0.01" min="0" inputmode="decimal"></label>
         <label>Data de Emissão<input type="date" id="nfEmissao"></label>
         <label>Data de Recebimento<input type="date" id="nfRecebimento"></label>
         <label>Data de Conferência<input type="date" id="nfConferencia"></label>
-        <label>Conferido por <span class="req">*</span><input type="text" id="nfConferidoPor" placeholder="Nome do operador que conferiu" required></label>
+        <label>Conferido por <span class="req">*</span><input type="text" id="nfConferidoPor" placeholder="Nome do operador" required></label>
         <label>Status da NF
           <select id="nfStatus">
             <option value="conferida">✅ Conferida</option>
@@ -603,15 +708,13 @@ label .req { color: var(--vermelho); font-weight: 700; }
           </select>
         </label>
       </div>
-      <label>Observações da NF<textarea id="nfObservacoes" rows="2" placeholder="Ex: chegou 1 peça trincada, conferir com fornecedor..."></textarea></label>
-
+      <label>Observações da NF<textarea id="nfObservacoes" rows="2" placeholder="Ex: chegou 1 peça trincada..."></textarea></label>
       <div id="blocoItens">
-        <h3 class="subtitulo">📦 Itens da NF <span style="font-size:11px;color:var(--vermelho);font-weight:400">(foto obrigatória em cada item)</span></h3>
+        <h3 class="subtitulo">📦 Itens da NF <span style="font-size:10.5px;color:var(--vermelho);font-weight:400">(foto obrigatória)</span></h3>
         <div id="itensNF"></div>
         <button type="button" class="btn-secundario btn-bloco" onclick="addItemNF()">+ Adicionar item</button>
       </div>
-
-      <div class="botoes" style="margin-top:16px">
+      <div class="botoes" style="margin-top:12px">
         <button type="button" class="btn-secundario" onclick="salvarRascunhoManual()" id="btnRascunho">💾 Rascunho</button>
         <button type="button" class="btn-secundario" onclick="tentarFecharNF()">Cancelar</button>
         <button type="submit" class="btn-sucesso" id="btnSalvarNF">✅ Salvar NF</button>
@@ -629,11 +732,7 @@ label .req { color: var(--vermelho); font-weight: 700; }
       <input type="hidden" id="edPecaId">
       <label>Nome da Peça *<input type="text" id="edNome" required></label>
       <div class="grid-3">
-        <label>Categoria
-          <select id="edCategoria">
-            <option value="">— Selecione —</option>
-          </select>
-        </label>
+        <label>Categoria<select id="edCategoria"><option value="">— Selecione —</option></select></label>
         <label>Marca<input type="text" id="edMarca"></label>
         <label>Cor / Detalhes<input type="text" id="edCor"></label>
       </div>
@@ -653,13 +752,13 @@ label .req { color: var(--vermelho); font-weight: 700; }
             <option value="transito">🚚 Em trânsito</option>
           </select>
         </label>
-        <label>Custo Unitário (rateio)<input type="number" id="edCusto" step="0.01" min="0"></label>
+        <label>Custo Unitário<input type="number" id="edCusto" step="0.01" min="0"></label>
       </div>
-      <label>Características<textarea id="edCarac" rows="2" placeholder="Cor, material, medidas..."></textarea></label>
+      <label>Características<textarea id="edCarac" rows="2"></textarea></label>
       <label>Observações internas<textarea id="edObs" rows="2"></textarea></label>
       <div class="botoes">
         <button type="button" class="btn-secundario" onclick="fecharModal('modalEditarPeca')">Cancelar</button>
-        <button type="submit" class="btn-sucesso">💾 Salvar Alterações</button>
+        <button type="submit" class="btn-sucesso">💾 Salvar</button>
       </div>
     </form>
   </div>
@@ -670,14 +769,14 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalDefinirOC')">✕</button>
     <h2>🧾 Definir como OC / Encomenda</h2>
-    <p id="ocPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
+    <p id="ocPecaInfo" style="font-size:12px;margin-bottom:8px;color:var(--cinza-esc)"></p>
     <form id="formDefinirOC">
       <input type="hidden" id="ocPecaId">
       <label>Nº da OC *<input type="text" id="ocNumero" required></label>
       <label>Cliente *
         <div class="campo-com-botao">
           <select id="ocClienteSelect"><option value="">— Selecione —</option></select>
-          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
+          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+</button>
         </div>
       </label>
       <div class="grid-2">
@@ -720,19 +819,19 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharLeitor()">✕</button>
     <h2>📷 Ler código da DANFE</h2>
-    <p style="color:var(--cinza-esc);font-size:12px;margin-bottom:8px">Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou o <strong>QR Code</strong> da nota.</p>
-    <div style="background:#f0f7ff;border-left:4px solid var(--azul);padding:8px 10px;border-radius:5px;margin-bottom:10px;font-size:11.5px;color:#0d47a1">
-      ℹ️ <strong>Leitura 100% local.</strong> O app lê a chave, valida o dígito e cruza o CNPJ com a sua base de fornecedores. Não consulta SEFAZ nem API fiscal.
+    <p style="color:var(--cinza-esc);font-size:11.5px;margin-bottom:6px">Aponte a câmera para o <strong>código de barras</strong> (Code-128) ou o <strong>QR Code</strong>.</p>
+    <div style="background:#f0f7ff;border-left:4px solid var(--azul);padding:7px 9px;border-radius:5px;margin-bottom:8px;font-size:11px;color:#0d47a1">
+      ℹ️ <strong>Leitura 100% local.</strong> Não consulta SEFAZ nem API fiscal.
     </div>
-    <div style="background:#e8f5e9;border-left:4px solid var(--verde);padding:8px 10px;border-radius:5px;margin-bottom:10px;font-size:11.5px;color:#1b5e20">
-      🔌 <strong>Leitor USB/Bluetooth:</strong> com o modal de NF aberto, basta apontar o leitor e bipar — o sistema detecta e preenche automaticamente.
+    <div style="background:#e8f5e9;border-left:4px solid var(--verde);padding:7px 9px;border-radius:5px;margin-bottom:8px;font-size:11px;color:#1b5e20">
+      🔌 <strong>Leitor USB/Bluetooth:</strong> com o modal de NF aberto, bipar já preenche automaticamente.
     </div>
-    <div id="leitorQR" style="width:100%;border-radius:var(--r);overflow:hidden;background:#000;min-height:200px"></div>
-    <div id="leitorStatus" style="font-size:12px;color:var(--cinza-esc);text-align:center;margin:8px 0 0"></div>
-    <details style="margin-top:10px">
-      <summary style="cursor:pointer;font-size:12px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
-      <div style="margin-top:8px">
-        <label>Chave de acesso (44 dígitos)<input type="text" id="chaveManual" inputmode="numeric" maxlength="60" placeholder="00000000000000000000000000000000000000000000"></label>
+    <div id="leitorQR" style="width:100%;border-radius:var(--r);overflow:hidden;background:#000;min-height:180px"></div>
+    <div id="leitorStatus" style="font-size:11.5px;color:var(--cinza-esc);text-align:center;margin:6px 0 0"></div>
+    <details style="margin-top:8px">
+      <summary style="cursor:pointer;font-size:11.5px;color:var(--bordo);font-weight:600">⌨️ Digitar a chave manualmente</summary>
+      <div style="margin-top:6px">
+        <label>Chave de acesso (44 dígitos)<input type="text" id="chaveManual" inputmode="numeric" maxlength="60"></label>
         <button type="button" class="btn-sucesso btn-bloco" onclick="usarChaveManual()">Usar esta chave</button>
       </div>
     </details>
@@ -760,13 +859,13 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalReservar')">✕</button>
     <h2>📌 Reservar Peça</h2>
-    <p id="reservaPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
+    <p id="reservaPecaInfo" style="font-size:12px;margin-bottom:8px;color:var(--cinza-esc)"></p>
     <form id="formReservar">
       <input type="hidden" id="reservaPecaId">
       <label>Cliente *
         <div class="campo-com-botao">
           <select id="reservaClienteSelect"><option value="">— Selecione —</option></select>
-          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+ Novo</button>
+          <button type="button" class="btn-secundario" onclick="abrirCadastroRapido('cliente')">+</button>
         </div>
       </label>
       <label>Ou digite o nome<input type="text" id="reservaClienteManual"></label>
@@ -790,7 +889,7 @@ label .req { color: var(--vermelho); font-weight: 700; }
   <div class="modal-conteudo" onclick="event.stopPropagation()">
     <button class="fechar-x" onclick="fecharModal('modalMover')">✕</button>
     <h2>📍 Mover peça</h2>
-    <p id="moverPecaInfo" style="font-size:13px;margin-bottom:10px;color:var(--cinza-esc)"></p>
+    <p id="moverPecaInfo" style="font-size:12px;margin-bottom:8px;color:var(--cinza-esc)"></p>
     <form id="formMover">
       <input type="hidden" id="moverPecaId">
       <label>Nova localização
@@ -869,10 +968,11 @@ const DATA_SCHEMA_KEY = 'schemaVersion';
 const SCHEMA_ATUAL = 3;
 const MAX_FOTO_KB = 180;
 const ULTIMO_CONFERENTE_KEY = 'ultimoConferente';
+const DESTINOS_RECOLHIDOS_KEY = 'destinosRecolhidos';
 
 const DB = {
   nfs: [], pecas: [], fornecedores: [], transportadoras: [], clientes: [],
-  auditoria: [],  // preservado no storage mas não usado na UI
+  auditoria: [],
   contadores: { peca: 0 },
   editandoFornId: null, editandoTranspId: null, editandoCliId: null
 };
@@ -971,9 +1071,6 @@ async function comprimirImagem(fileOuDataUrl, maxKB = MAX_FOTO_KB) {
   });
 }
 
-// ============================================================
-// MIGRAÇÃO
-// ============================================================
 function migrarParaSchema3() {
   let jaEra = false;
   try { jaEra = Number(localStorage.getItem(DATA_SCHEMA_KEY) || 0) >= SCHEMA_ATUAL; } catch {}
@@ -998,9 +1095,6 @@ function migrarParaSchema3() {
   return true;
 }
 
-// ============================================================
-// PERSISTÊNCIA
-// ============================================================
 function carregarLocal() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -1070,9 +1164,6 @@ async function salvarRemoto() {
 }
 function salvar() { const ok = salvarLocal(); salvarRemoto(); return ok; }
 
-// ============================================================
-// PERFIL
-// ============================================================
 function carregarPerfil() {
   try { perfilAtual = localStorage.getItem(PERFIL_KEY) || 'recebedor'; }
   catch { perfilAtual = 'recebedor'; }
@@ -1092,9 +1183,6 @@ function aplicarPerfil() {
   renderTudo();
 }
 
-// ============================================================
-// BACKUP
-// ============================================================
 function validarBackup(dados) {
   const erros = [];
   if (!dados || typeof dados !== 'object') return ['Arquivo não é um objeto JSON.'];
@@ -1115,7 +1203,7 @@ function validarBackup(dados) {
 function exportarBackup() {
   try {
     const dados = {
-      _app: 'estoque-hong-possas', _versao: 8,
+      _app: 'estoque-hong-possas', _versao: 9,
       _exportadoEm: new Date().toISOString(),
       nfs: DB.nfs, pecas: DB.pecas, fornecedores: DB.fornecedores,
       transportadoras: DB.transportadoras, clientes: DB.clientes,
@@ -1170,9 +1258,6 @@ async function limparTudo() {
   renderTudo(); toast('Dados apagados.');
 }
 
-// ============================================================
-// NAVEGAÇÃO
-// ============================================================
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.onclick = () => {
     const tab = btn.dataset.tab;
@@ -1185,9 +1270,6 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   };
 });
 
-// ============================================================
-// RENDER GERAL
-// ============================================================
 function renderTudo() {
   renderDashboard(); renderNFs(); renderDestinos(); renderPecas(); renderReservas();
   renderFornecedores(); renderTransportadoras(); renderClientes();
@@ -1236,15 +1318,11 @@ function renderDashboard() {
   else {
     const linhas = paradas.slice(0, 5).map(p =>
       `<div class="peca-parada">• <strong>${escapeHtml(p.nome)}</strong> (${escapeHtml(p.codigo)}) — ${p.diasParada} dias</div>`).join('');
-    const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:4px">...e mais ${paradas.length - 5}</div>` : '';
+    const extra = paradas.length > 5 ? `<div class="peca-parada" style="margin-top:3px">...e mais ${paradas.length - 5}</div>` : '';
     elP.innerHTML = `<div class="alerta-parada"><h4>⚠️ ${paradas.length} peça(s) parada(s) +90 dias</h4>${linhas}${extra}</div>`;
   }
-  // SEM ÚLTIMAS MOVIMENTAÇÕES
 }
 
-// ============================================================
-// CADASTRO RÁPIDO
-// ============================================================
 function abrirCadastroRapido(tipo) {
   $('formCadastroRapido').reset();
   $('avisoDuplicado').innerHTML = '';
@@ -1357,9 +1435,6 @@ $('formCadastroRapido').onsubmit = e => {
   toast(`✅ Cadastrado!`);
 };
 
-// ============================================================
-// LEITOR DE CÓDIGO — CÂMERA + LEITOR FÍSICO USB
-// ============================================================
 const UF_POR_CODIGO = {
   11:'RO',12:'AC',13:'AM',14:'RR',15:'PA',16:'AP',17:'TO',
   21:'MA',22:'PI',23:'CE',24:'RN',25:'PB',26:'PE',27:'AL',28:'SE',29:'BA',
@@ -1377,7 +1452,7 @@ function validarDVChaveNFe(chave) {
 function parsearChaveNFe(chaveBruta) {
   const chave = soDigitos(chaveBruta);
   if (chave.length !== 44) return { ok:false, erro:`Chave precisa ter 44 dígitos (recebi ${chave.length}).` };
-  if (!validarDVChaveNFe(chave)) return { ok:false, erro:'Dígito verificador inválido. Confira o código.' };
+  if (!validarDVChaveNFe(chave)) return { ok:false, erro:'Dígito verificador inválido.' };
   const codUF = chave.substring(0, 2);
   const aamm = chave.substring(2, 6);
   const cnpj = chave.substring(6, 20);
@@ -1406,7 +1481,6 @@ function aplicarChaveNFe(info) {
     toast(`✅ Chave lida (${info.tipo} ${info.uf}). Fornecedor não cadastrado.`, 'aviso');
   }
 }
-
 let html5QrCode = null;
 function abrirLeitor() {
   abrirModal('modalScanner');
@@ -1464,8 +1538,6 @@ async function fecharLeitor() {
   if (html5QrCode) { try { await html5QrCode.stop(); } catch {} try { html5QrCode.clear(); } catch {} html5QrCode = null; }
   fecharModal('modalScanner');
 }
-
-// -- Leitor físico USB --
 let bufferLeitorFisico = '';
 let ultimaTeclaLeitorTs = 0;
 let processandoLeitorFisico = false;
@@ -1499,9 +1571,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ============================================================
-// NF — RECEBIMENTO / EDIÇÃO / DUPLICAÇÃO
-// ============================================================
 let contadorItemNF = 0;
 let itemAtualFoto = null;
 let streamCamera = null;
@@ -1557,7 +1626,6 @@ function abrirNovaNF() {
   contadorItemNF = 0;
   $('nfConferencia').value = hoje();
   $('nfRecebimento').value = hoje();
-  // Preenche o conferente com o último usado (agilidade no dia a dia)
   try {
     const ultimo = localStorage.getItem(ULTIMO_CONFERENTE_KEY);
     if (ultimo) $('nfConferidoPor').value = ultimo;
@@ -1626,7 +1694,7 @@ function abrirDuplicarNF(nfId) {
     pecasNF.forEach(p => {
       contadorItemNF++;
       const div = document.createElement('div');
-      div.className = 'item-nf';
+      div.className = 'item-nf falta-foto';
       div.innerHTML = templateItemNF(contadorItemNF);
       $('itensNF').appendChild(div);
       div.querySelector('.item-numero').value = p.itemNF || contadorItemNF;
@@ -1636,7 +1704,6 @@ function abrirDuplicarNF(nfId) {
       div.querySelector('.item-qtd').value = 1;
       div.querySelector('.item-carac').value = p.caracteristicas || '';
       div.querySelector('.item-condicao').value = 'ok';
-      // Sem foto (obrigatório recapturar)
       const sel = div.querySelector('.item-condicao');
       sel.dispatchEvent(new Event('change'));
     });
@@ -1663,7 +1730,6 @@ function iniciarAutoSave() {
   }, 4000);
 }
 function pararAutoSave() { if (autoSaveInterval) clearInterval(autoSaveInterval); autoSaveInterval = null; }
-
 window.addEventListener('beforeunload', (e) => {
   if ($('modalNF').classList.contains('oculto')) return;
   if (nfEditandoId || nfDuplicandoId) return;
@@ -1671,7 +1737,6 @@ window.addEventListener('beforeunload', (e) => {
     [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
   if (algum) { e.preventDefault(); e.returnValue = ''; }
 });
-
 function coletarDadosNF() {
   const itens = [...document.querySelectorAll('#itensNF .item-nf')].map(div => {
     const foto = urlImagemSegura(div.querySelector('.item-foto').value);
@@ -1687,18 +1752,12 @@ function coletarDadosNF() {
     };
   });
   return {
-    pedido: $('nfPedido').value,
-    numero: $('nfNumero').value,
-    fornecedorId: $('nfFornecedor').value,
-    transportadoraId: $('nfTransportadora').value,
-    dataEmissao: $('nfEmissao').value,
-    dataRecebimento: $('nfRecebimento').value,
-    dataConferencia: $('nfConferencia').value,
-    conferidoPor: $('nfConferidoPor').value,
-    status: $('nfStatus').value,
-    valorTotalNF: $('nfValorTotal').value,
-    observacoes: $('nfObservacoes').value,
-    itens
+    pedido: $('nfPedido').value, numero: $('nfNumero').value,
+    fornecedorId: $('nfFornecedor').value, transportadoraId: $('nfTransportadora').value,
+    dataEmissao: $('nfEmissao').value, dataRecebimento: $('nfRecebimento').value,
+    dataConferencia: $('nfConferencia').value, conferidoPor: $('nfConferidoPor').value,
+    status: $('nfStatus').value, valorTotalNF: $('nfValorTotal').value,
+    observacoes: $('nfObservacoes').value, itens
   };
 }
 function salvarRascunhoAuto() {
@@ -1747,6 +1806,8 @@ function recuperarRascunho() {
         div.querySelector('.item-foto').value = foto;
         const prev = div.querySelector('.foto-preview');
         prev.innerHTML = `<div class="foto-thumb" style="background-image:url('${escapeHtml(foto)}')"><button type="button" class="rm" onclick="removerFoto(this)">✕</button></div>`;
+      } else {
+        div.classList.add('falta-foto');
       }
       const sel = div.querySelector('.item-condicao');
       sel.dispatchEvent(new Event('change'));
@@ -1764,15 +1825,11 @@ function descartarRascunho() {
 function tentarFecharNF() {
   if (nfEditandoId) {
     if (!confirm('Descartar alterações desta NF?')) return;
-    resetarModoNF();
-    fecharModal('modalNF');
-    return;
+    resetarModoNF(); fecharModal('modalNF'); return;
   }
   if (nfDuplicandoId) {
     if (!confirm('Descartar a duplicação em andamento?')) return;
-    resetarModoNF();
-    fecharModal('modalNF');
-    return;
+    resetarModoNF(); fecharModal('modalNF'); return;
   }
   const algum = $('nfNumero').value || $('nfFornecedor').value ||
     [...document.querySelectorAll('#itensNF .item-nome')].some(i => i.value);
@@ -1784,7 +1841,6 @@ function tentarFecharNF() {
   pararAutoSave();
   fecharModal('modalNF');
 }
-
 function templateItemNF(num) {
   return `
     <button type="button" class="remover" onclick="this.parentElement.remove()">✕</button>
@@ -1808,7 +1864,7 @@ function templateItemNF(num) {
         </select>
       </label>
     </div>
-    <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas, detalhes de avaria..."></textarea></label>
+    <label>Características<textarea class="item-carac" rows="2" placeholder="Cor, material, medidas..."></textarea></label>
     <div class="foto-upload">
       <div class="foto-preview"></div>
       <div class="botoes-foto">
@@ -1822,7 +1878,7 @@ function templateItemNF(num) {
 function addItemNF() {
   contadorItemNF++;
   const div = document.createElement('div');
-  div.className = 'item-nf';
+  div.className = 'item-nf falta-foto';
   div.innerHTML = templateItemNF(contadorItemNF);
   $('itensNF').appendChild(div);
   const sel = div.querySelector('.item-condicao');
@@ -1835,8 +1891,6 @@ function escolherArquivo(btn) {
   const input = btn.closest('.foto-upload').querySelector('input[type=file]');
   input.click();
 }
-
-// -------- FOTO ÚNICA --------
 function obterFotoWrap(wrap) { return urlImagemSegura(wrap.querySelector('.item-foto').value); }
 function setFotoWrap(wrap, dataUrl) {
   const segura = urlImagemSegura(dataUrl);
@@ -1867,9 +1921,6 @@ function removerFoto(btn) {
   if (item) item.classList.add('falta-foto');
 }
 
-// ============================================================
-// CÂMERA
-// ============================================================
 function avisoCamera(msg) {
   const el = $('cameraAviso');
   if (!el) return;
@@ -1931,15 +1982,11 @@ function escolherArquivoCamera() {
   }
 }
 
-// ============================================================
-// SUBMIT NF — com validações obrigatórias
-// ============================================================
 $('formNF').onsubmit = e => {
   e.preventDefault();
   if (nfEditandoId) return submeterEdicaoNF();
   return submeterNovaNF();
 };
-
 function submeterEdicaoNF() {
   const nf = DB.nfs.find(n => n.id === nfEditandoId);
   if (!nf) { toast('NF não encontrada.', 'erro'); resetarModoNF(); return; }
@@ -1966,33 +2013,24 @@ function submeterEdicaoNF() {
   nf.valorTotalNF = Number($('nfValorTotal').value) || 0;
   nf.observacoes = $('nfObservacoes').value.trim();
   nf.dataEdicao = new Date().toISOString();
-
   try { localStorage.setItem(ULTIMO_CONFERENTE_KEY, conferente); } catch {}
-
   const valorUnit = (nf.pecasIds && nf.pecasIds.length) ? (nf.valorTotalNF / nf.pecasIds.length) : 0;
   DB.pecas.forEach(p => {
     if ((nf.pecasIds || []).includes(p.id)) {
-      p.numeroNF = nf.numero;
-      p.numeroPedido = nf.pedido;
-      p.fornecedor = nf.fornecedorNome;
-      p.fornecedorId = nf.fornecedorId;
+      p.numeroNF = nf.numero; p.numeroPedido = nf.pedido;
+      p.fornecedor = nf.fornecedorNome; p.fornecedorId = nf.fornecedorId;
       p.transportadora = nf.transportadoraNome;
-      p.dataConferencia = nf.dataConferencia;
-      p.conferidoPor = conferente;
+      p.dataConferencia = nf.dataConferencia; p.conferidoPor = conferente;
       p.precoCusto = valorUnit;
       registrarHistorico(p, 'NF editada', `NF ${nf.numero} · conf. ${conferente}`);
     }
   });
-
   const ok = salvar();
   if (!ok && !firebaseUser) { toast('Erro ao salvar alterações.', 'erro'); return; }
-  resetarModoNF();
-  fecharModal('modalNF'); renderTudo();
+  resetarModoNF(); fecharModal('modalNF'); renderTudo();
   toast('✅ NF atualizada.');
 }
-
 function submeterNovaNF() {
-  // ==== VALIDAÇÃO 1: Conferente obrigatório ====
   const conferente = $('nfConferidoPor').value.trim();
   if (!conferente) {
     toast('Informe o nome de quem conferiu a NF.', 'erro');
@@ -2002,25 +2040,20 @@ function submeterNovaNF() {
     return;
   }
   $('nfConferidoPor').classList.remove('obrigatorio-vazio');
-
   const numNF = $('nfNumero').value.trim();
   const pedido = $('nfPedido').value.trim();
   const fornecedorId = $('nfFornecedor').value;
   const fornecedor = DB.fornecedores.find(f => f.id === fornecedorId);
-
   if (numNF && fornecedor) {
     const dup = DB.nfs.find(n => String(n.numero).toLowerCase() === numNF.toLowerCase() && n.fornecedorId === fornecedor.id);
     if (dup) {
       if (!confirm(`⚠️ Já existe NF ${dup.numero} deste fornecedor (${dup.fornecedorNome}).\n\nDeseja realmente cadastrar outra igual?`)) return;
     }
   }
-
   const itensDOM = [...document.querySelectorAll('#itensNF .item-nf')];
   if (!itensDOM.length) { toast('Adicione ao menos 1 item.', 'erro'); return; }
-
   const itensValidados = [];
   let primeiroItemSemFoto = null;
-
   for (let i = 0; i < itensDOM.length; i++) {
     const div = itensDOM[i];
     const nome = div.querySelector('.item-nome').value.trim();
@@ -2031,41 +2064,32 @@ function submeterNovaNF() {
     const carac = div.querySelector('.item-carac').value.trim();
     const numItem = div.querySelector('.item-numero').value.trim();
     const foto = urlImagemSegura(div.querySelector('.item-foto').value);
-
-    if (!nome) { toast(`Item ${i+1}: informe o nome da peça.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
+    if (!nome) { toast(`Item ${i+1}: informe o nome.`, 'erro'); div.querySelector('.item-nome').focus(); return; }
     if (!CATEGORIAS_FIXAS.includes(categoria)) { toast(`Item ${i+1}: categoria inválida.`, 'erro'); return; }
     const qtd = Number(qtdRaw);
     if (!Number.isInteger(qtd) || qtd <= 0) { toast(`Item ${i+1}: quantidade deve ser inteiro > 0.`, 'erro'); div.querySelector('.item-qtd').focus(); return; }
     if (!(condicao in CONDICOES)) { toast(`Item ${i+1}: condição inválida.`, 'erro'); return; }
-
-    // ==== VALIDAÇÃO 2: Foto obrigatória em cada item ====
     if (!foto) {
       div.classList.add('falta-foto');
       if (primeiroItemSemFoto === null) primeiroItemSemFoto = div;
-      continue; // não adiciona aos validados, mas continua verificando os demais
+      continue;
     }
     div.classList.remove('falta-foto');
-
     itensValidados.push({ nome, categoria, marca, qtd, condicao, carac, foto, numItem });
   }
-
   if (primeiroItemSemFoto) {
     const totalSemFoto = itensDOM.filter(d => d.classList.contains('falta-foto')).length;
-    toast(`📸 ${totalSemFoto} item(ns) sem foto. A foto é obrigatória em cada item.`, 'erro');
+    toast(`📸 ${totalSemFoto} item(ns) sem foto. A foto é obrigatória.`, 'erro');
     primeiroItemSemFoto.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
-
   const totalPecas = itensValidados.reduce((s, it) => s + it.qtd, 0);
   const valorNF = Number($('nfValorTotal').value) || 0;
   const valorUnit = totalPecas > 0 ? (valorNF / totalPecas) : 0;
-
   const transportadora = DB.transportadoras.find(t => t.id === $('nfTransportadora').value);
   const nf = {
-    id: uid(),
-    tipoEntrada: 'aguardando',
-    numero: numNF || 'S/N',
-    pedido: pedido,
+    id: uid(), tipoEntrada: 'aguardando',
+    numero: numNF || 'S/N', pedido: pedido,
     fornecedorId: fornecedor ? fornecedor.id : null,
     fornecedorNome: fornecedor ? fornecedor.nome : 'Não informado',
     fornecedorCNPJ: fornecedor ? (fornecedor.cnpj || '') : ($('nfCNPJ').value || ''),
@@ -2081,24 +2105,20 @@ function submeterNovaNF() {
     dataCadastro: new Date().toISOString(),
     pecasIds: []
   };
-
   const novasPecas = [];
   itensValidados.forEach(item => {
     for (let i = 1; i <= item.qtd; i++) {
       const peca = {
-        id: uid(),
-        codigo: gerarCodigo(item.categoria, item.nome),
+        id: uid(), codigo: gerarCodigo(item.categoria, item.nome),
         nome: item.nome, categoria: item.categoria, marca: item.marca,
         fornecedor: nf.fornecedorNome, fornecedorId: nf.fornecedorId,
         transportadora: nf.transportadoraNome,
         numeroNF: nf.numero, numeroPedido: nf.pedido,
         itemNF: item.numItem, dataConferencia: nf.dataConferencia,
         conferidoPor: conferente,
-        caracteristicas: item.carac,
-        condicao: item.condicao,
+        caracteristicas: item.carac, condicao: item.condicao,
         precoCusto: valorUnit, precoVenda: 0,
-        localizacao: 'deposito',
-        status: 'aguardando_destino',
+        localizacao: 'deposito', status: 'aguardando_destino',
         numeroOC: null, cliente: null, clienteTelefone: null,
         dataEntrega: null, valorCombinado: null, obsReserva: '',
         dataVenda: null,
@@ -2113,28 +2133,38 @@ function submeterNovaNF() {
       nf.pecasIds.push(peca.id);
     }
   });
-
   DB.pecas.push(...novasPecas);
   DB.nfs.push(nf);
   try { localStorage.removeItem(RASCUNHO_KEY); } catch {}
   try { localStorage.setItem(ULTIMO_CONFERENTE_KEY, conferente); } catch {}
   pararAutoSave();
   resetarModoNF();
-
   const ok = salvar();
   if (!ok && !firebaseUser) {
     DB.pecas = DB.pecas.filter(p => !nf.pecasIds.includes(p.id));
     DB.nfs = DB.nfs.filter(n => n.id !== nf.id);
-    toast('Erro ao salvar. NF não registrada.', 'erro');
-    return;
+    toast('Erro ao salvar. NF não registrada.', 'erro'); return;
   }
   fecharModal('modalNF'); renderTudo();
   toast(`✅ NF salva! ${nf.pecasIds.length} peça(s) aguardando destino.`);
 }
 
 // ============================================================
-// DESTINOS
+// DESTINOS — RECOLHÍVEL
 // ============================================================
+function carregarGruposRecolhidos() {
+  try { return JSON.parse(localStorage.getItem(DESTINOS_RECOLHIDOS_KEY) || '{}'); }
+  catch { return {}; }
+}
+function salvarGruposRecolhidos(obj) {
+  try { localStorage.setItem(DESTINOS_RECOLHIDOS_KEY, JSON.stringify(obj)); } catch {}
+}
+function toggleGrupoNF(nfNum) {
+  const grupos = carregarGruposRecolhidos();
+  grupos[nfNum] = !grupos[nfNum];
+  salvarGruposRecolhidos(grupos);
+  renderDestinos();
+}
 function renderDestinos() {
   if (perfilAtual !== 'coordenador') { $('listaDestinos').innerHTML = '<p class="vazio">Acesso restrito ao Coordenador Logístico.</p>'; return; }
   const pendentes = DB.pecas.filter(p => p.status === 'aguardando_destino');
@@ -2152,12 +2182,12 @@ function renderDestinos() {
     if (!busca) return true;
     return [p.nome, p.codigo, p.numeroNF, p.numeroPedido, p.fornecedor, p.marca].some(v => String(v || '').toLowerCase().includes(busca));
   });
-
   const el = $('listaDestinos');
   if (!filtradas.length) { el.innerHTML = '<p class="vazio">🎉 Nenhuma peça aguardando destino.</p>'; return; }
 
   const grupos = {};
   filtradas.forEach(p => { const k = p.numeroNF || 'Sem NF'; (grupos[k] = grupos[k] || []).push(p); });
+  const recolhidos = carregarGruposRecolhidos();
 
   el.innerHTML = Object.keys(grupos).sort().reverse().map(nfNum => {
     const pecas = grupos[nfNum];
@@ -2165,44 +2195,64 @@ function renderDestinos() {
     const pedido = pecas[0]?.numeroPedido || '';
     const conferente = pecas[0]?.conferidoPor || '';
     const dataConf = pecas[0]?.dataConferencia ? formatarData(pecas[0].dataConferencia) : '';
+    const recolhido = !!recolhidos[nfNum];
+
     const itens = pecas.map(p => {
       const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge ${p.condicao}" style="font-size:9px">${CONDICOES[p.condicao]}</span>` : '';
       const cls = p.condicao === 'avaria' ? 'cond-avaria' : p.condicao === 'observacao' ? 'cond-observacao' : '';
       return `
-      <div class="lista-linhas" style="--cols: 1fr 1.5fr 90px 180px">
         <div class="item ${cls}">
           <div class="l1">
             <span class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>
-            <span class="nome-principal">${escapeHtml(p.nome)}</span>
+            <span class="nm">${escapeHtml(p.nome)}</span>
           </div>
           <div class="l2">
             <span>${escapeHtml(p.marca || '—')}</span>
-            <span>item NF ${escapeHtml(p.itemNF || '—')}</span>
+            <span>item ${escapeHtml(p.itemNF || '—')}</span>
             ${condBadge}
           </div>
           <div class="l3">
             <button class="btn-sucesso" data-showroom="${escapeHtml(p.id)}">🪑 Showroom</button>
             <button class="btn-aviso" data-oc="${escapeHtml(p.id)}">🧾 OC</button>
           </div>
-        </div>
-      </div>`;
+        </div>`;
     }).join('');
+
     return `
-      <div class="grupo-nf">
-        <header>
-          <div>
-            <h3>NF ${escapeHtml(nfNum)} · ${escapeHtml(forn || '—')}</h3>
-            ${pedido ? `<div class="pedido-destaque inline">📋 ${escapeHtml(pedido)}</div>` : ''}
-            <small>${pecas.length} peça(s) pendente(s)${dataConf ? ' · conferida em ' + escapeHtml(dataConf) : ''}${conferente ? ' por ' + escapeHtml(conferente) : ''}</small>
+      <div class="grupo-nf ${recolhido ? 'recolhido' : ''}">
+        <header data-toggle-nf="${escapeHtml(nfNum)}">
+          <button class="toggle" type="button" aria-label="Expandir/Recolher">▼</button>
+          <div class="resumo-nf">
+            <span class="num-nf">NF ${escapeHtml(nfNum)}</span>
+            <span class="forn-nm">${escapeHtml(forn || '—')}</span>
+            ${pedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(pedido)}</span>` : ''}
+            <span class="meta">
+              <span><strong>${pecas.length}</strong> peça(s) pendente(s)</span>
+              ${dataConf ? `<span class="sep">·</span><span>conf. ${escapeHtml(dataConf)}${conferente ? ' por ' + escapeHtml(conferente) : ''}</span>` : ''}
+            </span>
           </div>
-          <div class="acoes-grupo">
+          <div class="acoes-grupo" onclick="event.stopPropagation()">
             <button class="btn-sucesso" data-showroom-todas="${escapeHtml(nfNum)}">🪑 Todas Showroom</button>
           </div>
         </header>
-        ${itens}
+        <div class="corpo">
+          <div class="destino-linhas">
+            <div class="cabecalho">
+              <span>Código</span><span>Descrição</span><span>Complementos</span><span style="text-align:right">Destino</span>
+            </div>
+            ${itens}
+          </div>
+        </div>
       </div>`;
   }).join('');
 
+  // Toggle recolher/expandir (clicando no header, exceto nos botões)
+  el.querySelectorAll('[data-toggle-nf]').forEach(h => {
+    h.addEventListener('click', (ev) => {
+      if (ev.target.closest('button') && !ev.target.closest('.toggle')) return;
+      toggleGrupoNF(h.dataset.toggleNf);
+    });
+  });
   el.querySelectorAll('[data-showroom]').forEach(b => b.addEventListener('click', () => confirmarDestinoShowroom(b.dataset.showroom)));
   el.querySelectorAll('[data-oc]').forEach(b => b.addEventListener('click', () => abrirDefinirOC(b.dataset.oc)));
   el.querySelectorAll('[data-showroom-todas]').forEach(b => b.addEventListener('click', () => confirmarShowroomLote(b.dataset.showroomTodas)));
@@ -2267,7 +2317,7 @@ $('formDefinirOC').onsubmit = e => {
 };
 
 // ============================================================
-// LISTAGENS EM LINHA
+// NFs — TABELA COMPACTA
 // ============================================================
 function renderNFs() {
   const busca = ($('buscaNF').value || '').toLowerCase();
@@ -2282,9 +2332,9 @@ function renderNFs() {
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma NF encontrada.</p>'; return; }
 
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 90px 1fr 150px 90px 60px 100px 170px">
+    <div class="lista-linhas" style="--cols: 130px 1fr 130px 90px 70px 110px 130px">
       <div class="cabecalho">
-        <span>NF</span><span>Fornecedor</span><span>Pedido/OC</span><span>Receb.</span><span>Peças</span><span>Status</span><span style="text-align:right">Ações</span>
+        <span>NF / Data</span><span>Fornecedor</span><span>Pedido / OC</span><span>Receb.</span><span>Peças</span><span>Status</span><span style="text-align:right">Ações</span>
       </div>
       ${lista.map(nf => {
         const pecasNF = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
@@ -2298,8 +2348,7 @@ function renderNFs() {
         return `
         <div class="item">
           <div class="l1">
-            <span class="nome-principal"><strong>${escapeHtml(nf.numero)}</strong></span>
-            <span class="cod">${escapeHtml(formatarData(nf.dataRecebimento))}</span>
+            <span class="nome-principal"><strong>${escapeHtml(nf.numero)}</strong> <span class="cod">${escapeHtml(formatarData(nf.dataRecebimento))}</span></span>
           </div>
           <div class="l2">
             <span>${escapeHtml(nf.fornecedorNome)}</span>
@@ -2345,19 +2394,20 @@ function excluirNF(id) {
   salvar(); renderTudo(); toast('NF excluída.');
 }
 
+// ============================================================
+// SHOWROOM — TABELA
+// ============================================================
 function renderPecas() {
   const catSel = $('filtroCategoriaPeca');
   const vCat = catSel.value;
   const cats = [...new Set(DB.pecas.map(p => p.categoria).filter(Boolean))].sort();
   catSel.innerHTML = '<option value="">Todas categorias</option>' + cats.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   catSel.value = vCat;
-
   const fornSel = $('filtroFornecedorPeca');
   const vForn = fornSel.value;
   const forns = [...new Set(DB.pecas.map(p => p.fornecedor).filter(Boolean))].sort();
   fornSel.innerHTML = '<option value="">Todos fornecedores</option>' + forns.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
   fornSel.value = vForn;
-
   const busca = ($('buscaPeca').value || '').toLowerCase();
   const cat = catSel.value, forn = fornSel.value, status = $('filtroStatusPeca').value;
   const lista = DB.pecas.filter(p => {
@@ -2369,36 +2419,22 @@ function renderPecas() {
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma peça encontrada.</p>'; return; }
 
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 80px 1fr 110px 110px 100px 90px 150px">
+    <div class="lista-linhas" style="--cols: 90px 1fr 120px 130px 130px 110px 70px">
       <div class="cabecalho">
-        <span>Código</span><span>Nome / Marca</span><span>Pedido/OC</span><span>Fornecedor</span><span>Cliente</span><span>Status</span><span style="text-align:right">Ações</span>
+        <span>Código</span><span>Nome / Marca</span><span>Pedido/OC</span><span>Fornecedor</span><span>Cliente</span><span>Status</span><span style="text-align:right">Ver</span>
       </div>
       ${lista.map(p => {
-        const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge-cond ${p.condicao}" style="position:static;display:inline-block;font-size:9px;padding:2px 6px;border-radius:8px;font-weight:800">${p.condicao === 'avaria' ? '🔴 AVARIA' : '🔍 OBS'}</span>` : '';
+        const condBadge = p.condicao && p.condicao !== 'ok' ? `<span class="badge-cond ${p.condicao}" style="position:static;display:inline-block;font-size:9px;padding:1px 5px;border-radius:7px;font-weight:800">${p.condicao === 'avaria' ? '🔴 AVARIA' : '🔍 OBS'}</span>` : '';
         const cls = p.condicao === 'avaria' ? 'cond-avaria' : p.condicao === 'observacao' ? 'cond-observacao' : '';
         return `
         <div class="item clicavel ${cls}" data-peca-id="${escapeHtml(p.id)}">
-          <div class="l1">
-            <span class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span>
-          </div>
-          <div class="l1">
-            <span class="nome-principal">${escapeHtml(p.nome)} ${condBadge}</span>
-          </div>
-          <div class="l2">
-            ${p.numeroPedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(p.numeroPedido)}</span>` : '<span style="color:#b0a0a5">—</span>'}
-          </div>
-          <div class="l2">
-            <span>${escapeHtml(p.fornecedor || '—')}</span>
-          </div>
-          <div class="l2">
-            <span>${p.cliente ? '👤 ' + escapeHtml(p.cliente) : '<span style="color:#b0a0a5">—</span>'}</span>
-          </div>
-          <div class="l2">
-            <span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span>
-          </div>
-          <div class="l3">
-            <button class="btn-secundario" data-ver="${escapeHtml(p.id)}" title="Ver">👁️</button>
-          </div>
+          <div class="l1"><span class="cod">${escapeHtml(p.codigo)}${p.sequencia ? ' · ' + escapeHtml(p.sequencia) : ''}</span></div>
+          <div class="l1"><span class="nome-principal">${escapeHtml(p.nome)} ${condBadge}</span></div>
+          <div class="l2">${p.numeroPedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(p.numeroPedido)}</span>` : '<span style="color:#b0a0a5">—</span>'}</div>
+          <div class="l2"><span>${escapeHtml(p.fornecedor || '—')}</span></div>
+          <div class="l2"><span>${p.cliente ? '👤 ' + escapeHtml(p.cliente) : '<span style="color:#b0a0a5">—</span>'}</span></div>
+          <div class="l2"><span class="badge ${escapeHtml(p.status)}">${escapeHtml(p.status.replace('_',' '))}</span></div>
+          <div class="l3"><button class="btn-secundario" data-ver="${escapeHtml(p.id)}" title="Ver">👁️</button></div>
         </div>`;
       }).join('')}
     </div>`;
@@ -2407,12 +2443,12 @@ function renderPecas() {
     if (ev.target.closest('button')) return;
     abrirFichaPeca(card.dataset.pecaId);
   }));
-  el.querySelectorAll('[data-ver]').forEach(b => b.addEventListener('click', (ev) => {
-    ev.stopPropagation();
-    abrirFichaPeca(b.dataset.ver);
-  }));
+  el.querySelectorAll('[data-ver]').forEach(b => b.addEventListener('click', (ev) => { ev.stopPropagation(); abrirFichaPeca(b.dataset.ver); }));
 }
 
+// ============================================================
+// RESERVAS — TABELA
+// ============================================================
 function renderReservas() {
   const busca = ($('buscaReserva').value || '').toLowerCase();
   const lista = DB.pecas.filter(p => p.status === 'reservado')
@@ -2422,32 +2458,25 @@ function renderReservas() {
   if (!lista.length) { el.innerHTML = '<p class="vazio">Nenhuma reserva.</p>'; return; }
 
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 90px 1fr 1fr 110px 90px 100px 160px">
+    <div class="lista-linhas" style="--cols: 90px 1fr 1fr 130px 100px 100px 150px">
       <div class="cabecalho">
-        <span>Código</span><span>Peça</span><span>Cliente</span><span>OC</span><span>Entrega</span><span>Valor</span><span style="text-align:right">Ações</span>
+        <span>Código</span><span>Peça</span><span>Cliente</span><span>OC / Pedido</span><span>Entrega</span><span>Valor</span><span style="text-align:right">Ações</span>
       </div>
       ${lista.map(p => `
         <div class="item">
-          <div class="l1">
-            <span class="cod">${escapeHtml(p.codigo)}</span>
-          </div>
-          <div class="l1">
-            <span class="nome-principal">${escapeHtml(p.nome)}</span>
-          </div>
+          <div class="l1"><span class="cod">${escapeHtml(p.codigo)}</span></div>
+          <div class="l1"><span class="nome-principal">${escapeHtml(p.nome)}</span></div>
           <div class="l2">
             <span>👤 ${escapeHtml(p.cliente || '—')}</span>
             ${p.clienteTelefone ? `<span>📞 ${escapeHtml(p.clienteTelefone)}</span>` : ''}
           </div>
           <div class="l2">
-            ${p.numeroOC ? `<span>🧾 ${escapeHtml(p.numeroOC)}</span>` : '<span style="color:#b0a0a5">—</span>'}
+            ${p.numeroOC ? `<span>🧾 ${escapeHtml(p.numeroOC)}</span>` : ''}
             ${p.numeroPedido ? `<span class="pedido-destaque mini">📋 ${escapeHtml(p.numeroPedido)}</span>` : ''}
+            ${!p.numeroOC && !p.numeroPedido ? '<span style="color:#b0a0a5">—</span>' : ''}
           </div>
-          <div class="l2">
-            <span>📅 ${escapeHtml(formatarData(p.dataEntrega))}</span>
-          </div>
-          <div class="l2">
-            <span><strong>${escapeHtml(brl(p.valorCombinado || 0))}</strong></span>
-          </div>
+          <div class="l2"><span>📅 ${escapeHtml(formatarData(p.dataEntrega))}</span></div>
+          <div class="l2"><span><strong>${escapeHtml(brl(p.valorCombinado || 0))}</strong></span></div>
           <div class="l3">
             <button class="btn-sucesso" data-entregar="${escapeHtml(p.id)}">✅ Entregar</button>
             <button class="btn-aviso" data-cancelar-res="${escapeHtml(p.id)}">↩️</button>
@@ -2481,9 +2510,6 @@ function cancelarReserva(id) {
   salvar(); renderTudo(); toast('Reserva cancelada.');
 }
 
-// ============================================================
-// FICHA PEÇA
-// ============================================================
 function abrirFichaPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) { fecharModal('modalFichaPeca'); toast('Peça não encontrada.', 'aviso'); return; }
@@ -2516,14 +2542,14 @@ function abrirFichaPeca(id) {
       <div class="ficha-info">
         <p><strong>Status:</strong> ${badge}${condBadge}</p>
         <p><strong>Local:</strong> ${escapeHtml(p.localizacao)}</p>
-        ${p.precoCusto ? `<p><strong>Custo unitário (rateio NF):</strong> ${escapeHtml(brl(p.precoCusto))}</p>` : ''}
+        ${p.precoCusto ? `<p><strong>Custo (rateio NF):</strong> ${escapeHtml(brl(p.precoCusto))}</p>` : ''}
         ${p.cliente ? `<p><strong>Cliente:</strong> ${escapeHtml(p.cliente)}</p>` : ''}
         ${p.clienteTelefone ? `<p><strong>📞:</strong> ${escapeHtml(p.clienteTelefone)}</p>` : ''}
         ${p.numeroOC ? `<p><strong>OC cliente:</strong> ${escapeHtml(p.numeroOC)}</p>` : ''}
         ${p.dataEntrega ? `<p><strong>Entrega:</strong> ${escapeHtml(formatarData(p.dataEntrega))}</p>` : ''}
         ${p.valorCombinado ? `<p><strong>Valor combinado:</strong> ${escapeHtml(brl(p.valorCombinado))}</p>` : ''}
       </div>
-      ${p.numeroPedido ? `<div class="full"><div class="pedido-destaque">📋 Pedido / Ordem de Compra na NF: <strong>${escapeHtml(p.numeroPedido)}</strong></div></div>` : ''}
+      ${p.numeroPedido ? `<div class="full"><div class="pedido-destaque">📋 Pedido / Ordem de Compra: <strong>${escapeHtml(p.numeroPedido)}</strong></div></div>` : ''}
       <div class="full"><p><strong>Características:</strong> ${escapeHtml(p.caracteristicas || '—')}</p></div>
       ${p.obsReserva ? `<div class="full"><p><strong>Obs reserva:</strong> ${escapeHtml(p.obsReserva)}</p></div>` : ''}
       <div class="full"><h3 class="subtitulo">🕒 Histórico</h3>${hist}</div>
@@ -2560,9 +2586,6 @@ function abrirFichaPeca(id) {
 }
 function ampliarFoto(url) { $('imgGaleria').src = url; abrirModal('modalGaleria'); }
 
-// ============================================================
-// EDITAR PEÇA
-// ============================================================
 function abrirEditarPeca(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
@@ -2615,7 +2638,6 @@ $('formEditarPeca').onsubmit = e => {
   salvar(); fecharModal('modalEditarPeca'); renderTudo();
   toast('✅ Peça atualizada.');
 };
-
 function trocarCondicao(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p) return;
@@ -2686,10 +2708,6 @@ function excluirPeca(id) {
   DB.nfs.forEach(n => { if (n.pecasIds) n.pecasIds = n.pecasIds.filter(pid => pid !== id); });
   salvar(); fecharModal('modalFichaPeca'); renderTudo(); toast('Peça excluída.');
 }
-
-// ============================================================
-// RESERVAR
-// ============================================================
 function abrirReservar(id) {
   const p = DB.pecas.find(x => x.id === id);
   if (!p || p.status !== 'disponivel') { toast('Só peças disponíveis.', 'erro'); return; }
@@ -2723,9 +2741,6 @@ $('formReservar').onsubmit = e => {
   salvar(); fecharModal('modalReservar'); renderTudo(); toast('📌 Reservada!');
 };
 
-// ============================================================
-// CADASTROS
-// ============================================================
 $('formFornecedor').onsubmit = e => {
   e.preventDefault();
   const cnpj = $('fornCNPJ').value.trim();
@@ -2754,10 +2769,7 @@ function editarForn(id) {
   $('fornCNPJ').value = f.cnpj || ''; $('fornNome').value = f.nome; $('fornContato').value = f.contato || '';
   $('btnForn').textContent = '💾 Salvar'; $('btnCancelForn').style.display = 'inline-flex';
 }
-function cancelarEditForn() {
-  DB.editandoFornId = null; $('formFornecedor').reset();
-  $('btnForn').textContent = '+ Adicionar'; $('btnCancelForn').style.display = 'none';
-}
+function cancelarEditForn() { DB.editandoFornId = null; $('formFornecedor').reset(); $('btnForn').textContent = '+ Adicionar'; $('btnCancelForn').style.display = 'none'; }
 function excluirForn(id) {
   if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   if (DB.nfs.some(n => n.fornecedorId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
@@ -2769,19 +2781,14 @@ function renderFornecedores() {
   const el = $('listaFornecedores');
   if (!DB.fornecedores.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 1fr 180px 160px 100px">
-      <div class="cabecalho">
-        <span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span>
-      </div>
+    <div class="lista-linhas" style="--cols: 1fr 180px 160px 90px">
+      <div class="cabecalho"><span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span></div>
       ${DB.fornecedores.map(f => `
         <div class="item">
           <div class="l1"><span class="nome-principal">${escapeHtml(f.nome)}</span></div>
           <div class="l2"><span>${escapeHtml(f.cnpj || '—')}</span></div>
           <div class="l2"><span>${escapeHtml(f.contato || '—')}</span></div>
-          <div class="l3">
-            <button class="btn-secundario" data-edit-f="${escapeHtml(f.id)}">✏️</button>
-            <button class="btn-perigo" data-del-f="${escapeHtml(f.id)}">🗑️</button>
-          </div>
+          <div class="l3"><button class="btn-secundario" data-edit-f="${escapeHtml(f.id)}">✏️</button><button class="btn-perigo" data-del-f="${escapeHtml(f.id)}">🗑️</button></div>
         </div>
       `).join('')}
     </div>`;
@@ -2816,10 +2823,7 @@ function editarTransp(id) {
   $('transpCNPJ').value = t.cnpj || ''; $('transpNome').value = t.nome; $('transpContato').value = t.contato || '';
   $('btnTransp').textContent = '💾 Salvar'; $('btnCancelTransp').style.display = 'inline-flex';
 }
-function cancelarEditTransp() {
-  DB.editandoTranspId = null; $('formTransportadora').reset();
-  $('btnTransp').textContent = '+ Adicionar'; $('btnCancelTransp').style.display = 'none';
-}
+function cancelarEditTransp() { DB.editandoTranspId = null; $('formTransportadora').reset(); $('btnTransp').textContent = '+ Adicionar'; $('btnCancelTransp').style.display = 'none'; }
 function excluirTransp(id) {
   if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   if (DB.nfs.some(n => n.transportadoraId === id)) { toast('Tem NFs vinculadas.', 'erro'); return; }
@@ -2831,19 +2835,14 @@ function renderTransportadoras() {
   const el = $('listaTransportadoras');
   if (!DB.transportadoras.length) { el.innerHTML = '<p class="vazio">Nenhuma cadastrada.</p>'; return; }
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 1fr 180px 160px 100px">
-      <div class="cabecalho">
-        <span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span>
-      </div>
+    <div class="lista-linhas" style="--cols: 1fr 180px 160px 90px">
+      <div class="cabecalho"><span>Nome</span><span>CNPJ</span><span>Contato</span><span style="text-align:right">Ações</span></div>
       ${DB.transportadoras.map(t => `
         <div class="item">
           <div class="l1"><span class="nome-principal">${escapeHtml(t.nome)}</span></div>
           <div class="l2"><span>${escapeHtml(t.cnpj || '—')}</span></div>
           <div class="l2"><span>${escapeHtml(t.contato || '—')}</span></div>
-          <div class="l3">
-            <button class="btn-secundario" data-edit-t="${escapeHtml(t.id)}">✏️</button>
-            <button class="btn-perigo" data-del-t="${escapeHtml(t.id)}">🗑️</button>
-          </div>
+          <div class="l3"><button class="btn-secundario" data-edit-t="${escapeHtml(t.id)}">✏️</button><button class="btn-perigo" data-del-t="${escapeHtml(t.id)}">🗑️</button></div>
         </div>
       `).join('')}
     </div>`;
@@ -2874,10 +2873,7 @@ function editarCli(id) {
   $('cliNome').value = c.nome; $('cliTelefone').value = c.telefone || ''; $('cliEndereco').value = c.endereco || '';
   $('btnCli').textContent = '💾 Salvar'; $('btnCancelCli').style.display = 'inline-flex';
 }
-function cancelarEditCli() {
-  DB.editandoCliId = null; $('formCliente').reset();
-  $('btnCli').textContent = '+ Adicionar'; $('btnCancelCli').style.display = 'none';
-}
+function cancelarEditCli() { DB.editandoCliId = null; $('formCliente').reset(); $('btnCli').textContent = '+ Adicionar'; $('btnCancelCli').style.display = 'none'; }
 function excluirCli(id) {
   if (perfilAtual !== 'coordenador') { toast('Apenas o Coordenador.', 'aviso'); return; }
   const c = DB.clientes.find(x => x.id === id); if (!c) return;
@@ -2890,19 +2886,14 @@ function renderClientes() {
   const el = $('listaClientes');
   if (!DB.clientes.length) { el.innerHTML = '<p class="vazio">Nenhum cadastrado.</p>'; return; }
   el.innerHTML = `
-    <div class="lista-linhas" style="--cols: 1fr 180px 1fr 100px">
-      <div class="cabecalho">
-        <span>Nome</span><span>Telefone</span><span>Endereço</span><span style="text-align:right">Ações</span>
-      </div>
+    <div class="lista-linhas" style="--cols: 1fr 180px 1fr 90px">
+      <div class="cabecalho"><span>Nome</span><span>Telefone</span><span>Endereço</span><span style="text-align:right">Ações</span></div>
       ${DB.clientes.map(c => `
         <div class="item">
           <div class="l1"><span class="nome-principal">${escapeHtml(c.nome)}</span></div>
           <div class="l2"><span>${escapeHtml(c.telefone || '—')}</span></div>
           <div class="l2"><span>${escapeHtml(c.endereco || '—')}</span></div>
-          <div class="l3">
-            <button class="btn-secundario" data-edit-c="${escapeHtml(c.id)}">✏️</button>
-            <button class="btn-perigo" data-del-c="${escapeHtml(c.id)}">🗑️</button>
-          </div>
+          <div class="l3"><button class="btn-secundario" data-edit-c="${escapeHtml(c.id)}">✏️</button><button class="btn-perigo" data-del-c="${escapeHtml(c.id)}">🗑️</button></div>
         </div>
       `).join('')}
     </div>`;
@@ -2910,9 +2901,6 @@ function renderClientes() {
   el.querySelectorAll('[data-del-c]').forEach(b => b.addEventListener('click', () => excluirCli(b.dataset.delC)));
 }
 
-// ============================================================
-// RELATÓRIOS
-// ============================================================
 function atalhoRel(tipo) {
   const hj = new Date();
   let ini, fim = new Date();
@@ -2928,7 +2916,6 @@ function atalhoRel(tipo) {
 }
 $('relInicio').addEventListener('change', renderRelatorio);
 $('relFim').addEventListener('change', renderRelatorio);
-
 function dentroPeriodo(dataISO, inicio, fim) {
   if (!dataISO) return false;
   const d = new Date(dataISO).getTime();
@@ -2940,22 +2927,17 @@ function renderRelatorio() {
   const inicio = $('relInicio').value;
   const fim = $('relFim').value;
   const nfsFiltradas = DB.nfs.filter(nf => (!inicio && !fim) ? true : dentroPeriodo(nf.dataRecebimento || nf.dataCadastro, inicio, fim));
-
-  // Estoque: peças cadastradas no período (ou todas se sem filtro)
   const pecasPeriodo = DB.pecas.filter(p => (!inicio && !fim) ? true : dentroPeriodo(p.dataCadastro, inicio, fim));
-
   const entregues = DB.pecas.filter(p => p.status === 'vendido' && p.dataVenda && dentroPeriodo(p.dataVenda, inicio, fim));
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
   const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
-
   const valorNFsTotal = nfsFiltradas.reduce((s, nf) => s + (Number(nf.valorTotalNF) || 0), 0);
   const valorEntregues = entregues.reduce((s, p) => s + (Number(p.valorCombinado) || 0), 0);
   const custoEntregues = entregues.reduce((s, p) => s + (Number(p.precoCusto) || 0), 0);
   const lucroEntregues = valorEntregues - custoEntregues;
   const margemEntregues = valorEntregues > 0 ? (lucroEntregues / valorEntregues) * 100 : 0;
   const valorReservas = reservasAtivas.reduce((s, p) => s + (Number(p.valorCombinado) || 0), 0);
-
   $('relResumo').innerHTML = `
     <div class="item"><span>NFs no período</span><strong>${nfsFiltradas.length}</strong></div>
     <div class="item"><span>Valor total das NFs</span><strong>${escapeHtml(brl(valorNFsTotal))}</strong></div>
@@ -2968,8 +2950,6 @@ function renderRelatorio() {
     <div class="item"><span>Reservas ativas</span><strong>${reservasAtivas.length}</strong></div>
     <div class="item"><span>Valor reservado</span><strong>${escapeHtml(brl(valorReservas))}</strong></div>
   `;
-
-  // ==== ESTOQUE POR STATUS / CATEGORIA / FORNECEDOR ====
   const porStatus = {
     'aguardando_destino': pecasPeriodo.filter(p => p.status === 'aguardando_destino').length,
     'disponivel': pecasPeriodo.filter(p => p.status === 'disponivel').length,
@@ -2980,37 +2960,21 @@ function renderRelatorio() {
   pecasPeriodo.forEach(p => { const k = p.categoria || 'Outros'; porCategoria[k] = (porCategoria[k] || 0) + 1; });
   const porFornecedor = {};
   pecasPeriodo.forEach(p => { const k = p.fornecedor || 'Não informado'; porFornecedor[k] = (porFornecedor[k] || 0) + 1; });
-
-  const renderBloco = (titulo, obj, ordenarPorQtd = true) => {
+  const renderBloco = (titulo, obj, ordenar = true) => {
     const entries = Object.entries(obj);
-    if (ordenarPorQtd) entries.sort((a, b) => b[1] - a[1]);
+    if (ordenar) entries.sort((a, b) => b[1] - a[1]);
     else entries.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
-    if (!entries.length) return `<div class="estoque-bloco"><h4>${titulo}</h4><p class="vazio" style="padding:10px;font-size:11px">Sem dados.</p></div>`;
-    return `<div class="estoque-bloco">
-      <h4>${titulo}</h4>
-      ${entries.map(([k, v]) => `<div class="item-estq"><span class="nome">${escapeHtml(k)}</span><span class="qtd">${v}</span></div>`).join('')}
-    </div>`;
+    if (!entries.length) return `<div class="estoque-bloco"><h4>${titulo}</h4><p class="vazio" style="padding:8px;font-size:11px">Sem dados.</p></div>`;
+    return `<div class="estoque-bloco"><h4>${titulo}</h4>${entries.map(([k, v]) => `<div class="item-estq"><span class="nome">${escapeHtml(k)}</span><span class="qtd">${v}</span></div>`).join('')}</div>`;
   };
-
-  const rotStatus = {
-    'aguardando_destino': '⏳ Aguardando destino',
-    'disponivel': '✅ Disponível',
-    'reservado': '📌 Reservado',
-    'vendido': '💰 Vendido'
-  };
+  const rotStatus = { 'aguardando_destino':'⏳ Aguardando destino','disponivel':'✅ Disponível','reservado':'📌 Reservado','vendido':'💰 Vendido' };
   const statusRotulado = {};
   Object.keys(porStatus).forEach(k => { if (porStatus[k]) statusRotulado[rotStatus[k]] = porStatus[k]; });
-
-  $('relEstoque').innerHTML =
-    renderBloco('📊 Por status', statusRotulado, false) +
-    renderBloco('🛋️ Por categoria', porCategoria) +
-    renderBloco('🏢 Por fornecedor', porFornecedor);
+  $('relEstoque').innerHTML = renderBloco('📊 Por status', statusRotulado, false) + renderBloco('🛋️ Por categoria', porCategoria) + renderBloco('🏢 Por fornecedor', porFornecedor);
 
   let html = '';
-
-  // NF com conferente destacado
   html += `<div class="rel-secao"><h3>📄 Notas Fiscais (${nfsFiltradas.length})</h3>`;
-  if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:16px">Nenhuma NF no período.</p>';
+  if (!nfsFiltradas.length) html += '<p class="vazio" style="padding:12px">Nenhuma NF no período.</p>';
   else {
     html += nfsFiltradas.map(nf => {
       const pecas = DB.pecas.filter(p => (nf.pecasIds || []).includes(p.id));
@@ -3020,17 +2984,16 @@ function renderRelatorio() {
         <div class="rel-linha">
           <div class="esq">
             <strong>NF ${escapeHtml(nf.numero)} · ${escapeHtml(nf.fornecedorNome)}</strong>
-            ${nf.pedido ? `<small class="pedido-destaque mini">📋 Pedido/OC: ${escapeHtml(nf.pedido)}</small>` : ''}
-            <small>👤 <strong>Conferido por: ${escapeHtml(nf.conferidoPor || 'não registrado')}</strong> · ${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s)${pend ? ' · ' + pend + ' pendente(s)' : ''}${prob ? ' · ' + prob + ' c/ problema' : ''}</small>
+            ${nf.pedido ? `<small class="pedido-destaque mini">📋 ${escapeHtml(nf.pedido)}</small>` : ''}
+            <small>👤 <strong>Conf.: ${escapeHtml(nf.conferidoPor || 'não registrado')}</strong> · ${escapeHtml(formatarData(nf.dataRecebimento))} · ${pecas.length} peça(s)${pend ? ' · ' + pend + ' pendente(s)' : ''}${prob ? ' · ' + prob + ' c/ problema' : ''}</small>
           </div>
           <div class="dir"><strong>${escapeHtml(brl(nf.valorTotalNF || 0))}</strong></div>
         </div>`;
     }).join('');
   }
   html += '</div>';
-
   html += `<div class="rel-secao"><h3>✅ Peças Entregues (${entregues.length})</h3>`;
-  if (!entregues.length) html += '<p class="vazio" style="padding:16px">Nenhuma entrega no período.</p>';
+  if (!entregues.length) html += '<p class="vazio" style="padding:12px">Nenhuma entrega no período.</p>';
   else {
     html += entregues.map(p => {
       const receita = Number(p.valorCombinado) || 0;
@@ -3050,7 +3013,6 @@ function renderRelatorio() {
     }).join('');
   }
   html += '</div>';
-
   if (comProblema.length) {
     html += `<div class="rel-secao"><h3>⚠️ Avaria / Observação (${comProblema.length})</h3>`;
     html += comProblema.map(p => `
@@ -3063,9 +3025,8 @@ function renderRelatorio() {
       </div>`).join('');
     html += '</div>';
   }
-
   html += `<div class="rel-secao"><h3>📌 Reservas Ativas (${reservasAtivas.length})</h3>`;
-  if (!reservasAtivas.length) html += '<p class="vazio" style="padding:16px">Nenhuma reserva ativa.</p>';
+  if (!reservasAtivas.length) html += '<p class="vazio" style="padding:12px">Nenhuma reserva ativa.</p>';
   else {
     html += reservasAtivas.map(p => `
       <div class="rel-linha">
@@ -3077,7 +3038,6 @@ function renderRelatorio() {
       </div>`).join('');
   }
   html += '</div>';
-
   $('relConteudo').innerHTML = html;
 }
 function exportarRelatorioCSV() {
@@ -3088,7 +3048,6 @@ function exportarRelatorioCSV() {
   const reservasAtivas = DB.pecas.filter(p => p.status === 'reservado');
   const aguardando = DB.pecas.filter(p => p.status === 'aguardando_destino');
   const comProblema = DB.pecas.filter(p => p.condicao === 'avaria' || p.condicao === 'observacao');
-
   const linhas = [];
   linhas.push(['TIPO','DATA','REF','DESCRICAO','CLIENTE/FORNECEDOR','VALOR','CONFERENTE/OBS']);
   nfsFiltradas.forEach(nf => {
@@ -3114,15 +3073,11 @@ function exportarRelatorioCSV() {
   const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  const periodo = (inicio || 'inicio') + '_' + (fim || 'fim');
-  a.download = `relatorio-${periodo}.csv`;
+  a.download = `relatorio-${(inicio || 'inicio')}_${(fim || 'fim')}.csv`;
   a.click();
   toast('CSV exportado.');
 }
 
-// ============================================================
-// ESTATÍSTICAS
-// ============================================================
 function renderEstatisticas() {
   const total = DB.pecas.length;
   const aguard = DB.pecas.filter(p => p.status === 'aguardando_destino').length;
@@ -3143,9 +3098,6 @@ function renderEstatisticas() {
     </div>`;
 }
 
-// ============================================================
-// FECHAR MODAIS
-// ============================================================
 document.querySelectorAll('.modal').forEach(m => {
   m.onclick = e => {
     if (e.target === m) {
@@ -3157,9 +3109,6 @@ document.querySelectorAll('.modal').forEach(m => {
   };
 });
 
-// ============================================================
-// FIREBASE
-// ============================================================
 async function iniciarFirebase() {
   atualizarStatusSync('iniciando');
   carregarPerfil();
@@ -3201,7 +3150,6 @@ async function iniciarFirebase() {
 }
 iniciarFirebase();
 
-// Expor funções globais
 window.abrirNovaNF = abrirNovaNF;
 window.abrirEditarNF = abrirEditarNF;
 window.abrirDuplicarNF = abrirDuplicarNF;
@@ -3249,6 +3197,7 @@ window.usarChaveManual = usarChaveManual;
 window.confirmarDestinoShowroom = confirmarDestinoShowroom;
 window.confirmarShowroomLote = confirmarShowroomLote;
 window.abrirDefinirOC = abrirDefinirOC;
+window.toggleGrupoNF = toggleGrupoNF;
 </script>
 </body>
 </html>
